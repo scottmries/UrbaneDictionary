@@ -1,44 +1,36 @@
-# Phase 3: Notebooks and Tags (2 days)
+# Phase 3: Term Likes and Dislikes (Opinions)
 
 ## Rails
 ### Models
-* Notebook
-* Tag
-* Tagging
+* Opinions
 
 ### Controllers
-* Api::NotebooksController (create, destroy, index, show, update)
+* Api::OpinionsController (create, destroy, update)
 
 ### Views
-* notebooks/index.json.jbuilder
-* notebooks/show.json.jbuilder
-* tags/show.json.jbuilder
 
 ## Flux
 ### Views (React Components)
-* NotebooksIndex
-  - NotebookIndexItem
-* NotebookForm
-* SearchIndex
+* OpinionForm
 
 ### Stores
-* Notebook
+* Opinion
 
 ### Actions
-* ApiActions.receiveAllNotebooks -> triggered by ApiUtil
-* ApiActions.receiveSingleNotebook
-* ApiActions.deleteNotebook
-* NotebookActions.fetchAllNotebooks -> triggers ApiUtil
-* NotebookActions.fetchSingleNotebook
-* NotebookActions.createNotebook
-* NotebookActions.editNotebook
-* NotebookActions.destroyNotebook
+* ApiActions.receiveAllOpinion -> triggered by ApiUtil
+* ApiActions.receiveSingleOpinion
+* ApiActions.deleteOpinion
+* OpinionActions.fetchAllOpinions -> triggers ApiUtil
+* OpinionActions.fetchSingleOpinion
+* OpinionActions.createOpinion
+* OpinionActions.updateOpinion
+* OpinionActions.destroyOpinion
 
 ### ApiUtil
-* ApiUtil.fetchAllNotebooks
-* ApiUtil.fetchSingleNotebook
-* ApiUtil.createNotebook
-* ApiUtil.editNotebook
-* ApiUtil.destroyNotebook
+* ApiUtil.fetchAllOpinions
+* ApiUtil.fetchSingleOpinion
+* ApiUtil.createOpinion
+* ApiUtil.updateOpinion
+* ApiUtil.destroyOpinion
 
 ## Gems/Libraries

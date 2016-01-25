@@ -1,4 +1,4 @@
-# Phase 2: Flux Architecture and Note CRUD (2 days)
+# Phase 2: Flux Architecture and Term CRUD (2 days)
 
 ## Rails
 ### Models
@@ -9,30 +9,29 @@
 
 ## Flux
 ### Views (React Components)
-* NotesIndex
-  - NotesIndexItem
-* NoteForm
+* TermsIndex
+  - TermsIndexItem
+* TermForm
 
 ### Stores
-* Note
+* Term
 
 ### Actions
-* ApiActions.receiveAllNotes -> triggered by ApiUtil
-* ApiActions.receiveSingleNote
-* ApiActions.deleteNote
-* NoteActions.fetchAllNotes -> triggers ApiUtil
-* NoteActions.fetchSingleNote 
-* NoteActions.createNote
-* NoteActions.editNote 
-* NoteActions.destroyNote
+* ApiActions.receiveAllTerms -> triggered by ApiUtil
+* ApiActions.receiveSingleTerm
+* ApiActions.deleteTerm
+* TermActions.fetchAllTerms -> triggers ApiUtil
+* TermActions.fetchSingleTerm
+* TermActions.createTerm
+* TermActions.editTerm
+* TermActions.destroyTerm
 
 ### ApiUtil
-* ApiUtil.fetchAllNotes
-* ApiUtil.fetchSingleNote
-* ApiUtil.createNote
-* ApiUtil.editNote
-* ApiUtil.destroyNote
+* ApiUtil.fetchAllTerms
+* ApiUtil.fetchSingleTerm
+* ApiUtil.createTerm
+* ApiUtil.editTerm
+* ApiUtil.destroyTerm
 
 ## Gems/Libraries
 * Flux Dispatcher (npm)
-* Twitter Bootstrap

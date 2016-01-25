@@ -1,40 +1,46 @@
-# Phase 5: Reminders and Garbage Collection
+# Phase 5: ### Phase 5: Favorites and Sets of Favorites (2.5 days)
+
+# Phase 3: Notebooks and Tags (2 days)
 
 ## Rails
 ### Models
-* Reminder
+* FavoritesSet
+* Favorite
 
 ### Controllers
-* Api::RemindersController (create, destroy, index, show, update)
+* Api::FavoritesSetController (create, destroy, index, show, update)
+* Api::FavoriteController (create, destroy)
 
 ### Views
-* reminders/index.json.jbuilder
+* favorites_set/index.json.jbuilder
+* favorites_set/show.json.jbuilder
+* favorite/show.json.jbuilder
 
 ## Flux
 ### Views (React Components)
-* RemindersIndex
-  - ReminderIndexItem
-* ReminderShow
-* ReminderForm
+* FavoritesSetIndex
+  - FavoritesSetIndexItem
+* FavoritesSetForm
+* FavoriteForm
 
 ### Stores
-* Reminder
+* FavoritesSets
 
 ### Actions
-* ApiActions.receiveAllReminders -> triggered by ApiUtil
-* ApiActions.receiveSingleReminder
-* ApiActions.deleteReminder
-* ReminderActions.fetchAllReminders -> triggers ApiUtil
-* ReminderActions.fetchSingleReminder
-* ReminderActions.createReminder
-* ReminderActions.updateReminder
-* ReminderActions.destroyReminder
+* ApiActions.receiveAllFavoritesSets -> triggered by ApiUtil
+* ApiActions.receiveSingleFavoritesSet
+* ApiActions.deleteFavoritesSet
+* NotebookActions.fetchAllFavoritesSets -> triggers ApiUtil
+* NotebookActions.fetchSingleFavoritesSet
+* NotebookActions.createFavoritesSet
+* NotebookActions.editFavoritesSet
+* NotebookActions.destroyFavoritesSet
 
 ### ApiUtil
-* ApiUtil.fetchAllReminders
-* ApiUtil.fetchSingleReminder
-* ApiUtil.createReminder
-* ApiUtil.updateReminder
-* ApiUtil.destroyReminder
+* ApiUtil.fetchAllFavoritesSets
+* ApiUtil.fetchSingleFavoritesSet
+* ApiUtil.createFavoritesSet
+* ApiUtil.editFavoritesSet
+* ApiUtil.destroyFavoritesSet
 
 ## Gems/Libraries

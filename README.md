@@ -1,4 +1,4 @@
-# FresherNote
+# Urbane Dictionary
 
 [Heroku link][heroku] **NB:** This should be a link to your production site
 
@@ -6,19 +6,18 @@
 
 ## Minimum Viable Product
 
-FresherNote is a web application inspired by Evernote built using Ruby on Rails
-and React.js. FresherNote allows users to:
+Urbane Dictionary is a web application inspired by Urban Dictionary built using
+Ruby on Rails and React.js. Urbane Dictionary allows users to:
 
 <!-- This is a Markdown checklist. Use it to keep track of your progress! -->
 
 - [ ] Create an account
 - [ ] Log in / Log out
-- [ ] Create, read, edit, and delete notes
-- [ ] Organize notes within Notebooks
-- [ ] Tag notes with multiple tags and search notes by tag
-- [ ] Search through notes for blocks of text
-- [ ] Apply complex styling to notes while editing
-- [ ] Set reminders on notes
+- [ ] Create, read, edit, and delete terms
+- [ ] Like and dislike terms
+- [ ] Browse terms by first letter
+- [ ] Search terms
+- [ ] Facebook Like, Tweet, and favorite terms
 
 ## Design Docs
 * [View Wireframes][view]
@@ -29,22 +28,22 @@ and React.js. FresherNote allows users to:
 
 ## Implementation Timeline
 
-### Phase 1: User Authentication, Note Model and JSON API (1.5 days)
+### Phase 1: User Authentication, Term Model and JSON API (1.5 days)
 
 In Phase 1, I will begin by implementing user signup and authentication (using
 BCrypt). There will be a basic landing page after signup that will contain the
 container for the application's root React component. Before building out the
-front end, I will begin by setting up a full JSON API for Notes.
+front end, I will begin by setting up a full JSON API for Terms.
 
 [Details][phase-one]
 
-### Phase 2: Flux Architecture and Note CRUD (2.5 days)
+### Phase 2: Flux Architecture and Term CRUD (2.5 days)
 
 Phase 2 is focused on setting up Flux, the React Router, and the React view
 structure for the main application. After the basic Flux architecture has been
-set up, a Note store will be implemented and a set of actions corresponding to
+set up, a Term store will be implemented and a set of actions corresponding to
 the needed CRUD functionality created. Once this is done, I will create React
-views for the Notes `Index`, `IndexItem` and `Form`. At the end of Phase 2,
+views for the Terms `Index`, `IndexItem` and `Form`. At the end of Phase 2,
 Notes can be created, read, edited and destroyed in the browser. Notes should
 save to the database when the form loses focus or is left idle after editing.
 Lastly, while constructing the views I will start using basic bootstrap for
@@ -52,44 +51,40 @@ styling.
 
 [Details][phase-two]
 
-### Phase 3: Notebooks and Tags (2 days)
+### Phase 3: Term Likes and Dislikes (Opinions) (1 day)
 
-Phase 3 adds organization to the Notes. Notes belong to a Notebook, which has
-its own `Index` view. Create JSON API for Notebooks. Notes can also now be
-tagged with multiple tags. Users can bring up notes in a separate `SearchIndex`
-view by searching for their tags. Once the tag search is implemented, I will
-extend this to a fuzzy search through every Note's content.
+Phase 3 allows users to like and dislike Terms, and the number of likes and
+dislikes will display below each term. Likes and Dislikes will share a
+single set of CRUD functionality (Opinions), with a frontend for each.
 
 [Details][phase-three]
 
-### Phase 4: Allow Complex Styling in Notes (1 day)
+### Phase 4: Browse and Search Terms (1.5 days)
 
-Using the react-quill library (based on Quill.js), allow for complex styling of
-notes.
+Phase 4 introduces browsing functionality to Terms. Users can search for
+terms by a substring, or browse terms by their first letter.
 
 [Details][phase-four]
 
-### Phase 5: Reminders and Garbage Collection (1 day)
+### Phase 5: Favorites and Sets of Favorites (2.5 days)
 
-Phase 5 introduces two new features. First, users can set reminders on notes
-which will at the time they are set for prompt the user to review and edit the
-given note. In addition, I will implement a feature that asks users to review
-notes once they reach a certain age and ask whether they should be kept,
-archived, or deleted.
+Phase 5 introduces three features. Users can connect their Facebook and Twitter
+accounts to Urbane Dictionary, allowing them to Like and Retweet them. Users can
+also create sets of favorites on Urbane Dictionary and add favorited terms
+ to them.
 
 [Details][phase-five]
 
 ### Phase 6: Styling Cleanup and Seeding (1 day)
 
-Bootstrap will have been used to keep things organized up until now, but in
-Phase 6 I will add styling flourishes and make modals out of some elements (like
-the NotebookForm).
+Phase 6 will finalize styling, adding modals for some form elements, and seed
+the database.
 
 ### Bonus Features (TBD)
-- [ ] Prettify transitions
-- [ ] Use javascript library for cleaner tag selection
-- [ ] Changelogs for Notes
-- [ ] Pagination / infinite scroll for Notes Index
+- [ ] Subterms: show definition on hover
+- [ ] Facebook Likes and Tweets
+- [ ] Add audio and video to terms, and attach YouTube links
+- [ ] Vote on random terms
 - [ ] Multiple sessions
 
 [phase-one]: ./docs/phases/phase1.md
