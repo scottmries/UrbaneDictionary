@@ -6,7 +6,7 @@
 ## New Session
 ![new-session]
 
-## TermsIndex / TermIndexItem
+## Landing Page / TermsIndex / TermIndexItem
 ![terms]
 
 ## Term
