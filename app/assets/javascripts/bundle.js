@@ -72,7 +72,11 @@
 	          'h2',
 	          null,
 	          'Colloquialisms for the City-Dwelling Sophisticate'
-	        ),
+	        )
+	      ),
+	      React.createElement(
+	        'main',
+	        null,
 	        this.props.children
 	      )
 	    );
@@ -30796,7 +30800,7 @@
 	          key: term.term,
 	          term: term.term,
 	          definition: term.definition,
-	          usage: term.definition
+	          usage: term.usage
 	        });
 	      })
 	    );

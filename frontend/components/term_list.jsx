@@ -23,7 +23,7 @@ var TermList = React.createClass({
             key={term.term}
             term={term.term}
             definition={term.definition}
-            usage={term.definition}
+            usage={term.usage}
             />
           );
         })

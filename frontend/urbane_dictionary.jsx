@@ -13,8 +13,10 @@ var App = React.createClass({
       <header>
         <h1>Urbane Dictionary</h1>
         <h2>Colloquialisms for the City-Dwelling Sophisticate</h2>
-        {this.props.children}
       </header>
+      <main>
+        {this.props.children}
+      </main>
     </div>
   );
   }
