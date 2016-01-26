@@ -44,10 +44,10 @@ structure for the main application. After the basic Flux architecture has been
 set up, a Term store will be implemented and a set of actions corresponding to
 the needed CRUD functionality created. Once this is done, I will create React
 views for the Terms `Index`, `IndexItem` and `Form`. At the end of Phase 2,
-Notes can be created, read, edited and destroyed in the browser. Notes should
+Terms can be created, read, edited and destroyed in the browser. Terms should
 save to the database when the form loses focus or is left idle after editing.
-Lastly, while constructing the views I will start using basic bootstrap for
-styling.
+Lastly, while constructing the views I will start making custom styles in 
+plain CSS.
 
 [Details][phase-two]
 
