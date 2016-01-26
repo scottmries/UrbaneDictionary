@@ -8,13 +8,13 @@ term         | string    | not null
 definition   | text      | not null
 usage        | text      | not null
 author_id    | integer   | not null, foreign key (references users), indexed
-favorites_id | integer   | not null, foreign key (references favorites), indexed
 
 ## opinions
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
 author_id   | integer   | not null, foreign key (references users), indexed
+term_id     | integer   | not null, foreing key (references terms), indexed
 liked       | boolean   | not null
 
 ## favorites_sets
@@ -22,7 +22,6 @@ column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
 user_id     | integer   | not null, foreign key (references users)
-favorite_id | integer   | not null, foreign key (references favorites)
 
 ## favorites
 column name       | data type | details
