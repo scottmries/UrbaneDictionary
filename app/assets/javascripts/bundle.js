@@ -30947,13 +30947,9 @@
 	      "article",
 	      { className: "term" },
 	      React.createElement(
-	        "a",
-	        { href: "terms/" + this.props.id },
-	        React.createElement(
-	          "h2",
-	          null,
-	          this.props.term
-	        )
+	        "h2",
+	        null,
+	        this.props.term
 	      ),
 	      React.createElement(
 	        "p",
