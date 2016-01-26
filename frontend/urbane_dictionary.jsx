@@ -1,10 +1,11 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var ReactRouter = require('react-router');
+// var ReactRouter = require('react-router');
 var ApiUtil = require('./util/api_util');
-var Router = ReactRouter.Router;
-var Route = ReactRouter.Route;
-var IndexRoute = ReactRouter.IndexRoute;
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var IndexRoute = require('react-router').IndexRoute;
+var Terms = require('./components/term_list');
 
 var App = React.createClass({
   render: function () {
@@ -22,8 +23,6 @@ var App = React.createClass({
 var routes = (
   <Route path="/" component={App}>
     <IndexRoute component={Terms}/>
-    <Route path="users/new" component={SignUp}/>
-    <Route path="sessions/new" component={SignIn}/>
   </Route>
 );
 

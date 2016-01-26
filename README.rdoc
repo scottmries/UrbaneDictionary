@@ -11,7 +11,7 @@
 
 Run the follow commands to install dependencies:
 
-npm install --save webpack react react-dom babel-core babel-loader babel-preset-react
+npm install --save webpack react react-dom history react-router flux babel-core babel-loader babel-preset-react
 bundle install
 
 

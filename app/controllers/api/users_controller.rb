@@ -1,7 +1,7 @@
-class UsersController < ApplicationController
+class Api::UsersController < ApplicationController
 
   def create
-    
+
     if user_params[:username] == "guest"
       @user = User.create_guest_user
     else
@@ -13,7 +13,6 @@ class UsersController < ApplicationController
       # redirect_to terms_url
       render json: @user
     else
-      flash.now[:errors] = @user.errors.full_message
       render json: @user.errors.full_messages, status: 422
     end
   end

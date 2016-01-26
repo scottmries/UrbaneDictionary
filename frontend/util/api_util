@@ -1,0 +1,22 @@
+var ApiActions = require('../actions/api_actions.js');
+var TermsStore = require('../stores/term');
+
+ApiUtil = {
+  fetchTerms: function () {
+    $.ajax({
+      type: 'get',
+      dataType: 'json',
+      url: 'api/terms',
+      success: function (terms) {
+        ApiActions.receiveAllTerms(terms);
+        console.log(terms);
+        console.log("Now those are some nice terms.");
+      },
+      error: function () {
+        console.log("Whoops a daisy. Fetching terms is broken. :(");
+      }
+    });
+  }
+};
+
+module.exports = ApiUtil;
