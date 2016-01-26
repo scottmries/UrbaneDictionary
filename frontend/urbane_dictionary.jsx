@@ -6,6 +6,7 @@ var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
 var Terms = require('./components/term_list');
+var SignIn = require('./components/sign_in');
 
 var App = React.createClass({
   render: function () {
@@ -13,10 +14,12 @@ var App = React.createClass({
       <header>
         <h1>Urbane Dictionary</h1>
         <h2>Colloquialisms for the City-Dwelling Sophisticate</h2>
+        <SignIn />
       </header>
       <main>
         {this.props.children}
       </main>
+
     </div>
   );
   }
@@ -25,6 +28,7 @@ var App = React.createClass({
 var routes = (
   <Route path="/" component={App}>
     <IndexRoute component={Terms}/>
+    // <Route path="sessions/new" component={SignIn}/>
   </Route>
 );
 

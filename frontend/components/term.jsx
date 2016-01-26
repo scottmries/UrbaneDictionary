@@ -11,9 +11,9 @@ var Term = React.createClass({
       usage = "";
     }
     return (<article className="term">
-      <a href={"terms/" + this.props.id}>
+     <a href={"terms/" + this.props.id}>
         <h2>{this.props.term}</h2>
-      </a>
+     </a>
       <p className="definition">
         {this.props.definition}
       </p>

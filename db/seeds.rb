@@ -83,15 +83,15 @@ Term.delete_all
 Term.create([
   {
     user_id: 1,
-    term: "I ain't all ham and plaques.",
+    term: "It ain't all ham and plaques.",
     definition: "Life doesn't always reward you.",
-    usage: "Nice pig-farming trophy, son, but I ain't all ham and plaques."
+    usage: "Nice pig-farming trophy, son, but it ain't all ham and plaques."
   },
   {
     user_id: 1,
     term: "The bee's knees",
     definition: "A thing that is good.",
-    usage: "This artesanal honey and foie gras charcuterie is the bee's knees."
+    usage: "This artisanal honey and ham hock charcuterie is the bee's knees."
   },
   {
     user_id: 1,
