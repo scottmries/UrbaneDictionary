@@ -1,6 +1,6 @@
 var React = require('react');
 var TermStore = require('../stores/term');
-var Term = require('./term');
+var TermListItem = require('./term_list_item');
 
 var TermList = React.createClass({
   getInitialState: function () {
@@ -16,11 +16,13 @@ var TermList = React.createClass({
     this.setState({ terms: TermStore.all() });
   },
 
+  
+
   render: function () {
     return (<div className="term_list">
         {this.state.terms.map (function (term){
-          return (<Term
-            id={term.id}
+          return (<TermListItem
+            term={term}
             key={term.id}
             />
           );

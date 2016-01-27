@@ -6,10 +6,12 @@ var Term = React.createClass({
 
   mixins: [History],
 
+  getId: function () {
+    return parseInt(this.props.params.id);
+  },
+
   getInitialState: function () {
-    var id = typeof this.props.params !== "undefined" ? this.props.params.id : this.props.id;
-    id = parseInt(id);
-    return {term: TermStore.find_by_id(id)};
+    return {term: TermStore.find_by_id(this.getId())};
   },
 
   showTerm: function (e) {
@@ -18,12 +20,13 @@ var Term = React.createClass({
   },
 
   componentDidMount: function () {
-
+    TermStore.addListener(this._onChange);
+    ApiUtil.fetchSingleTerm(this.getId());
   },
 
   componentWillReceiveProps: function () {
     var id = parseInt(this.props.id);
-    this.setState({term: TermStore.find_by_id(id)});
+    this.setState({term: TermStore.find_by_id(this.getId())});
   },
 
   render: function () {

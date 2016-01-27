@@ -10,8 +10,9 @@
 
     if @user.save
       sign_in(@user)
+      redirect_to root_url
       # redirect_to terms_url
-      render json: @user
+      # render json: @user
     else
       render json: @user.errors.full_messages, status: 422
     end
