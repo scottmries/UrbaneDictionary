@@ -16,14 +16,21 @@ var TermList = React.createClass({
     this.setState({ terms: TermStore.all() });
   },
 
+  
+
   render: function () {
     debugger
     return (
       <div className="term-list">
         {this.state.terms.map (function (term){
+<<<<<<< HEAD
           return (
             <TermListItem
             id={term.id}
+=======
+          return (<TermListItem
+            term={term}
+>>>>>>> newbranch
             key={term.id}
             />
           );

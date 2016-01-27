@@ -53,8 +53,13 @@
 	var IndexRoute = __webpack_require__(184).IndexRoute;
 	var Terms = __webpack_require__(231);
 	var SignIn = __webpack_require__(233);
+<<<<<<< HEAD
 	var SingleTerm = __webpack_require__(240);
 	var Author = __webpack_require__(239);
+=======
+	var Term = __webpack_require__(232);
+	var NewTermButton = __webpack_require__(243);
+>>>>>>> newbranch
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -90,6 +95,7 @@
 	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: App },
+	  '// ',
 	  React.createElement(IndexRoute, { component: Terms }),
 	  React.createElement(Route, { path: 'terms/:id', component: SingleTerm }),
 	  React.createElement(Route, { path: 'users/:id', component: Author }),
@@ -19724,17 +19730,29 @@
 	    });
 	  },
 
+<<<<<<< HEAD
 	  fetchSingleTerm: function (id) {
 	    $.ajax({
 	      type: 'get',
 	      dataType: 'json',
 	      url: 'api/terms/' + id,
+=======
+	  fetchSingleTerm: function (term_id) {
+	    $.ajax({
+	      type: 'get',
+	      dataType: 'json',
+	      url: 'api/terms/' + term_id,
+>>>>>>> newbranch
 	      success: function (term) {
 	        console.log("Here's your single term already: ", term);
 	        ApiActions.receiveSingleTerm(term);
 	      },
 	      error: function () {
+<<<<<<< HEAD
 	        console.log("Uh ohz, fetching a single term failed.");
+=======
+	        console.log("Bad news: fetching a single term is broken.");
+>>>>>>> newbranch
 	      }
 	    });
 	  }
@@ -30957,7 +30975,11 @@
 	      { className: 'term-list' },
 	      this.state.terms.map(function (term) {
 	        return React.createElement(TermListItem, {
+<<<<<<< HEAD
 	          id: term.id,
+=======
+	          term: term,
+>>>>>>> newbranch
 	          key: term.id
 	        });
 	      })
@@ -31015,9 +31037,17 @@
 	var Author = React.createClass({
 	  displayName: 'Author',
 
+	  getId: function () {
+	    return parseInt(this.props.params.id);
+	  },
+
 	  getInitialState: function () {
+<<<<<<< HEAD
 	    var id = this.props.params.id;
 	    return { terms: TermStore.find_by_author_id(id) };
+=======
+	    return { term: TermStore.find_by_id(this.getId()) };
+>>>>>>> newbranch
 	  },
 
 	  componentDidMount: function () {
@@ -31025,9 +31055,20 @@
 	    ApiUtil.fetchTerms();
 	  },
 
+<<<<<<< HEAD
 	  _onChange: function () {
 	    var id = this.props.params.id;
 	    this.setState({ terms: TermStore.find_by_author_id(id) });
+=======
+	  componentDidMount: function () {
+	    TermStore.addListener(this._onChange);
+	    ApiUtil.fetchSingleTerm(this.getId());
+	  },
+
+	  componentWillReceiveProps: function () {
+	    var id = parseInt(this.props.id);
+	    this.setState({ term: TermStore.find_by_id(this.getId()) });
+>>>>>>> newbranch
 	  },
 
 	  render: function () {
@@ -31146,6 +31187,108 @@
 		return module;
 	}
 
+
+/***/ },
+/* 234 */,
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var TermStore = __webpack_require__(166);
+	var History = __webpack_require__(184).History;
+
+	var TermListItem = React.createClass({
+	  displayName: 'TermListItem',
+
+	  mixins: [History],
+
+	  show: function (e) {
+	    e.preventDefault();
+	  },
+
+	  render: function () {
+	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	    var usage;
+	    var date = new Date(this.props.term.created_at);
+	    var shortMonth = months[date.getMonth()].slice(0, 3);
+	    var dateString = shortMonth + " " + date.getDate();
+	    if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0) {
+	      usage = React.createElement(
+	        'p',
+	        { className: 'usage' },
+	        this.props.term.usage
+	      );
+	    } else {
+	      usage = "";
+	    }
+	    return React.createElement(
+	      'article',
+	      { className: 'term' },
+	      React.createElement(
+	        'strong',
+	        { className: 'date' },
+	        dateString
+	      ),
+	      React.createElement(
+	        'h2',
+	        null,
+	        this.props.term.term
+	      ),
+	      React.createElement(
+	        'p',
+	        { className: 'definition' },
+	        this.props.term.definition
+	      ),
+	      usage,
+	      React.createElement(
+	        'p',
+	        { className: 'author' },
+	        'by ',
+	        this.props.term.user.username,
+	        ' ',
+	        months[date.getMonth()],
+	        ' ',
+	        date.getDate(),
+	        ', ',
+	        date.getFullYear()
+	      )
+	    );
+	  }
+	});
+
+	module.exports = TermListItem;
+
+/***/ },
+/* 242 */,
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var NewTermButton = React.createClass({
+	  displayName: "NewTermButton",
+
+	  handleClick: function (e) {
+	    e.preventDefault();
+	    console.log("Wow, look at Clicky over here.");
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      "button",
+	      { onClick: this.handleClick },
+	      "New Term"
+	    );
+	  }
+	});
+
+	module.exports = NewTermButton;
 
 /***/ }
 /******/ ]);
