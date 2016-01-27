@@ -10,6 +10,10 @@
   box-shadow: 1px 1px 1px #aaa;
 }
 
+.term a {
+  text-decoration: none;
+}
+
 strong.date {
   background-color: #EFFF00;
   text-transform: uppercase;
@@ -33,4 +37,9 @@ strong.date {
 
 .usage {
   font-style: italic;
+}
+
+.author {
+  margin-top: 20px;
+  font-weight: bold;
 }

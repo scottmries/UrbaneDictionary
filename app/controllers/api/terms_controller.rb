@@ -14,13 +14,13 @@ class Api::TermsController < ApplicationController
   end
 
   def index
-    @terms = Term.all.includes(:user)
+    @terms = Term.includes(:user).as_json(include: :user)
     render json: @terms
   end
 
   def show
     @term = Term.find(term_params[:id])
-    render json: @term
+    render json: {term: @term, user: @term}
   end
 
   def update

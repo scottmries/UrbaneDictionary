@@ -19712,8 +19712,8 @@
 	      dataType: 'json',
 	      url: 'api/terms',
 	      success: function (terms) {
-	        ApiActions.receiveAllTerms(terms);
 	        console.log(terms);
+	        ApiActions.receiveAllTerms(terms);
 	        console.log("Now those are some nice terms.");
 	      },
 	      error: function () {
@@ -30977,10 +30977,11 @@
 	  },
 
 	  render: function () {
-	    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	    var usage;
 	    var date = new Date(this.state.term.created_at);
-	    var dateString = months[date.getMonth()] + " " + date.getDate();
+	    var shortMonth = months[date.getMonth()].slice(0, 3);
+	    var dateString = shortMonth + " " + date.getDate();
 	    if (typeof this.state.term.usage !== "undefined" && this.state.term.usage.length > 0) {
 	      usage = React.createElement(
 	        'p',
@@ -31017,7 +31018,13 @@
 	        'p',
 	        { className: 'author' },
 	        'by ',
-	        this.state.term.user
+	        this.state.term.user.username,
+	        ' ',
+	        months[date.getMonth()],
+	        ' ',
+	        date.getDate(),
+	        ', ',
+	        date.getFullYear()
 	      )
 	    );
 	  }

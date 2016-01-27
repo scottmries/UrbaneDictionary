@@ -8,8 +8,8 @@ ApiUtil = {
       dataType: 'json',
       url: 'api/terms',
       success: function (terms) {
-        ApiActions.receiveAllTerms(terms);
         console.log(terms);
+        ApiActions.receiveAllTerms(terms);
         console.log("Now those are some nice terms.");
       },
       error: function () {
