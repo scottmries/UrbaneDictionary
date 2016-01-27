@@ -7,14 +7,14 @@ class Api::TermsController < ApplicationController
   def create
     @term = Term.create(term_params)
     if @term.save
-      render json: @term
+      render json: {term: @term, user: @term.user}
     else
       render json: @term.errors.full_messages, status: 422
     end
   end
 
   def index
-    @terms = Term.all
+    @terms = Term.all.includes(:user)
     render json: @terms
   end
 

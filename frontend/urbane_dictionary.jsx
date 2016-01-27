@@ -7,6 +7,7 @@ var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
 var Terms = require('./components/term_list');
 var SignIn = require('./components/sign_in');
+var Term = require('./components/term');
 
 var App = React.createClass({
   render: function () {
@@ -28,6 +29,7 @@ var App = React.createClass({
 var routes = (
   <Route path="/" component={App}>
     <IndexRoute component={Terms}/>
+    <Route path="terms/:id" component={Term} />
     // <Route path="sessions/new" component={SignIn}/>
   </Route>
 );

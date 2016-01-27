@@ -53,6 +53,7 @@
 	var IndexRoute = __webpack_require__(184).IndexRoute;
 	var Terms = __webpack_require__(231);
 	var SignIn = __webpack_require__(233);
+	var Term = __webpack_require__(232);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -89,6 +90,7 @@
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: Terms }),
+	  React.createElement(Route, { path: 'terms/:id', component: Term }),
 	  '// ',
 	  React.createElement(Route, { path: 'sessions/new', component: SignIn })
 	);
@@ -19718,6 +19720,17 @@
 	        console.log("Whoops a daisy. Fetching terms is broken. :(");
 	      }
 	    });
+	  },
+
+	  fetchSingleTerm: function (term) {
+	    $.ajax({
+	      type: 'get',
+	      dataType: 'json',
+	      url: 'api/terms/' + term.id,
+	      success: function (term) {
+	        ApiActions.receiveSingleTerm(term);
+	      }
+	    });
 	  }
 	};
 
@@ -19736,6 +19749,13 @@
 	    AppDispatcher.dispatch({
 	      actionType: TermConstants.TERMS_RECEIVED,
 	      terms: terms
+	    });
+	  },
+
+	  receiveSingleTerm: function (term) {
+	    AppDispatcher.dispatch({
+	      actionType: TermConstants.TERM_RECEIVED,
+	      term: term
 	    });
 	  }
 	};
@@ -20063,7 +20083,8 @@
 /***/ function(module, exports) {
 
 	TermConstants = {
-	  TERMS_RECEIVED: "TERMS_RECEIVED"
+	  TERMS_RECEIVED: "TERMS_RECEIVED",
+	  TERM_RECEIVED: "TERM_RECEIVED"
 	};
 
 	module.exports = TermConstants;
@@ -20089,13 +20110,16 @@
 	};
 
 	TermStore.__onDispatch = function (payload) {
-	  console.log(payload);
 	  switch (payload.actionType) {
 	    case TermConstants.TERMS_RECEIVED:
 	      reset(payload.terms);
 	      TermStore.__emitChange();
 	      break;
 	  }
+	};
+
+	TermStore.find_by_id = function (id) {
+	  return _terms[id - 1];
 	};
 
 	module.exports = TermStore;
@@ -30911,11 +30935,8 @@
 	      { className: 'term_list' },
 	      this.state.terms.map(function (term) {
 	        return React.createElement(Term, {
-	          date: term.created_at,
-	          key: term.term,
-	          term: term.term,
-	          definition: term.definition,
-	          usage: term.usage
+	          id: term.id,
+	          key: term.id
 	        });
 	      })
 	    );
@@ -30929,44 +30950,75 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var TermStore = __webpack_require__(166);
+	var History = __webpack_require__(184).History;
 
 	var Term = React.createClass({
-	  displayName: "Term",
+	  displayName: 'Term',
+
+	  mixins: [History],
+
+	  getInitialState: function () {
+	    var id = typeof this.props.params !== "undefined" ? this.props.params.id : this.props.id;
+	    id = parseInt(id);
+	    return { term: TermStore.find_by_id(id) };
+	  },
+
+	  showTerm: function (e) {
+	    e.preventDefault();
+	    this.history.pushState(null, '/terms/' + this.props.id);
+	  },
+
+	  componentDidMount: function () {},
+
+	  componentWillReceiveProps: function () {
+	    var id = parseInt(this.props.id);
+	    this.setState({ term: TermStore.find_by_id(id) });
+	  },
 
 	  render: function () {
 	    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	    var usage;
-	    var date = new Date(this.props.date);
+	    var date = new Date(this.state.term.created_at);
 	    var dateString = months[date.getMonth()] + " " + date.getDate();
-	    console.log(dateString);
-	    if (this.props.usage.length > 0) {
+	    if (typeof this.state.term.usage !== "undefined" && this.state.term.usage.length > 0) {
 	      usage = React.createElement(
-	        "p",
-	        { className: "usage" },
-	        this.props.usage
+	        'p',
+	        { className: 'usage' },
+	        this.state.term.usage
 	      );
 	    } else {
 	      usage = "";
 	    }
 	    return React.createElement(
-	      "article",
-	      { className: "term" },
+	      'article',
+	      { className: 'term' },
 	      React.createElement(
-	        "strong",
-	        { className: "date" },
+	        'strong',
+	        { className: 'date' },
 	        dateString
 	      ),
 	      React.createElement(
-	        "h2",
-	        null,
-	        this.props.term
+	        'a',
+	        { href: '#', onClick: this.showTerm },
+	        React.createElement(
+	          'h2',
+	          null,
+	          this.state.term.term
+	        )
 	      ),
 	      React.createElement(
-	        "p",
-	        { className: "definition" },
-	        this.props.definition
+	        'p',
+	        { className: 'definition' },
+	        this.state.term.definition
 	      ),
-	      usage
+	      usage,
+	      React.createElement(
+	        'p',
+	        { className: 'author' },
+	        'by ',
+	        this.state.term.user
+	      )
 	    );
 	  }
 	});

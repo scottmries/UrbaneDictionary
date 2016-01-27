@@ -7,6 +7,13 @@ ApiActions = {
       actionType: TermConstants.TERMS_RECEIVED,
       terms: terms
     });
+  },
+
+  receiveSingleTerm: function(term) {
+    AppDispatcher.dispatch({
+      actionType: TermConstants.TERM_RECEIVED,
+      term: term
+    })
   }
 };
 

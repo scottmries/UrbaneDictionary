@@ -16,6 +16,17 @@ ApiUtil = {
         console.log("Whoops a daisy. Fetching terms is broken. :(");
       }
     });
+  },
+
+  fetchSingleTerm: function (term) {
+    $.ajax({
+      type: 'get',
+      dataType: 'json',
+      url: 'api/terms/' + term.id,
+      success: function (term) {
+        ApiActions.receiveSingleTerm(term);
+      }
+    });
   }
 };
 
