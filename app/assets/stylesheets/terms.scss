@@ -5,11 +5,32 @@
 .term {
   width: 620px;
   background-color: #fff;
-  margin-bottom: 20px
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 1px 1px 1px #aaa;
+}
+
+strong.date {
+  background-color: #EFFF00;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  margin-bottom: 20px;
+  font-size: 12px;
 }
 
 .term h2 {
   color: #134FE6;
   font-family: "Lora", Georgia, Cambria, "Times New Roman", Times, serif;
-  font-size: 24px;
+  font-size: 32px;
+  display: block;
+  margin: 20px 0;
+}
+
+.definition {
+  margin-bottom: 20px;
+}
+
+.usage {
+  font-style: italic;
 }

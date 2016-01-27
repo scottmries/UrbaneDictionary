@@ -76,7 +76,12 @@ users = User.create([
   {
     username: 'arianauffman',
     password: 'password'
+  },
+  {
+    username: 'spencercampbell',
+    password: 'password'
   }
+
   ])
 
 Term.delete_all
@@ -98,5 +103,44 @@ Term.create([
     term: "The cat's pajamas",
     definition: "A thing that is good.",
     usage: "These feline-printed, hand-woven silk bedclothes are the cat's pajamas."
+  },
+  {
+    user_id: 3,
+    term: "Sweet sassy mo-lassy",
+    definition: "Wow; holy mackerel.",
+    usage: "Sweet sassy mo-lassy these cookies are good!"
+  },
+  {
+    user_id: 18,
+    term: "Poppin' a Mallick",
+    definition: "Alejandro González Iñárritu shooting pretty shots.",
+    usage: "Wow, \"The Revenant\" is really poppin' a Mallick."
+  },
+  {
+    user_id: 4,
+    term: "Hot dog!",
+    definition: "Hot diggity dog! Jeez o Pete!",
+    usage: "Hot dog! Am I ever enjoying these frankfurters!"
+  },
+  {
+    user_id: 5,
+    term: "23 Skidoo",
+    definition: "To depart with haste.",
+    usage: "All right, gentlemen, enough rough-housing. Time to 23 Skidoo."
+  },
+  {
+    user_id: 5,
+    term: "Don't take any wooden nickels!",
+    definition: "Proceed with caution.",
+    usage: "This here lumberjack doesn't seem on the up and up. Don't take any wooden nickels!"
+  },
+  {
+    # James
+    user_id: 6,
+    term: "See you on the flip side.",
+    definition: "Fare thee well, fine fellow.",
+    usage: "I'm off for a game of heads-or-tails. See you on the flip side."
   }
+
+
   ])

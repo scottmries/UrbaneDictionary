@@ -30911,6 +30911,7 @@
 	      { className: 'term_list' },
 	      this.state.terms.map(function (term) {
 	        return React.createElement(Term, {
+	          date: term.created_at,
 	          key: term.term,
 	          term: term.term,
 	          definition: term.definition,
@@ -30933,7 +30934,11 @@
 	  displayName: "Term",
 
 	  render: function () {
+	    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	    var usage;
+	    var date = new Date(this.props.date);
+	    var dateString = months[date.getMonth()] + " " + date.getDate();
+	    console.log(dateString);
 	    if (this.props.usage.length > 0) {
 	      usage = React.createElement(
 	        "p",
@@ -30946,6 +30951,11 @@
 	    return React.createElement(
 	      "article",
 	      { className: "term" },
+	      React.createElement(
+	        "strong",
+	        { className: "date" },
+	        dateString
+	      ),
 	      React.createElement(
 	        "h2",
 	        null,

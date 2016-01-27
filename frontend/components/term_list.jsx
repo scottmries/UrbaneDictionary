@@ -20,6 +20,7 @@ var TermList = React.createClass({
     return (<div className="term_list">
         {this.state.terms.map (function (term){
           return (<Term
+            date={term.created_at}
             key={term.term}
             term={term.term}
             definition={term.definition}

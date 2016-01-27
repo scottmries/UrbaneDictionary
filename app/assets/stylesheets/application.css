@@ -24,7 +24,7 @@
      text-align: inherit;
      vertical-align: inherit;
      background: transparent;
-
+     box-sizing: border-box;
  }
 
 #root {
@@ -36,4 +36,9 @@ body {
   background-color: #eee;
   color: #2C353C;
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+}
+
+/*TEMPORARY*/
+header {
+  display: none;
 }
