@@ -53,7 +53,8 @@
 	var IndexRoute = __webpack_require__(184).IndexRoute;
 	var Terms = __webpack_require__(231);
 	var SignIn = __webpack_require__(233);
-	var Term = __webpack_require__(232);
+	var SingleTerm = __webpack_require__(240);
+	var Author = __webpack_require__(239);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -90,7 +91,8 @@
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: Terms }),
-	  React.createElement(Route, { path: 'terms/:id', component: Term }),
+	  React.createElement(Route, { path: 'terms/:id', component: SingleTerm }),
+	  React.createElement(Route, { path: 'users/:id', component: Author }),
 	  '// ',
 	  React.createElement(Route, { path: 'sessions/new', component: SignIn })
 	);
@@ -19722,13 +19724,17 @@
 	    });
 	  },
 
-	  fetchSingleTerm: function (term) {
+	  fetchSingleTerm: function (id) {
 	    $.ajax({
 	      type: 'get',
 	      dataType: 'json',
-	      url: 'api/terms/' + term.id,
+	      url: 'api/terms/' + id,
 	      success: function (term) {
+	        console.log("Here's your single term already: ", term);
 	        ApiActions.receiveSingleTerm(term);
+	      },
+	      error: function () {
+	        console.log("Uh ohz, fetching a single term failed.");
 	      }
 	    });
 	  }
@@ -20115,11 +20121,26 @@
 	      reset(payload.terms);
 	      TermStore.__emitChange();
 	      break;
+	    case TermConstants.TERM_RECEIVED:
+	      reset([payload.terms]);
+	      TermStore.__emitChange();
+	      break;
 	  }
 	};
 
-	TermStore.find_by_id = function (id) {
-	  return _terms[id - 1];
+	TermStore.findById = function (id) {
+	  debugger;
+	  for (var i = 0; i < _terms.length; i++) {
+	    if (_terms[i].id === id) {
+	      return _terms[i];
+	    }
+	  }
+	};
+
+	TermStore.findByAuthorId = function (id) {
+	  return _terms.filter(function (term) {
+	    return term.user_id === id;
+	  });
 	};
 
 	module.exports = TermStore;
@@ -30911,7 +30932,7 @@
 
 	var React = __webpack_require__(1);
 	var TermStore = __webpack_require__(166);
-	var Term = __webpack_require__(232);
+	var TermListItem = __webpack_require__(241);
 
 	var TermList = React.createClass({
 	  displayName: 'TermList',
@@ -30930,11 +30951,12 @@
 	  },
 
 	  render: function () {
+	    debugger;
 	    return React.createElement(
 	      'div',
-	      { className: 'term_list' },
+	      { className: 'term-list' },
 	      this.state.terms.map(function (term) {
-	        return React.createElement(Term, {
+	        return React.createElement(TermListItem, {
 	          id: term.id,
 	          key: term.id
 	        });
@@ -30946,93 +30968,7 @@
 	module.exports = TermList;
 
 /***/ },
-/* 232 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var TermStore = __webpack_require__(166);
-	var History = __webpack_require__(184).History;
-
-	var Term = React.createClass({
-	  displayName: 'Term',
-
-	  mixins: [History],
-
-	  getInitialState: function () {
-	    var id = typeof this.props.params !== "undefined" ? this.props.params.id : this.props.id;
-	    id = parseInt(id);
-	    return { term: TermStore.find_by_id(id) };
-	  },
-
-	  showTerm: function (e) {
-	    e.preventDefault();
-	    this.history.pushState(null, '/terms/' + this.props.id);
-	  },
-
-	  componentDidMount: function () {},
-
-	  componentWillReceiveProps: function () {
-	    var id = parseInt(this.props.id);
-	    this.setState({ term: TermStore.find_by_id(id) });
-	  },
-
-	  render: function () {
-	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	    var usage;
-	    var date = new Date(this.state.term.created_at);
-	    var shortMonth = months[date.getMonth()].slice(0, 3);
-	    var dateString = shortMonth + " " + date.getDate();
-	    if (typeof this.state.term.usage !== "undefined" && this.state.term.usage.length > 0) {
-	      usage = React.createElement(
-	        'p',
-	        { className: 'usage' },
-	        this.state.term.usage
-	      );
-	    } else {
-	      usage = "";
-	    }
-	    return React.createElement(
-	      'article',
-	      { className: 'term' },
-	      React.createElement(
-	        'strong',
-	        { className: 'date' },
-	        dateString
-	      ),
-	      React.createElement(
-	        'a',
-	        { href: '#', onClick: this.showTerm },
-	        React.createElement(
-	          'h2',
-	          null,
-	          this.state.term.term
-	        )
-	      ),
-	      React.createElement(
-	        'p',
-	        { className: 'definition' },
-	        this.state.term.definition
-	      ),
-	      usage,
-	      React.createElement(
-	        'p',
-	        { className: 'author' },
-	        'by ',
-	        this.state.term.user.username,
-	        ' ',
-	        months[date.getMonth()],
-	        ' ',
-	        date.getDate(),
-	        ', ',
-	        date.getFullYear()
-	      )
-	    );
-	  }
-	});
-
-	module.exports = Term;
-
-/***/ },
+/* 232 */,
 /* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31063,6 +30999,153 @@
 	});
 
 	module.exports = SignIn;
+
+/***/ },
+/* 234 */,
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var TermStore = __webpack_require__(166);
+
+	var Author = React.createClass({
+	  displayName: 'Author',
+
+	  getInitialState: function () {
+	    var id = this.props.params.id;
+	    return { terms: TermStore.find_by_author_id(id) };
+	  },
+
+	  componentDidMount: function () {
+	    TermStore.addListener(this._onChange);
+	    ApiUtil.fetchTerms();
+	  },
+
+	  _onChange: function () {
+	    var id = this.props.params.id;
+	    this.setState({ terms: TermStore.find_by_author_id(id) });
+	  },
+
+	  render: function () {
+	    debugger;
+	    return React.createElement(
+	      'div',
+	      { className: 'term_list' },
+	      this.state.terms.map(function (term) {
+	        return React.createElement(Term, {
+	          id: term.id,
+	          key: term.id
+	        });
+	      })
+	    );
+	  }
+	});
+
+	module.exports = Author;
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var SingleTerm = React.createClass({
+	  displayName: 'SingleTerm',
+
+	  render: function () {}
+	});
+
+	module.exports = SingleTerm;
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {var React = __webpack_require__(1);
+
+	var TermListItem = React.createClass({
+	  displayName: "TermListItem",
+
+	  render: function () {
+	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	    var usage;
+	    var date = new Date(this.state.term.created_at);
+	    var shortMonth = months[date.getMonth()].slice(0, 3);
+	    var dateString = shortMonth + " " + date.getDate();
+	    if (typeof this.state.term.usage !== "undefined" && this.state.term.usage.length > 0) {
+	      usage = React.createElement(
+	        "p",
+	        { className: "usage" },
+	        this.state.term.usage
+	      );
+	    } else {
+	      usage = "";
+	    }
+	    return React.createElement(
+	      "article",
+	      { className: "term term_list_item" },
+	      React.createElement(
+	        "strong",
+	        { className: "date" },
+	        dateString
+	      ),
+	      React.createElement(
+	        "a",
+	        { href: "#", onClick: this.showTerm },
+	        React.createElement(
+	          "h2",
+	          null,
+	          this.state.term.term
+	        )
+	      ),
+	      React.createElement(
+	        "p",
+	        { className: "definition" },
+	        this.state.term.definition
+	      ),
+	      usage,
+	      React.createElement(
+	        "p",
+	        { className: "author" },
+	        "by ",
+	        React.createElement(
+	          "a",
+	          { href: "#", onClick: this.showUserTerms },
+	          "  ",
+	          this.state.term.user.username
+	        ),
+	        months[date.getMonth()],
+	        " ",
+	        date.getDate(),
+	        ", ",
+	        date.getFullYear()
+	      )
+	    );
+	  }
+	});
+
+	module.export = TermListItem;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(242)(module)))
+
+/***/ },
+/* 242 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
 
 /***/ }
 /******/ ]);

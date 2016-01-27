@@ -7,23 +7,43 @@ var Term = React.createClass({
   mixins: [History],
 
   getInitialState: function () {
+
+    var id = this.getId();
+    var term = TermStore.findById(id);
+    return {term: term};
+  },
+
+  componentWillMount: function () {
+    var id = this.getId();
+    TermStore.addListener(this._onChange);
+    ApiUtil.fetchSingleTerm(id);
+  },
+
+  getId: function () {
     var id = typeof this.props.params !== "undefined" ? this.props.params.id : this.props.id;
     id = parseInt(id);
-    return {term: TermStore.find_by_id(id)};
+    return id;
+  },
+
+  _onChange: function () {
+    var id = this.getId();
+    // var term = TermStore.findById(id);
+    // this.setState({term: TermStore.findById(id)});
   },
 
   showTerm: function (e) {
     e.preventDefault();
-    this.history.pushState(null, '/terms/' + this.props.id);
+    this.history.pushState(this.state, '/terms/' + this.props.id);
   },
 
-  componentDidMount: function () {
-
+  showUserTerms: function (e) {
+    e.preventDefault();
+    this.history.pushState(this.state, '/users/' + this.state.term.user_id);
   },
 
   componentWillReceiveProps: function () {
     var id = parseInt(this.props.id);
-    this.setState({term: TermStore.find_by_id(id)});
+    // this.setState({term: TermStore.find_by_id(id)});
   },
 
   render: function () {
@@ -38,18 +58,23 @@ var Term = React.createClass({
     } else {
       usage = "";
     }
-    return (<article className="term">
-      <strong className="date">{dateString}</strong>
-        <a href="#" onClick={this.showTerm}><h2>{this.state.term.term}</h2></a>
-      <p className="definition">
-        {this.state.term.definition}
-      </p>
-      {usage}
-      <p className="author">
-        by {this.state.term.user.username} {months[date.getMonth()]} {date.getDate()}, {date.getFullYear()}
-      </p>
-    </article>
-  );
+    return (
+      <article className="term">
+        <strong className="date">{dateString}</strong>
+        <a href="#" onClick={this.showTerm}>
+          <h2>{this.state.term.term}</h2>
+        </a>
+        <p className="definition">
+          {this.state.term.definition}
+        </p>
+        {usage}
+        <p className="author">
+          by <a href="#" onClick={this.showUserTerms}>  {this.state.term.user.username}
+          </a>
+          {months[date.getMonth()]} {date.getDate()}, {date.getFullYear()}
+        </p>
+      </article>
+    );
   }
 });
 

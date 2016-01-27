@@ -19,8 +19,8 @@ class Api::TermsController < ApplicationController
   end
 
   def show
-    @term = Term.find(term_params[:id])
-    render json: {term: @term, user: @term}
+    @term = Term.find(params[:id])
+    render json: @term
   end
 
   def update

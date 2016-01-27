@@ -18,13 +18,17 @@ ApiUtil = {
     });
   },
 
-  fetchSingleTerm: function (term) {
+  fetchSingleTerm: function (id) {
     $.ajax({
       type: 'get',
       dataType: 'json',
-      url: 'api/terms/' + term.id,
+      url: 'api/terms/' + id,
       success: function (term) {
+        console.log("Here's your single term already: ", term);
         ApiActions.receiveSingleTerm(term);
+      },
+      error: function () {
+        console.log("Uh ohz, fetching a single term failed.");
       }
     });
   }

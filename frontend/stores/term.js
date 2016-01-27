@@ -20,11 +20,26 @@ TermStore.__onDispatch = function (payload) {
       reset(payload.terms);
       TermStore.__emitChange();
       break;
+    case TermConstants.TERM_RECEIVED:
+      reset([payload.terms]);
+      TermStore.__emitChange();
+      break;
   }
 };
 
-TermStore.find_by_id = function(id) {
-  return _terms[id - 1];
+TermStore.findById = function(id) {
+  debugger
+  for(var i = 0; i < _terms.length; i++){
+    if (_terms[i].id === id){
+      return _terms[i];
+    }
+  }
+};
+
+TermStore.findByAuthorId = function(id) {
+  return _terms.filter(function (term){
+    return term.user_id === id;
+  });
 };
 
 module.exports = TermStore;
