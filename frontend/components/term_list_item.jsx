@@ -1,6 +1,7 @@
 var React = require('react');
 var TermStore = require('../stores/term');
 var History = require('react-router').History;
+var FileUploads = require('./file_uploads');
 
 var TermListItem = React.createClass({
 
@@ -23,7 +24,7 @@ var TermListItem = React.createClass({
       usage = "";
     }
     return (
-      <article className="term term_list_item">
+      <article className="term term_list_item group">
         <strong className="date">{dateString}</strong>
         <a href="#" onClick={this.showTerm}>
           <h2>{this.props.term.term}</h2>
@@ -36,6 +37,7 @@ var TermListItem = React.createClass({
           by <a href="#" onClick={this.showUserTerms}>  {this.props.term.user.username}
           </a> {months[date.getMonth()]} {date.getDate()}, {date.getFullYear()}
         </p>
+        <FileUploads />
       </article>
     );
   }

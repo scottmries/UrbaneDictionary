@@ -30881,6 +30881,7 @@
 	var React = __webpack_require__(1);
 	var TermStore = __webpack_require__(166);
 	var History = __webpack_require__(182).History;
+	var FileUploads = __webpack_require__(235);
 
 	var TermListItem = React.createClass({
 	  displayName: 'TermListItem',
@@ -30908,7 +30909,7 @@
 	    }
 	    return React.createElement(
 	      'article',
-	      { className: 'term term_list_item' },
+	      { className: 'term term_list_item group' },
 	      React.createElement(
 	        'strong',
 	        { className: 'date' },
@@ -30945,7 +30946,8 @@
 	        date.getDate(),
 	        ', ',
 	        date.getFullYear()
-	      )
+	      ),
+	      React.createElement(FileUploads, null)
 	    );
 	  }
 	});
@@ -31064,6 +31066,62 @@
 	});
 
 	module.exports = NewTermButton;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var FileUploads = React.createClass({
+	  displayName: "FileUploads",
+
+	  getInitialState: function () {
+
+	    return { buttons_shown: false };
+	  },
+
+	  handleEllipsisClick: function () {
+	    this.setState({ buttons_shown: !this.state.buttons_shown });
+	  },
+
+	  render: function () {
+	    var uploadButtons;
+	    if (this.state.buttons_shown) {
+	      uploadButtons = React.createElement(
+	        "div",
+	        { className: "upload-buttons" },
+	        React.createElement(
+	          "button",
+	          { className: "image-upload" },
+	          React.createElement("i", { className: "fa fa-camera" })
+	        ),
+	        React.createElement(
+	          "button",
+	          { className: "audio-upload" },
+	          React.createElement("i", { className: "fa fa-microphone" })
+	        ),
+	        React.createElement(
+	          "button",
+	          { className: "video-upload" },
+	          React.createElement("i", { className: "fa fa-video-camera" })
+	        )
+	      );
+	    }
+	    return React.createElement(
+	      "div",
+	      { className: "file-uploads" },
+	      React.createElement(
+	        "button",
+	        { className: "ellipsis", onClick: this.handleEllipsisClick },
+	        React.createElement("i", { className: "fa fa-ellipsis-h" })
+	      ),
+	      uploadButtons
+	    );
+	  }
+	});
+
+	module.exports = FileUploads;
 
 /***/ }
 /******/ ]);

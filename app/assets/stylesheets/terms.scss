@@ -47,3 +47,40 @@ strong.date {
 .author a {
   color: #134FE6;
 }
+
+.file-uploads {
+  float: right;
+  text-align: center;
+  position: relative;
+}
+
+.file-uploads button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid black;
+  margin: 2px;
+}
+
+.upload-buttons {
+  width: 142px;
+  position: absolute;
+  top: 50px;
+  background: #05ff56;
+  padding: 5px;
+}
+
+.upload-button:before {
+  content: " ";
+  width: 10px;
+  height: 10px;
+  background: #05ff56;
+}
+
+.upload-buttons button:hover {
+  background: white;
+}
+
+.ellipsis:hover{
+  background: #05ff56;
+}
