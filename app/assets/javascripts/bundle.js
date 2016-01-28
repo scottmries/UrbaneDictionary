@@ -20128,14 +20128,13 @@
 	      TermStore.__emitChange();
 	      break;
 	    case TermConstants.TERM_RECEIVED:
-	      reset([payload.terms]);
+	      reset([payload.term]);
 	      TermStore.__emitChange();
 	      break;
 	  }
 	};
 
 	TermStore.findById = function (id) {
-	  debugger;
 	  for (var i = 0; i < _terms.length; i++) {
 	    if (_terms[i].id === id) {
 	      return _terms[i];
@@ -30892,6 +30891,11 @@
 	    e.preventDefault();
 	  },
 
+	  showTerm: function (id, e) {
+	    e.preventDefault();
+	    this.history.pushState(null, "/terms/" + id);
+	  },
+
 	  render: function () {
 	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	    var usage;
@@ -30917,7 +30921,7 @@
 	      ),
 	      React.createElement(
 	        'a',
-	        { href: '#', onClick: this.showTerm },
+	        { href: '#', onClick: this.showTerm.bind(null, this.props.term.id) },
 	        React.createElement(
 	          'h2',
 	          null,
@@ -30991,11 +30995,92 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var TermStore = __webpack_require__(166);
+	var History = __webpack_require__(182).History;
 
 	var SingleTerm = React.createClass({
 	  displayName: 'SingleTerm',
 
-	  render: function () {}
+	  // mixins: [History],
+
+	  getId: function () {
+	    var id = typeof this.props.params !== "undefined" ? this.props.params.id : this.props.id;
+	    id = parseInt(id);
+	    return id;
+	  },
+
+	  componentWillMount: function () {
+	    var id = this.getId();
+	    TermStore.addListener(this._onChange);
+	    ApiUtil.fetchSingleTerm(id);
+	  },
+
+	  _onChange: function () {
+	    var id = this.getId();
+	    this.setState({ term: TermStore.findById(id) });
+	  },
+
+	  render: function () {
+	    if (this.state) {
+	      console.log(this.state);
+	      var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	      var usage;
+	      var date = new Date(this.state.term.created_at);
+	      var shortMonth = months[date.getMonth()].slice(0, 3);
+	      var dateString = shortMonth + " " + date.getDate();
+	      if (this.state && this.state.term.usage.length > 0) {
+	        usage = React.createElement(
+	          'p',
+	          { className: 'usage' },
+	          this.state.term.usage
+	        );
+	      } else {
+	        usage = "";
+	      }
+	      return React.createElement(
+	        'article',
+	        { className: 'term' },
+	        React.createElement(
+	          'strong',
+	          { className: 'date' },
+	          dateString
+	        ),
+	        React.createElement(
+	          'a',
+	          { href: '#', onClick: this.showTerm },
+	          React.createElement(
+	            'h2',
+	            null,
+	            this.state.term.term
+	          )
+	        ),
+	        React.createElement(
+	          'p',
+	          { className: 'definition' },
+	          this.state.term.definition
+	        ),
+	        usage,
+	        React.createElement(
+	          'p',
+	          { className: 'author' },
+	          'by ',
+	          React.createElement(
+	            'a',
+	            { href: '#', onClick: this.showUserTerms },
+	            '  ',
+	            this.state.term.user.username
+	          ),
+	          months[date.getMonth()],
+	          ' ',
+	          date.getDate(),
+	          ', ',
+	          date.getFullYear()
+	        )
+	      );
+	    } else {
+	      return React.createElement('div', null);
+	    }
+	  }
 	});
 
 	module.exports = SingleTerm;
@@ -31085,6 +31170,18 @@
 	    this.setState({ buttons_shown: !this.state.buttons_shown });
 	  },
 
+	  handleImageClick: function (e) {
+	    console.log("image click");
+	  },
+
+	  handleAudioClick: function (e) {
+	    console.log("audio click");
+	  },
+
+	  handleVideoClick: function (e) {
+	    console.log("video click");
+	  },
+
 	  render: function () {
 	    var uploadButtons;
 	    if (this.state.buttons_shown) {
@@ -31093,17 +31190,17 @@
 	        { className: "upload-buttons" },
 	        React.createElement(
 	          "button",
-	          { className: "image-upload" },
+	          { className: "image-upload", onClick: this.handleImageClick },
 	          React.createElement("i", { className: "fa fa-camera" })
 	        ),
 	        React.createElement(
 	          "button",
-	          { className: "audio-upload" },
+	          { className: "audio-upload", onClick: this.handleAudioClick },
 	          React.createElement("i", { className: "fa fa-microphone" })
 	        ),
 	        React.createElement(
 	          "button",
-	          { className: "video-upload" },
+	          { className: "video-upload", onClick: this.handleVideoClick },
 	          React.createElement("i", { className: "fa fa-video-camera" })
 	        )
 	      );

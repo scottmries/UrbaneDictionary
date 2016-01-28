@@ -11,6 +11,11 @@ var TermListItem = React.createClass({
     e.preventDefault();
   },
 
+  showTerm: function (id, e) {
+    e.preventDefault();
+    this.history.pushState(null, "/terms/" + id);
+  },
+
   render: function () {
     var months = ["January", "February", "March", "April", "May",
       "June", "July", "August", "September", "October", "November", "December"];
@@ -26,7 +31,7 @@ var TermListItem = React.createClass({
     return (
       <article className="term term_list_item group">
         <strong className="date">{dateString}</strong>
-        <a href="#" onClick={this.showTerm}>
+        <a href="#" onClick={this.showTerm.bind(null, this.props.term.id)}>
           <h2>{this.props.term.term}</h2>
         </a>
         <p className="definition">

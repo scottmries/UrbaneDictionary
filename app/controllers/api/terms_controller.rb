@@ -19,7 +19,7 @@ class Api::TermsController < ApplicationController
   end
 
   def show
-    @term = Term.find(params[:id])
+    @term = Term.includes(:user).find(params[:id]).as_json(include: :user)
     render json: @term
   end
 

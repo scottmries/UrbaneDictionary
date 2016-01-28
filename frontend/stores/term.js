@@ -21,14 +21,13 @@ TermStore.__onDispatch = function (payload) {
       TermStore.__emitChange();
       break;
     case TermConstants.TERM_RECEIVED:
-      reset([payload.terms]);
+      reset([payload.term]);
       TermStore.__emitChange();
       break;
   }
 };
 
 TermStore.findById = function(id) {
-  debugger
   for(var i = 0; i < _terms.length; i++){
     if (_terms[i].id === id){
       return _terms[i];
