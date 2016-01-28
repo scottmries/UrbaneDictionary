@@ -30998,7 +30998,9 @@
 	var SingleTerm = React.createClass({
 	  displayName: 'SingleTerm',
 
-	  // mixins: [History],
+	  getInitialState: function () {
+	    return { term: TermStore.findById(this.getId()) };
+	  },
 
 	  getId: function () {
 	    var id = this.props.params.id;
@@ -31040,11 +31042,6 @@
 	        'article',
 	        { className: 'term' },
 	        React.createElement(TermHeader, { termHeader: dateString }),
-	        React.createElement(
-	          'strong',
-	          { className: 'date' },
-	          dateString
-	        ),
 	        React.createElement(
 	          'a',
 	          { href: '#', onClick: this.showTerm },

@@ -4,7 +4,10 @@ var History = require('react-router').History;
 var TermHeader = require('./term_header');
 
 var SingleTerm = React.createClass({
-  // mixins: [History],
+
+  getInitialState: function () {
+    return { term: TermStore.findById(this.getId()) };
+  },
 
   getId: function () {
     var id = this.props.params.id;
@@ -43,7 +46,6 @@ var SingleTerm = React.createClass({
       return (
         <article className="term">
           <TermHeader termHeader={dateString} />
-          <strong className="date">{dateString}</strong>
           <a href="#" onClick={this.showTerm}>
             <h2>{this.state.term.term}</h2>
           </a>
