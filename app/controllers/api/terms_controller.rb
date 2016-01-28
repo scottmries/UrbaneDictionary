@@ -1,32 +1,33 @@
 class Api::TermsController < ApplicationController
   def new
     @term = Term.new
-    render json: @term
+    render new
   end
 
   def create
     @term = Term.create(term_params)
     if @term.save
-      render json: {term: @term, user: @term.user}
+      render :show
     else
       render json: @term.errors.full_messages, status: 422
     end
   end
 
   def index
-    @terms = Term.includes(:user).as_json(include: :user)
-    render json: @terms
+    @terms = Term.all
+    render :index
+
   end
 
   def show
-    @term = Term.includes(:user).find(params[:id]).as_json(include: :user)
-    render json: @term
+    @term = Term.find(params[:id])
+    render :show
   end
 
   def update
     @term = Term.find(term_params[:id])
     if @term.update(term_params)
-      render json: @term
+      render :show
     else
       render @term.errors.full_messages, status: 422
     end
@@ -34,7 +35,8 @@ class Api::TermsController < ApplicationController
 
   def destroy
     @term = Term.find(term_params[:id])
-    @term.delete
+    @term.destroy
+    render :show
   end
 
   private

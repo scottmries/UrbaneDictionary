@@ -19,6 +19,12 @@ class User < ActiveRecord::Base
     user
   end
 
+  def createTerm(term_params)
+    term_params[:user_id] = self.id
+    term = Term.new(term_params)
+    term.save!
+  end
+
   def self.create_guest_user
     user = User.new(username: "guest", password: SecureRandom.urlsafe_base64(16))
   end

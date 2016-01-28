@@ -2,6 +2,7 @@ var React = require('react');
 var TermStore = require('../stores/term');
 var History = require('react-router').History;
 var FileUploads = require('./file_uploads');
+var TermHeader = require('./term_header');
 
 var TermListItem = React.createClass({
 
@@ -13,7 +14,7 @@ var TermListItem = React.createClass({
 
   showTerm: function (id, e) {
     e.preventDefault();
-    this.history.pushState(null, "/terms/" + id);
+    this.history.pushState(this.state, "/terms/" + id);
   },
 
   render: function () {
@@ -30,7 +31,7 @@ var TermListItem = React.createClass({
     }
     return (
       <article className="term term_list_item group">
-        <strong className="date">{dateString}</strong>
+        <TermHeader termHeader={dateString} />
         <a href="#" onClick={this.showTerm.bind(null, this.props.term.id)}>
           <h2>{this.props.term.term}</h2>
         </a>
@@ -39,8 +40,7 @@ var TermListItem = React.createClass({
         </p>
         {usage}
         <p className="author">
-          by <a href="#" onClick={this.showUserTerms}>  {this.props.term.user.username}
-          </a> {months[date.getMonth()]} {date.getDate()}, {date.getFullYear()}
+          by <a href="#" onClick={this.showUserTerms}>  {this.props.term.user.username} </a> {months[date.getMonth()]} {date.getDate()}, {date.getFullYear()}
         </p>
         <FileUploads />
       </article>

@@ -11,15 +11,15 @@ var FileUploads = React.createClass({
   },
 
   handleImageClick: function (e) {
-    console.log("image click");
+    return
   },
 
   handleAudioClick: function (e) {
-    console.log("audio click");
+    return
   },
 
   handleVideoClick: function (e) {
-    console.log("video click");
+    return
   },
 
   render: function () {

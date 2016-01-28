@@ -16,10 +16,8 @@ var TermList = React.createClass({
     this.setState({ terms: TermStore.all() });
   },
 
-
-
   render: function () {
-    console.log(this.state);
+    console.log("this.state", this.state);
     return (
       <div className="term-list">
         {this.state.terms.map (function (term){

@@ -19719,12 +19719,11 @@
 	      dataType: 'json',
 	      url: 'api/terms',
 	      success: function (terms) {
-	        console.log(terms);
 	        ApiActions.receiveAllTerms(terms);
-	        console.log("Now those are some nice terms.");
+	        // console.log("Now those are some nice terms.", terms);
 	      },
 	      error: function () {
-	        console.log("Whoops a daisy. Fetching terms is broken. :(");
+	        // console.log("Whoops a daisy. Fetching terms is broken. :(");
 	      }
 	    });
 	  },
@@ -19735,12 +19734,11 @@
 	      dataType: 'json',
 	      url: 'api/terms/' + id,
 	      success: function (term) {
-	        console.log("Here's your single term already: ", term);
+	        // console.log("Here's your single term already: ", term);
 	        ApiActions.receiveSingleTerm(term);
 	      },
 	      error: function () {
-	        console.log("Uh ohz, fetching a single term failed.");
-	        console.log("Bad news: fetching a single term is broken.");
+	        // console.log("Uh ohz, fetching a single term failed.");
 	      }
 	    });
 	  }
@@ -30857,7 +30855,7 @@
 	  },
 
 	  render: function () {
-	    console.log(this.state);
+	    console.log("this.state", this.state);
 	    return React.createElement(
 	      'div',
 	      { className: 'term-list' },
@@ -30881,6 +30879,7 @@
 	var TermStore = __webpack_require__(166);
 	var History = __webpack_require__(182).History;
 	var FileUploads = __webpack_require__(235);
+	var TermHeader = __webpack_require__(236);
 
 	var TermListItem = React.createClass({
 	  displayName: 'TermListItem',
@@ -30893,7 +30892,7 @@
 
 	  showTerm: function (id, e) {
 	    e.preventDefault();
-	    this.history.pushState(null, "/terms/" + id);
+	    this.history.pushState(this.state, "/terms/" + id);
 	  },
 
 	  render: function () {
@@ -30914,11 +30913,7 @@
 	    return React.createElement(
 	      'article',
 	      { className: 'term term_list_item group' },
-	      React.createElement(
-	        'strong',
-	        { className: 'date' },
-	        dateString
-	      ),
+	      React.createElement(TermHeader, { termHeader: dateString }),
 	      React.createElement(
 	        'a',
 	        { href: '#', onClick: this.showTerm.bind(null, this.props.term.id) },
@@ -30942,7 +30937,8 @@
 	          'a',
 	          { href: '#', onClick: this.showUserTerms },
 	          '  ',
-	          this.props.term.user.username
+	          this.props.term.user.username,
+	          ' '
 	        ),
 	        ' ',
 	        months[date.getMonth()],
@@ -30997,6 +30993,7 @@
 	var React = __webpack_require__(1);
 	var TermStore = __webpack_require__(166);
 	var History = __webpack_require__(182).History;
+	var TermHeader = __webpack_require__(236);
 
 	var SingleTerm = React.createClass({
 	  displayName: 'SingleTerm',
@@ -31004,14 +31001,17 @@
 	  // mixins: [History],
 
 	  getId: function () {
-	    var id = typeof this.props.params !== "undefined" ? this.props.params.id : this.props.id;
+	    var id = this.props.params.id;
 	    id = parseInt(id);
 	    return id;
 	  },
 
 	  componentWillMount: function () {
-	    var id = this.getId();
 	    TermStore.addListener(this._onChange);
+	  },
+
+	  componentDidMount: function () {
+	    var id = this.getId();
 	    ApiUtil.fetchSingleTerm(id);
 	  },
 
@@ -31022,13 +31022,12 @@
 
 	  render: function () {
 	    if (this.state) {
-	      console.log(this.state);
 	      var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	      var usage;
 	      var date = new Date(this.state.term.created_at);
 	      var shortMonth = months[date.getMonth()].slice(0, 3);
 	      var dateString = shortMonth + " " + date.getDate();
-	      if (this.state && this.state.term.usage.length > 0) {
+	      if (this.state.term.usage.length > 0) {
 	        usage = React.createElement(
 	          'p',
 	          { className: 'usage' },
@@ -31040,6 +31039,7 @@
 	      return React.createElement(
 	        'article',
 	        { className: 'term' },
+	        React.createElement(TermHeader, { termHeader: dateString }),
 	        React.createElement(
 	          'strong',
 	          { className: 'date' },
@@ -31070,6 +31070,7 @@
 	            '  ',
 	            this.state.term.user.username
 	          ),
+	          ' ',
 	          months[date.getMonth()],
 	          ' ',
 	          date.getDate(),
@@ -31171,15 +31172,15 @@
 	  },
 
 	  handleImageClick: function (e) {
-	    console.log("image click");
+	    return;
 	  },
 
 	  handleAudioClick: function (e) {
-	    console.log("audio click");
+	    return;
 	  },
 
 	  handleVideoClick: function (e) {
-	    console.log("video click");
+	    return;
 	  },
 
 	  render: function () {
@@ -31219,6 +31220,28 @@
 	});
 
 	module.exports = FileUploads;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var TermHeader = React.createClass({
+	  displayName: "TermHeader",
+
+	  render: function () {
+	    // console.log("this.props", this.props);
+	    return React.createElement(
+	      "strong",
+	      { className: "term-header" },
+	      this.props.termHeader
+	    );
+	    // return <strong>a</strong>;
+	  }
+	});
+
+	module.exports = TermHeader;
 
 /***/ }
 /******/ ]);

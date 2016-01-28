@@ -8,12 +8,11 @@ ApiUtil = {
       dataType: 'json',
       url: 'api/terms',
       success: function (terms) {
-        console.log(terms);
         ApiActions.receiveAllTerms(terms);
-        console.log("Now those are some nice terms.");
+        // console.log("Now those are some nice terms.", terms);
       },
       error: function () {
-        console.log("Whoops a daisy. Fetching terms is broken. :(");
+        // console.log("Whoops a daisy. Fetching terms is broken. :(");
       }
     });
   },
@@ -24,12 +23,11 @@ ApiUtil = {
       dataType: 'json',
       url: 'api/terms/' + id,
       success: function (term) {
-        console.log("Here's your single term already: ", term);
+        // console.log("Here's your single term already: ", term);
         ApiActions.receiveSingleTerm(term);
       },
       error: function () {
-        console.log("Uh ohz, fetching a single term failed.");
-        console.log("Bad news: fetching a single term is broken.");
+        // console.log("Uh ohz, fetching a single term failed.");
       }
     });
   }

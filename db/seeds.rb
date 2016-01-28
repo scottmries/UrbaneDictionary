@@ -1,146 +1,166 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-
 User.delete_all
-users = User.create([
-  {
-    username: 'scott',
-    password: 'password'
-  },
-  {
-    username: "minijo",
-    password: 'password'
-  },
-  {
-    username: 'davidkarpinski',
-    password: 'password'
-  },
-  {
-    username: 'lisajane',
-    password: 'password'
-  },
-  {
-    username: 'geoffreyhusseinkrawczyk',
-    password: 'password'
-  },
-  {
-    username: 'jamesboatwright',
-    password: 'password'
-  },
-  {
-    username: 'desireemervau',
-    password: 'password'
-  },
-  {
-    username: 'katehurley',
-    password: 'password'
-  },
-  {
-    username: 'marlaynacatlett',
-    password: 'password'
-  },
-  {
-    username: 'shastiolearysoudant',
-    password: 'password'
-  },
-  {
-    username: 'joshuavonstout',
-    password: 'password'
-  },
-  {
-    username: 'jessicariot',
-    password: 'password'
-  },
-  {
-    username: 'taramerry',
-    password: 'password'
-  },
-  {
-    username: 'reesewentz',
-    password: 'password'
-  },
-  {
-    username: 'brendankelly',
-    password: 'password'
-  },
-  {
-    username: 'arielleavenia',
-    password: 'password'
-  },
 
-  {
-    username: 'arianauffman',
-    password: 'password'
-  },
-  {
-    username: 'spencercampbell',
-    password: 'password'
-  }
+scott = User.create({ username: 'scott', password: 'password' })
+minijo = User.create({ username: "minijo", password: 'password' })
+davidkarpinski = User.create({ username: 'davidkarpinski', password: 'password' })
 
-  ])
+lisajane = User.create({ username: 'lisajane', password: 'password' })
+geoffreyhusseinkrawczyk = User.create({ username: 'geoffreyhusseinkrawczyk', password: 'password' })
+jamesboatwright = User.create({ username: 'jamesboatwright', password: 'password' })
+desireemervau = User.create({ username: 'desireemervau', password: 'password' })
+katehurley = User.create({ username: 'katehurley', password: 'password' })
+marlaynacatlett = User.create({ username: 'marlaynacatlett', password: 'password' })
+shastiolearysoudant = User.create({ username: 'shastiolearysoudant', password: 'password' })
+joshuavonstout = User.create({ username: 'joshuavonstout', password: 'password' })
+jessicariot = User.create({ username: 'jessicariot', password: 'password' })
+taramerry = User.create({ username: 'taramerry', password: 'password' })
+reesewentz = User.create({ username: 'reesewentz', password: 'password' })
+brendankelly = User.create({ username: 'brendankelly', password: 'password' })
+arielleavenia = User.create({ username: 'arielleavenia', password: 'password' })
+arianauffman = User.create({ username: 'arianauffman', password: 'password' })
+spencercampbell = User.create({ username: 'spencercampbell', password: 'password' })
 
 Term.delete_all
-Term.create([
-  {
-    user_id: 1,
-    term: "It ain't all ham and plaques.",
+scott.createTerm({    term: "It ain't all ham and plaques.",
     definition: "Life doesn't always reward you.",
     usage: "Nice pig-farming trophy, son, but it ain't all ham and plaques."
-  },
-  {
-    user_id: 1,
-    term: "The bee's knees",
+  })
+scott.createTerm(  {    term: "The bee's knees",
     definition: "A thing that is good.",
     usage: "This artisanal honey and ham hock charcuterie is the bee's knees."
-  },
-  {
-    user_id: 1,
-    term: "The cat's pajamas",
+  })
+scott.createTerm ({    term: "The cat's pajamas",
     definition: "A thing that is good.",
     usage: "These feline-printed, hand-woven silk bedclothes are the cat's pajamas."
-  },
-  {
-    user_id: 3,
-    term: "Sweet sassy mo-lassy",
+  })
+davidkarpinski.createTerm ({    term: "Sweet sassy mo-lassy",
     definition: "Wow; holy mackerel.",
     usage: "Sweet sassy mo-lassy these cookies are good!"
-  },
-  {
-    user_id: 18,
+  })
+spencercampbell.createTerm ({
     term: "Poppin' a Mallick",
     definition: "Alejandro González Iñárritu shooting pretty shots.",
     usage: "Wow, \"The Revenant\" is really poppin' a Mallick."
-  },
-  {
-    user_id: 4,
-    term: "Hot dog!",
+  })
+lisajane.createTerm ({    term: "Hot dog!",
     definition: "Hot diggity dog! Jeez o Pete!",
     usage: "Hot dog! Am I ever enjoying these frankfurters!"
-  },
-  {
-    user_id: 5,
-    term: "23 Skidoo",
+  })
+geoffreyhusseinkrawczyk.createTerm ({    term: "23 Skidoo",
     definition: "To depart with haste.",
     usage: "All right, gentlemen, enough rough-housing. Time to 23 Skidoo."
-  },
-  {
-    user_id: 5,
-    term: "Don't take any wooden nickels!",
+  })
+geoffreyhusseinkrawczyk.createTerm ({    term: "Don't take any wooden nickels!",
     definition: "Proceed with caution.",
     usage: "This here lumberjack doesn't seem on the up and up. Don't take any wooden nickels!"
-  },
-  {
-    # James
-    user_id: 6,
-    term: "See you on the flip side.",
+  })
+jamesboatwright.createTerm ({    term: "See you on the flip side.",
     definition: "Fare thee well, fine fellow.",
     usage: "I'm off for a game of heads-or-tails. See you on the flip side."
-  }
-
-
-  ])
+  })
+desireemervau.createTerm ({    term: "Applesauce!",
+    definition: "Rubbish! Piffle! (Cassell)",
+    usage: "Aloysius: \"You would really enjoy these Granny Smiths I have cooked down.\"\rGertrude: \"Applesauce!\""
+  })
+katehurley.createTerm ({    term: "Fuck that noise!",
+    definition: "No! No way!",
+    usage: "Aloysius \"Would you care to attend Stravinsky's 'Rite of Spring,' conducted by Toscanini, this evening?\"\rGertrude: \"Fuck that noise!\""
+  })
+minijo.createTerm ({    term: "Caddywompus",
+    definition: "Old codger",
+    usage: "The elderly fella what carries my clubs is a real caddywompus."
+  })
+minijo.createTerm ({    term: "Banana oil.",
+    definition: "That's doubtful.",
+    usage: "Aloysius: \"These here potassium sticks are good for your health.\"\rGertrude: \"Banana oil!\""
+  })
+  # .createTerm ({
+  #  #   term: "Barneymugging",
+  #   definition: "Intercourse",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # })
+  # .createTerm ({
+  #  #   term: "See you on the flip side.",
+  #   definition: "Fare thee well, fine fellow.",
+  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
+  # }
