@@ -18,29 +18,18 @@ ApiUtil = {
     });
   },
 
-<<<<<<< HEAD
   fetchSingleTerm: function (id) {
     $.ajax({
       type: 'get',
       dataType: 'json',
       url: 'api/terms/' + id,
-=======
-  fetchSingleTerm: function (term_id) {
-    $.ajax({
-      type: 'get',
-      dataType: 'json',
-      url: 'api/terms/' + term_id,
->>>>>>> newbranch
       success: function (term) {
         console.log("Here's your single term already: ", term);
         ApiActions.receiveSingleTerm(term);
       },
       error: function () {
-<<<<<<< HEAD
         console.log("Uh ohz, fetching a single term failed.");
-=======
         console.log("Bad news: fetching a single term is broken.");
->>>>>>> newbranch
       }
     });
   }

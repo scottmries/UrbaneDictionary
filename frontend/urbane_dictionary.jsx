@@ -7,21 +7,19 @@ var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
 var Terms = require('./components/term_list');
 var SignIn = require('./components/sign_in');
-<<<<<<< HEAD
 var SingleTerm = require('./components/single_term');
 var Author = require('./components/author');
-=======
-var Term = require('./components/term');
 var NewTermButton = require('./components/new_term_button');
->>>>>>> newbranch
 
 var App = React.createClass({
   render: function () {
     return (<div id="content">
       <header>
-        <h1>Urbane Dictionary</h1>
-        <h2>Colloquialisms for the City-Dwelling Sophisticate</h2>
-        <SignIn />
+        <div className="header-inner">
+          <h1>Urbane Dictionary</h1>
+          <h2>Colloquialisms for the City-Dwelling Sophisticate</h2>
+          <SignIn />
+        </div>
       </header>
       <main>
         {this.props.children}
@@ -34,14 +32,9 @@ var App = React.createClass({
 
 var routes = (
   <Route path="/" component={App}>
-<<<<<<< HEAD
     <IndexRoute component={Terms}/>
     <Route path="terms/:id" component={SingleTerm} />
     <Route path="users/:id" component={Author} />
-=======
-    // <IndexRoute component={Terms}/>
-    <Route path="terms/:id" component={Term} />
->>>>>>> newbranch
     // <Route path="sessions/new" component={SignIn}/>
   </Route>
 );

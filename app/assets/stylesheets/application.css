@@ -28,7 +28,7 @@
  }
 
 #root {
-  width: 940px;
+  /*width: 940px;*/
   margin: auto;
 }
 
@@ -38,7 +38,19 @@ body {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
 }
 
-/*TEMPORARY*/
 header {
-  /*display: none;*/
+  background-color: #1D2439;
+}
+
+.header-inner {
+  width: 940px;
+  margin: auto;
+  color: white;
+  font-family: 'Special Elite', cursive;
+  padding: 15px 0;
+}
+
+main {
+  width: 940px;
+  margin: auto;
 }
