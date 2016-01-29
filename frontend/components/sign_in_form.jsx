@@ -1,6 +1,6 @@
 var React = require('react');
 
-var SignIn = React.createClass({
+var SignInForm = React.createClass({
 
 
   render: function () {
@@ -18,4 +18,4 @@ var SignIn = React.createClass({
   }
 });
 
-module.exports = SignIn;
+module.exports = SignInForm;

@@ -74,31 +74,32 @@ minijo.createTerm ({    term: "Banana oil.",
     definition: "That's doubtful.",
     usage: "Aloysius: \"These here potassium sticks are good for your health.\"\rGertrude: \"Banana oil!\""
   })
-  # .createTerm ({
-  #  #   term: "Barneymugging",
-  #   definition: "Intercourse",
-  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
-  # })
-  # .createTerm ({
-  #  #   term: "See you on the flip side.",
-  #   definition: "Fare thee well, fine fellow.",
-  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
-  # })
-  # .createTerm ({
-  #  #   term: "See you on the flip side.",
-  #   definition: "Fare thee well, fine fellow.",
-  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
-  # })
-  # .createTerm ({
-  #  #   term: "See you on the flip side.",
-  #   definition: "Fare thee well, fine fellow.",
-  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
-  # })
-  # .createTerm ({
-  #  #   term: "See you on the flip side.",
-  #   definition: "Fare thee well, fine fellow.",
-  #   usage: "I'm off for a game of heads-or-tails. See you on the flip side."
-  # })
+minijo.createTerm ({
+    term: "Barneymugging",
+    definition: "Intercourse",
+    usage: "Care for a session of barneymugging?"
+  })
+minijo.createTerm ({
+    term: "Bug-eyed betty",
+    definition: "An ugly woman",
+    usage: "Ol' Elizabeth Flye sure is one bug-eyed betty."
+  })
+minijo.createTerm ({
+    term: "Burning with a blue flame",
+    definition: "Drunk",
+    usage: "The chaps and I were burning with a blue flame when we went camping."
+  })
+minijo.createTerm ({
+    term: "Facestretcher",
+    definition: "Cougar",
+    usage: "Joan Rivers was a real facestretcher when she still blessed this planet with her presence."
+  })
+
+minijo.createTerm ({
+    term: "Forty-niner",
+    definition: "A male gold-digger",
+    usage: "I heard ol' Joe Montana was a real forty-niner."
+  })
   # .createTerm ({
   #  #   term: "See you on the flip side.",
   #   definition: "Fare thee well, fine fellow.",
