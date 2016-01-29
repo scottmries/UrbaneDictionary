@@ -125,3 +125,7 @@ main {
   height: 100%;
   background-color: rgba(19, 79, 230, 0.5);
 }
+
+.modal > section {
+  background: white;
+}

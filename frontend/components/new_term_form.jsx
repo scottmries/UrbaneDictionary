@@ -6,10 +6,22 @@ var NewTermForm = React.createClass({
   },
 
   render: function () {
-    return <button className="newTerm">
-      <i className="fa fa-plus plus" onClick={this.handleClick}></i>
-      <span>{this.props.text}</span>
-      </button>;
+    return (<section className="newTermForm">
+      <h2>New Term</h2>
+      <form>
+        <label>Term
+          <input type="text" value="" name="term"></input>
+        </label>
+        <label>Definition
+          <input type="textarea" value="" name="definition"></input>
+        </label>
+        <label>Usage
+          <input type="textarea" value="" name="usage"></input>
+        </label>
+        <button>Submit</button>
+      </form>
+      </section>
+    );
   }
 });
 

@@ -2,18 +2,31 @@ var React = require('react');
 
 var SignInForm = React.createClass({
 
+  submit: function (e) {
+    e.preventDefault();
+
+    var credentials = e.currentTarger.serializeJSON();
+    SessionsApiUtil.login(credentials, function () {
+      this.history.pushState({}, "/");
+    }.bind(this));
+
+  },
 
   render: function () {
 
     return (
-      <div className="sign-in">
+      <section className="sign-in">
         <h2>Say, Jim, fancy a sign in?</h2>
-        <form action="api/users" method="post">
-          <input type="hidden" name="user[username]" value="guest" />
-          <input type="hidden" name="user[password]" value="" />
-          <input type="submit" value="Guest Sign In" />
-        </form>
-      </div>
+          <form action="api/users" method="post" onSubmit={this.submit}>
+            <label>Username:
+              <input type="text" name="user[username]" value="" />
+            </label>
+            <label>Password:
+              <input type="password" name="user[password]" value="" />
+            </label>
+            <input type="submit" value="Sign In" />
+          </form>
+      </section>
     );
   }
 });
