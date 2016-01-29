@@ -126,6 +126,47 @@ main {
   background-color: rgba(19, 79, 230, 0.5);
 }
 
+.modal h2 {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  text-transform: uppercase;
+  color: white;
+  font-weight: bold;
+  border-bottom: 2px solid yellow;
+  margin: auto;
+}
+
 .modal > section {
+
+}
+
+.modal .form-inner {
+  padding: 30px;
+  font-size: 12px;
   background: white;
+  width: 800px;
+  margin: 100px auto 0 auto;
+}
+
+.modal button {
+  color: white;
+}
+
+.modal form button{
+  background: yellow;
+  color: black;
+  width: 100%;
+  text-align: center;
+}
+
+.closeModal {
+  background: transparent;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: white;
+  border: 2px solid yellow;
+  text-align: center;
+  float: right;
 }

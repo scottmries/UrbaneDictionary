@@ -19,7 +19,6 @@ var Author = React.createClass({
     },
 
     render: function () {
-      debugger
       return (<div className="term_list">
           {this.state.terms.map (function (term){
             return (<Term

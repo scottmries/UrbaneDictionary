@@ -9,15 +9,17 @@ var NewTermForm = React.createClass({
     return (<section className="newTermForm">
       <h2>New Term</h2>
       <form>
-        <label>Term
-          <input type="text" value="" name="term"></input>
-        </label>
-        <label>Definition
-          <input type="textarea" value="" name="definition"></input>
-        </label>
-        <label>Usage
-          <input type="textarea" value="" name="usage"></input>
-        </label>
+        <div className="form-inner">
+            <label>Term
+            <input type="text" value="" name="term"></input>
+          </label>
+          <label>Definition
+            <input type="textarea" value="" name="definition"></input>
+          </label>
+          <label>Usage
+            <input type="textarea" value="" name="usage"></input>
+          </label>
+        </div>
         <button>Submit</button>
       </form>
       </section>

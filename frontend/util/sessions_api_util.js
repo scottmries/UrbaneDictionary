@@ -15,8 +15,8 @@ var SessionsApiUtil = {
 
   logout: function () {
     $.ajax({
-      url: 'api/session/destroy',
-      type: 'get',
+      url: 'api/session',
+      type: 'delete',
       dataType: 'json',
       success: function () {
         console.log("logged out!");
@@ -26,7 +26,7 @@ var SessionsApiUtil = {
 
   fetchCurrentUser: function (cb) {
     $.ajax({
-      url: '/api/session',
+      url: 'api/session',
       type: 'GET',
       dataType: 'json',
       success: function (currentUser) {

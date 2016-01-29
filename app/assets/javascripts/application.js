@@ -12,5 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require serialize-json
 //= require bundle
 //= require_tree .

@@ -13,7 +13,7 @@ class Api::SessionsController < ApplicationController
 
   def create
     @user = User.find_by_credentials(
-      params[:email],
+      params[:username],
       params[:password]
     )
 
@@ -24,4 +24,10 @@ class Api::SessionsController < ApplicationController
 
       render "api/users/show"
     end
+  end
+
+  def destroy
+    @user = User.find_by_credentials
+    render "/"
+  end
 end
