@@ -7,6 +7,11 @@ CurrentUserActions = {
       actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
       currentUser: currentUser
     });
+  },
+  logoutCurrentUser: function() {
+    AppDispatcher.dispatch({
+      actionType: CurrentUserConstants.LOGOUT_CURRENT_USER
+    });
   }
 };
 

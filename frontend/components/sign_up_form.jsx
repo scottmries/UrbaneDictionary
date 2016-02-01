@@ -1,4 +1,5 @@
 var React = require('react');
+var Modal = require('./modal');
 
 var SignUpForm = React.createClass({
   render: function () {

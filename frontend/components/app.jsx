@@ -12,6 +12,7 @@ var Sidebar = require('./sidebar');
 var Header = require('./header');
 var CurrentUserStore = require('./../stores/current_user_store');
 var SessionsApiUtil = require('./../util/sessions_api_util');
+var Spinner = require('./spinner');
 
 var App = React.createClass({
 
@@ -23,48 +24,63 @@ var App = React.createClass({
   getInitialState: function () {
     return ({
       signInModalIsOpen: false,
-      newTermModalIsOpen: false
+      newTermModalIsOpen: false,
+      fetchingModalIsOpen: true
     });
+  },
+
+  openFetchingModal: function () {
+    this.setState({
+      fetchingModalIsOpen: true
+    })
+  },
+
+  closeFetchingModal: function () {
+    this.setState({
+      fetchingModalIsOpen: false
+    })
   },
 
   openSignInModal: function () {
     this.setState({
       signInModalIsOpen: true
     });
-    console.log("Opening sign in modal");
   },
 
   closeSignInModal: function () {
     this.setState({
       signInModalIsOpen: false
     });
-    console.log("Closing sign in modal");
   },
 
   openNewTermModal: function () {
     this.setState({
       newTermModalIsOpen: true
     });
-    console.log("Opening new term modal");
   },
 
   closeNewTermModal: function () {
     this.setState({
       newTermModalIsOpen: false
     });
-    console.log("Closing new term modal");
   },
 
   render: function () {
     var signInModal;
     var newTermModal;
-    if (this.state.signInModalIsOpen){
-      signInModal = <Modal closeHandler={this.closeSignInModal}>
-        <SignInForm />
-      </Modal>;
+    var fetchingModal;
+
+    if (this.state.fetchingModalIsOpen) {
+      fetchingModal = (
+        <Modal closeHandler={this.closeFetchingModal}>
+          <Spinner />
+        </Modal>
+
+      )
     } else {
-      signInModal = <div></div>;
+      fetchingModal = <div></div>;
     }
+
     if (this.state.newTermModalIsOpen){
       newTermModal = <Modal closeHandler={this.closeNewTermModal}>
         <NewTermForm />
@@ -74,8 +90,8 @@ var App = React.createClass({
     }
     return (
       <div id="content">
+        {fetchingModal}
         {newTermModal}
-        {signInModal}
 
         <Header openNewTermModal={this.openNewTermModal}
           openSignInModal={this.openSignInModal} />

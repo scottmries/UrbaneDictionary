@@ -3,6 +3,7 @@ var SignInButton = require('./sign_in_button');
 var NewTermButton = require('./new_term_button');
 var CurrentUserStore = require('./../stores/current_user_store');
 var SessionsApiUtil = require('./../util/sessions_api_util');
+var Logo = require('./logo');
 
 var Header = React.createClass({
 
@@ -28,14 +29,14 @@ var Header = React.createClass({
     var logInStatus;
     if (CurrentUserStore.isLoggedIn()) { // if we're logged in....
       logInStatus =  (
-        <div>
+        <div className="logInStatus">
           Logged in as { this.state.currentUser.username }
           <button onClick={ this.logout }>LOG OUT</button>
         </div>
       );
     } else {
       logInStatus = (
-        <div>
+        <div className="logInStatus">
           <a href="#/login">Login</a>
         </div>
       );
@@ -44,7 +45,7 @@ var Header = React.createClass({
 
       <header className="group">
         <div className="header-inner">
-          <h1>Urbane Dictionary</h1>
+          <Logo />
           <h2>Colloquialisms for the City-Dwelling Sophisticate</h2>
           {logInStatus}
           <nav className="subnav">

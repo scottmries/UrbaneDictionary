@@ -15,23 +15,27 @@ var Header = require('./components/header');
 var routes = (
   <Route path="/" component={App}>
     <IndexRoute component={Terms}/>
-    <Route path="login" component={SignInForm} />
+    <Route path="/login" component={SignInForm} />
     <Route path="users/new" component={SignUpForm} />
     <Route path="terms/:id" component={SingleTerm} />
     <Route path="users/:id" component={Author} />
   </Route>
 );
 
+// var loggedIn = false;
+
 function _ensureLoggedIn(nextState, replace, callback) {
 
   if (CurrentUserStore.userHasBeenFetched()) {
     _redirectIfNotLoggedIn();
   } else {
+
     SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
   }
 
   function _redirectIfNotLoggedIn() {
     if (!CurrentUser.Store.isLoggedIn()) {
+      // openSignInModal
       replace({}, "/login");
       callback();
     }
