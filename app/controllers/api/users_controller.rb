@@ -1,7 +1,6 @@
  class Api::UsersController < ApplicationController
 
   def create
-    byebug
     if user_params[:username] == "guest"
       @user = User.create_guest_user
     else
@@ -10,7 +9,7 @@
 
     if @user.save
       sign_in!(@user)
-      render new
+      render "api/terms/index"
       # redirect_to terms_url
       # render json: @user
     else

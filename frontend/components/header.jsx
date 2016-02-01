@@ -4,6 +4,7 @@ var NewTermButton = require('./new_term_button');
 var CurrentUserStore = require('./../stores/current_user_store');
 var SessionsApiUtil = require('./../util/sessions_api_util');
 var Logo = require('./logo');
+var SearchBar = require('./search_bar');
 
 var Header = React.createClass({
 
@@ -49,8 +50,8 @@ var Header = React.createClass({
           <h2>Colloquialisms for the City-Dwelling Sophisticate</h2>
           {logInStatus}
           <nav className="subnav">
-            <SignInButton clickCallback={this.props.openSignInModal} text="" />
             <NewTermButton clickCallback={this.props.openNewTermModal} text="" />
+            <SearchBar />
           </nav>
         </div>
       </header>

@@ -26,16 +26,11 @@ CurrentUserStore.__onDispatch = function (payload) {
       CurrentUserStore.__emitChange();
       break;
     case CurrentUserConstants.LOGOUT_CURRENT_USER:
-      _currentUserHasBeenFetched = true;
+
+      _currentUserHasBeenFetched = false;
       _currentUser = {};
       CurrentUserStore.__emitChange();
       break;
-  }
-
-  if (payload.actionType === CurrentUserConstants.RECEIVE_CURRENT_USER) {
-    _currentUserHasBeenFetched = true;
-    _currentUser = payload.currentUser;
-    CurrentUserStore.__emitChange();
   }
 };
 

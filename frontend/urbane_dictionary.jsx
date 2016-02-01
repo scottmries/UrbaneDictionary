@@ -10,12 +10,15 @@ var SignUpForm = require('./components/sign_up_form');
 var SingleTerm = require('./components/single_term');
 var Author = require('./components/author');
 var Header = require('./components/header');
+var CurrentUserStore = require('./stores/current_user_store');
+var SessionsApiUtil = require('./util/sessions_api_util');
 
 
 var routes = (
+  // <Route path="/" component={App} onEnter={_ensureLoggedIn}>
   <Route path="/" component={App}>
-    <IndexRoute component={Terms}/>
-    <Route path="/login" component={SignInForm} />
+    <IndexRoute component={Terms} onEnter={_ensureLoggedIn}/>
+    <Route path="login" component={SignInForm} />
     <Route path="users/new" component={SignUpForm} />
     <Route path="terms/:id" component={SingleTerm} />
     <Route path="users/:id" component={Author} />
@@ -26,7 +29,7 @@ var routes = (
 
 function _ensureLoggedIn(nextState, replace, callback) {
 
-  if (CurrentUserStore.userHasBeenFetched()) {
+  if (CurrentUserStore.hasBeenFetched()) {
     _redirectIfNotLoggedIn();
   } else {
 
@@ -34,11 +37,10 @@ function _ensureLoggedIn(nextState, replace, callback) {
   }
 
   function _redirectIfNotLoggedIn() {
-    if (!CurrentUser.Store.isLoggedIn()) {
-      // openSignInModal
+    if (!CurrentUserStore.isLoggedIn()) {
       replace({}, "/login");
-      callback();
     }
+    callback();
   }
 }
 

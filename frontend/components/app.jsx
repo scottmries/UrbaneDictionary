@@ -13,12 +13,25 @@ var Header = require('./header');
 var CurrentUserStore = require('./../stores/current_user_store');
 var SessionsApiUtil = require('./../util/sessions_api_util');
 var Spinner = require('./spinner');
+var History = require('react-router').History;
 
 var App = React.createClass({
 
+  mixins: [History],
+
   componentDidMount: function () {
     CurrentUserStore.addListener(this.forceUpdate.bind(this));
+    CurrentUserStore.addListener(this._onChange);
     SessionsApiUtil.fetchCurrentUser();
+  },
+
+  _onChange: function () {
+    if (CurrentUserStore.isLoggedIn()){
+      this.setState( { fetchingModalIsOpen: false } );
+    } else {
+      debugger
+      this.history.replace("/login");
+    }
   },
 
   getInitialState: function () {
@@ -32,13 +45,13 @@ var App = React.createClass({
   openFetchingModal: function () {
     this.setState({
       fetchingModalIsOpen: true
-    })
+    });
   },
 
   closeFetchingModal: function () {
     this.setState({
       fetchingModalIsOpen: false
-    })
+    });
   },
 
   openSignInModal: function () {
@@ -76,7 +89,7 @@ var App = React.createClass({
           <Spinner />
         </Modal>
 
-      )
+      );
     } else {
       fetchingModal = <div></div>;
     }

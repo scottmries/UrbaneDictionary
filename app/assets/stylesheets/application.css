@@ -182,3 +182,8 @@ main {
   text-align: center;
   float: right;
 }
+
+.fa {
+  font-size: 28px !important ;
+  color: white;
+}
