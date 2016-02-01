@@ -24841,9 +24841,16 @@
 	    });
 	  },
 
-	  createTerm: function (current_user) {
+	  createTerm: function (term) {
 	    $.ajax({
-	      type: 'post'
+	      type: 'post',
+	      dataType: false,
+	      processData: false,
+	      url: 'api/terms',
+	      data: { term: term },
+	      success: function (term) {
+	        ApiUtil.fetchTerms();
+	      }
 	    });
 	  }
 	};
@@ -31706,6 +31713,7 @@
 	var React = __webpack_require__(1);
 	var TermStore = __webpack_require__(225);
 	var TermListItem = __webpack_require__(244);
+	var SearchResultsStore = __webpack_require__(265);
 
 	var TermList = React.createClass({
 	  displayName: 'TermList',
@@ -31714,9 +31722,21 @@
 	    return { terms: TermStore.all() };
 	  },
 
-	  componentDidMount: function () {
+	  componentWillMount: function () {
 	    TermStore.addListener(this._onChange);
+	    SearchResultsStore.addListener(this._onSearch);
 	    ApiUtil.fetchTerms();
+	  },
+
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+
+	  _onSearch: function () {
+	    var searchResults = SearchResultsStore.all();
+	    if (searchResults.length !== 0) {
+	      this.setState({ terms: searchResults });
+	    } else {}
 	  },
 
 	  _onChange: function () {
@@ -31724,7 +31744,6 @@
 	  },
 
 	  render: function () {
-	    console.log("this.state", this.state);
 	    return React.createElement(
 	      'div',
 	      { className: 'term-list' },
@@ -31759,9 +31778,14 @@
 	    e.preventDefault();
 	  },
 
-	  showTerm: function (id, e) {
+	  showTerm: function (e) {
 	    e.preventDefault();
-	    this.history.pushState(this.state, "/terms/" + id);
+	    this.history.pushState(this.state, "/terms/" + this.props.term.id);
+	  },
+
+	  showUserTerms: function (e) {
+	    e.preventDefault();
+	    this.history.pushState(this.state, "/users/" + this.props.term.user_id);
 	  },
 
 	  render: function () {
@@ -31785,7 +31809,7 @@
 	      React.createElement(TermHeader, { termHeader: dateString }),
 	      React.createElement(
 	        'a',
-	        { href: '#', onClick: this.showTerm.bind(null, this.props.term.id) },
+	        { href: '#', onClick: this.showTerm },
 	        React.createElement(
 	          'h2',
 	          null,
@@ -31855,7 +31879,9 @@
 
 	  render: function () {
 	    var uploadButtons;
+	    var pressedClass = "ellipsis";
 	    if (this.state.buttons_shown) {
+	      pressedClass = "pressed";
 	      uploadButtons = React.createElement(
 	        "div",
 	        { className: "upload-buttons" },
@@ -31881,7 +31907,7 @@
 	      { className: "file-uploads" },
 	      React.createElement(
 	        "button",
-	        { className: "ellipsis", onClick: this.handleEllipsisClick },
+	        { className: pressedClass, onClick: this.handleEllipsisClick },
 	        React.createElement("i", { className: "fa fa-ellipsis-h" })
 	      ),
 	      uploadButtons
@@ -31901,13 +31927,11 @@
 	  displayName: "TermHeader",
 
 	  render: function () {
-	    // console.log("this.props", this.props);
 	    return React.createElement(
 	      "strong",
 	      { className: "term-header" },
 	      this.props.termHeader
 	    );
-	    // return <strong>a</strong>;
 	  }
 	});
 
@@ -32056,7 +32080,6 @@
 	      type: 'GET',
 	      dataType: 'json',
 	      success: function (currentUser) {
-	        console.log(currentUser);
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        cb && cb(currentUser);
 	      }
@@ -32194,52 +32217,83 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var CurrentUserStore = __webpack_require__(260);
+	var ApiUtil = __webpack_require__(218);
 
 	var NewTermForm = React.createClass({
-	  displayName: "NewTermForm",
+	  displayName: 'NewTermForm',
 
-	  handleClick: function () {
-	    console.log("clicked new term");
+	  getInitialState: function () {
+	    return {
+	      term: "",
+	      definition: "",
+	      usage: ""
+	    };
+	  },
+
+	  handleClick: function () {},
+
+	  handleDefinitionChange: function () {
+	    this.setState({ definition: e.currentTarget.value });
+	  },
+
+	  handleTermChange: function () {
+	    this.setState({ term: e.currentTarget.value });
+	  },
+
+	  handleUsageChange: function () {
+	    this.setState({ usage: e.currentTarget.value });
+	  },
+
+	  currentUser: function () {
+	    return CurrentUserStore.currentUser();
+	  },
+
+	  submit: function (e) {
+	    e.preventDefault();
+	    var term = $(e.currentTarget).serializeJSON();
+	    term.user_id = this.currentUser().id;
+	    ApiUtil.createTerm(term);
 	  },
 
 	  render: function () {
 	    return React.createElement(
-	      "section",
-	      { className: "newTermForm" },
+	      'section',
+	      { className: 'newTermForm' },
 	      React.createElement(
-	        "h2",
+	        'h2',
 	        null,
-	        "New Term"
+	        'New Term'
 	      ),
 	      React.createElement(
-	        "form",
-	        null,
+	        'form',
+	        { onSubmit: this.submit },
 	        React.createElement(
-	          "div",
-	          { className: "form-inner" },
+	          'div',
+	          { className: 'form-inner' },
 	          React.createElement(
-	            "label",
+	            'label',
 	            null,
-	            "Term",
-	            React.createElement("input", { type: "text", value: "", name: "term" })
+	            'Term',
+	            React.createElement('input', { type: 'text', onChange: this.handleTermChange, name: 'term' })
 	          ),
 	          React.createElement(
-	            "label",
+	            'label',
 	            null,
-	            "Definition",
-	            React.createElement("input", { type: "textarea", value: "", name: "definition" })
+	            'Definition',
+	            React.createElement('input', { type: 'textarea', onChange: this.handleDefinitionChange, name: 'definition' })
 	          ),
 	          React.createElement(
-	            "label",
+	            'label',
 	            null,
-	            "Usage",
-	            React.createElement("input", { type: "textarea", value: "", name: "usage" })
+	            'Usage',
+	            React.createElement('input', { type: 'textarea', onChange: this.handleUsageChange, name: 'usage' })
 	          )
 	        ),
 	        React.createElement(
-	          "button",
+	          'button',
 	          null,
-	          "Submit"
+	          'Submit'
 	        )
 	      )
 	    );
@@ -32357,7 +32411,7 @@
 
 	  getInitialState: function () {
 	    var id = this.props.params.id;
-	    return { terms: TermStore.find_by_author_id(id) };
+	    return { terms: TermStore.findByAuthorId(id) };
 	  },
 
 	  componentDidMount: function () {
@@ -32454,6 +32508,7 @@
 	        { className: 'logInStatus' },
 	        'Logged in as ',
 	        this.state.currentUser.username,
+	        React.createElement('br', null),
 	        React.createElement(
 	          'button',
 	          { onClick: this.logout },
@@ -32657,16 +32712,122 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var SearchApiUtil = __webpack_require__(267);
 
 	var SearchBar = React.createClass({
-	  displayName: "SearchBar",
+	  displayName: 'SearchBar',
+
+	  getInitialState: function () {
+	    return { page: 1, query: "" };
+	  },
+
+	  search: function (e) {
+	    var query = e.target.value;
+	    SearchApiUtil.search(query, 1);
+
+	    this.setState({ page: 1, query: query });
+	  },
+
+	  nextPage: function () {
+	    var nextPage = this.state.page + 1;
+	    SearchApiUtil.search(this.state.query, nextPage);
+
+	    this.setState({ page: nextPage });
+	  },
 
 	  render: function () {
-	    return React.createElement("input", { type: "text" });
+	    return React.createElement('input', { type: 'text', onKeyUp: this.search, placeholder: 'Type any text here...' });
 	  }
 	});
 
 	module.exports = SearchBar;
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(226).Store;
+	var AppDispatcher = __webpack_require__(220);
+	var SearchConstants = __webpack_require__(266);
+
+	var _searchResults = [];
+	var _meta = {};
+
+	var SearchResultsStore = new Store(AppDispatcher);
+
+	SearchResultsStore.all = function () {
+	  return _searchResults.slice();
+	};
+
+	SearchResultsStore.meta = function () {
+	  return _meta;
+	};
+
+	SearchResultsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SearchConstants.RECEIVE_RESULTS:
+	      _searchResults = payload.searchResults;
+	      _meta = payload.meta;
+	      SearchResultsStore.__emitChange();
+	      break;
+	  }
+	};
+
+	module.exports = SearchResultsStore;
+
+/***/ },
+/* 266 */
+/***/ function(module, exports) {
+
+	SearchConstants = {
+	  RECEIVE_RESULTS: "RECEIVE_RESULTS"
+	};
+
+	module.exports = SearchConstants;
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SearchActions = __webpack_require__(268);
+
+	var SearchApiUtil = {
+
+	  search: function (query, page) {
+	    $.ajax({
+	      url: '/api/search',
+	      type: 'GET',
+	      dataType: 'json',
+	      data: { query: query, page: page },
+	      success: function (data) {
+	        SearchActions.receiveResults(data);
+	      },
+	      error: function () {}
+	    });
+	  }
+	};
+
+	module.exports = SearchApiUtil;
+
+/***/ },
+/* 268 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SearchConstants = __webpack_require__(266);
+	var AppDispatcher = __webpack_require__(220);
+
+	SearchApiUtil = {
+	  receiveResults: function (data) {
+	    AppDispatcher.dispatch({
+	      actionType: SearchConstants.RECEIVE_RESULTS,
+	      searchResults: data.results,
+	      meta: { totalCount: data.total_count }
+	    });
+	  }
+	};
+
+	module.exports = SearchApiUtil;
 
 /***/ }
 /******/ ]);

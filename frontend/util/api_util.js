@@ -46,9 +46,16 @@ ApiUtil = {
     });
   },
 
-  createTerm: function (current_user) {
+  createTerm: function (term) {
     $.ajax({
       type: 'post',
+      dataType: false,
+      processData: false,
+      url: 'api/terms',
+      data: {term: term},
+      success: function (term) {
+        ApiUtil.fetchTerms();
+      }
     });
   }
 };

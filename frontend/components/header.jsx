@@ -31,7 +31,7 @@ var Header = React.createClass({
     if (CurrentUserStore.isLoggedIn()) { // if we're logged in....
       logInStatus =  (
         <div className="logInStatus">
-          Logged in as { this.state.currentUser.username }
+          Logged in as { this.state.currentUser.username }<br />
           <button onClick={ this.logout }>LOG OUT</button>
         </div>
       );

@@ -12,9 +12,14 @@ var TermListItem = React.createClass({
     e.preventDefault();
   },
 
-  showTerm: function (id, e) {
+  showTerm: function (e) {
     e.preventDefault();
-    this.history.pushState(this.state, "/terms/" + id);
+    this.history.pushState(this.state, "/terms/" + this.props.term.id);
+  },
+
+  showUserTerms: function (e) {
+    e.preventDefault();
+    this.history.pushState(this.state, "/users/" + this.props.term.user_id);
   },
 
   render: function () {
@@ -32,7 +37,7 @@ var TermListItem = React.createClass({
     return (
       <article className="term term_list_item group">
         <TermHeader termHeader={dateString} />
-        <a href="#" onClick={this.showTerm.bind(null, this.props.term.id)}>
+        <a href="#" onClick={this.showTerm}>
           <h2>{this.props.term.term}</h2>
         </a>
         <p className="definition">

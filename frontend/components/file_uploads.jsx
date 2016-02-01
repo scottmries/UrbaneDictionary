@@ -24,7 +24,9 @@ var FileUploads = React.createClass({
 
   render: function () {
     var uploadButtons;
+    var pressedClass = "ellipsis";
     if (this.state.buttons_shown){
+      pressedClass = "pressed";
       uploadButtons = <div className="upload-buttons">
         <button className="image-upload" onClick={this.handleImageClick}>
           <i className="fa fa-camera"></i>
@@ -39,7 +41,7 @@ var FileUploads = React.createClass({
     }
     return (
       <div className="file-uploads">
-        <button className="ellipsis" onClick={this.handleEllipsisClick}><i className="fa fa-ellipsis-h"></i></button>
+        <button className={pressedClass} onClick={this.handleEllipsisClick}><i className="fa fa-ellipsis-h"></i></button>
         {uploadButtons}
       </div>
     );

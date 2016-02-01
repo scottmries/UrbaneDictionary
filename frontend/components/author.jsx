@@ -5,7 +5,7 @@ var Author = React.createClass({
 
     getInitialState: function () {
       var id = this.props.params.id;
-      return { terms: TermStore.find_by_author_id(id)};
+      return { terms: TermStore.findByAuthorId(id)};
     },
 
     componentDidMount: function () {

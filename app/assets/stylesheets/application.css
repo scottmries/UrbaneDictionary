@@ -53,7 +53,7 @@ header .subnav button {
   font-family: "Lora", Georgia, Cambria, "Times New Roman", Times, serif;
   font-size: 20px;
   margin: 0 0 10px 10px;
-  padding: 1px 0 0 18px;
+  padding: 3px 0 0 15px;
 }
 
 header .subnav button:hover,
@@ -196,7 +196,24 @@ main {
   float: right;
 }
 
-.fa {
-  font-size: 28px !important ;
+.subnav .newTerm .fa {
+  font-size: 28px;
+}
+
+.file-uploads .fa {
+  font-size: 14px;
+}
+
+.logInStatus button {
+  background: #134FE6;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 3px;
+  margin: 5px;
   color: white;
+}
+
+.logInStatus button:hover {
+  color: #EFFF00;
 }

@@ -29,11 +29,19 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+gem 'react-rails', '~>1.3.0'
+
+gem 'flux-rails-assets','~>2.1.0'
+
 gem 'paperclip'
 
 gem 'aws-sdk', '~> 1.6'
 
 gem 'figaro'
+
+gem 'pg_search'
+
+gem 'kaminari'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
