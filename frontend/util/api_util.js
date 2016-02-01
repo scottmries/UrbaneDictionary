@@ -2,6 +2,20 @@ var ApiActions = require('../actions/api_actions.js');
 var TermsStore = require('../stores/term');
 
 ApiUtil = {
+  newUser: function (user, cb) {
+    $.ajax({
+      type: 'post',
+      dataType: 'json',
+      url: 'api/users',
+      data: {user: user},
+      success: function () {
+        cb();
+      },
+      error: function () {
+      }
+    });
+  },
+
   fetchTerms: function () {
     $.ajax({
       type: 'get',
@@ -29,6 +43,12 @@ ApiUtil = {
       error: function () {
         // console.log("Uh ohz, fetching a single term failed.");
       }
+    });
+  },
+
+  createTerm: function (current_user) {
+    $.ajax({
+      type: 'post',
     });
   }
 };

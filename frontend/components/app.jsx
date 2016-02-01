@@ -29,7 +29,6 @@ var App = React.createClass({
     if (CurrentUserStore.isLoggedIn()){
       this.setState( { fetchingModalIsOpen: false } );
     } else {
-      debugger
       this.history.replace("/login");
     }
   },
@@ -44,7 +43,8 @@ var App = React.createClass({
 
   openFetchingModal: function () {
     this.setState({
-      fetchingModalIsOpen: true
+      fetchingModalIsOpen: true,
+      signInModalIsOpen: false
     });
   },
 
@@ -56,7 +56,8 @@ var App = React.createClass({
 
   openSignInModal: function () {
     this.setState({
-      signInModalIsOpen: true
+      signInModalIsOpen: true,
+      fetchingModalIsOpen: false
     });
   },
 

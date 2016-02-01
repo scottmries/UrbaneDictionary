@@ -24693,7 +24693,6 @@
 	    if (CurrentUserStore.isLoggedIn()) {
 	      this.setState({ fetchingModalIsOpen: false });
 	    } else {
-	      debugger;
 	      this.history.replace("/login");
 	    }
 	  },
@@ -24708,7 +24707,8 @@
 
 	  openFetchingModal: function () {
 	    this.setState({
-	      fetchingModalIsOpen: true
+	      fetchingModalIsOpen: true,
+	      signInModalIsOpen: false
 	    });
 	  },
 
@@ -24720,7 +24720,8 @@
 
 	  openSignInModal: function () {
 	    this.setState({
-	      signInModalIsOpen: true
+	      signInModalIsOpen: true,
+	      fetchingModalIsOpen: false
 	    });
 	  },
 
@@ -24797,6 +24798,19 @@
 	var TermsStore = __webpack_require__(225);
 
 	ApiUtil = {
+	  newUser: function (user, cb) {
+	    $.ajax({
+	      type: 'post',
+	      dataType: 'json',
+	      url: 'api/users',
+	      data: { user: user },
+	      success: function () {
+	        cb();
+	      },
+	      error: function () {}
+	    });
+	  },
+
 	  fetchTerms: function () {
 	    $.ajax({
 	      type: 'get',
@@ -24824,6 +24838,12 @@
 	      error: function () {
 	        // console.log("Uh ohz, fetching a single term failed.");
 	      }
+	    });
+	  },
+
+	  createTerm: function (current_user) {
+	    $.ajax({
+	      type: 'post'
 	    });
 	  }
 	};
@@ -31927,7 +31947,7 @@
 	var History = __webpack_require__(159).History;
 	var Modal = __webpack_require__(252);
 	var GuestSignIn = __webpack_require__(253);
-
+	var SignUpForm = __webpack_require__(263);
 	var SignInForm = React.createClass({
 	  displayName: 'SignInForm',
 
@@ -31977,17 +31997,21 @@
 	              'label',
 	              null,
 	              'Username:',
+	              React.createElement('br', null),
 	              React.createElement('input', { type: 'text', name: 'user[username]', onChange: this.handleUsernameChange, value: this.state.username })
 	            ),
+	            React.createElement('br', null),
 	            React.createElement(
 	              'label',
 	              null,
 	              'Password:',
+	              React.createElement('br', null),
 	              React.createElement('input', { type: 'password', name: 'user[password]', onChange: this.handlePasswordChange, value: this.state.password })
 	            )
 	          ),
 	          React.createElement('input', { type: 'submit', value: 'Sign In' })
-	        )
+	        ),
+	        React.createElement(SignUpForm, null)
 	      )
 	    );
 	  }
@@ -32111,17 +32135,29 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(218);
+	var History = __webpack_require__(159).History;
 
 	var GuestSignIn = React.createClass({
-	  displayName: "GuestSignIn",
+	  displayName: 'GuestSignIn',
+
+	  mixins: [History],
+
+	  submit: function (e) {
+	    e.preventDefault();
+	    var user = $(e.currentTarget).serializeJSON().user;
+	    ApiUtil.newUser(user, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
 
 	  render: function () {
 	    return React.createElement(
-	      "form",
-	      { action: "api/users", method: "post" },
-	      React.createElement("input", { type: "hidden", name: "user[username]", value: "guest" }),
-	      React.createElement("input", { type: "hidden", name: "user[password]", value: "" }),
-	      React.createElement("input", { type: "submit", value: "Guest Sign In" })
+	      'form',
+	      { onSubmit: this.submit },
+	      React.createElement('input', { type: 'hidden', name: 'user[username]', value: 'guest' }),
+	      React.createElement('input', { type: 'hidden', name: 'user[password]', value: '' }),
+	      React.createElement('input', { type: 'submit', value: 'Guest Sign In' })
 	    );
 	  }
 	});
@@ -32554,14 +32590,42 @@
 
 	var React = __webpack_require__(1);
 	var Modal = __webpack_require__(252);
+	var ApiUtil = __webpack_require__(218);
+	var SessionsApiUtil = __webpack_require__(249);
+	var History = __webpack_require__(159).History;
 
 	var SignUpForm = React.createClass({
 	  displayName: 'SignUpForm',
 
+	  mixins: [History],
+
+	  getInitialState: function () {
+	    return { username: "", password: "" };
+	  },
+
+	  handleUsernameChange: function (e) {
+	    this.setState({ username: e.currentTarget.value });
+	  },
+
+	  handlePasswordChange: function (e) {
+	    this.setState({ password: e.currentTarget.value });
+	  },
+
+	  submit: function (e) {
+	    e.preventDefault();
+	    var user = $(e.currentTarget).serializeJSON().user;
+	    // SessionsApiUtil.login(credentials, function () {
+	    //   this.history.pushState({}, "/");
+	    // }.bind(this));
+	    ApiUtil.newUser(user, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+
 	  render: function () {
 	    return React.createElement(
 	      'form',
-	      { action: 'api/users/new', method: 'post' },
+	      { onSubmit: this.submit },
 	      React.createElement(
 	        'div',
 	        { className: 'form-inner' },
@@ -32569,19 +32633,24 @@
 	          'label',
 	          null,
 	          'Username:',
-	          React.createElement('input', { type: 'text', name: 'user[username]', value: '' })
+	          React.createElement('br', null),
+	          React.createElement('input', { type: 'text', name: 'user[username]', onChange: this.handleUsernameChange, value: this.state.username })
 	        ),
+	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
 	          null,
 	          'Password:',
-	          React.createElement('input', { type: 'password', name: 'user[password]', value: '' })
+	          React.createElement('br', null),
+	          React.createElement('input', { type: 'password', name: 'user[password]', onChange: this.handlePasswordChange, value: this.state.password })
 	        )
 	      ),
 	      React.createElement('input', { type: 'submit', value: 'Sign Up' })
 	    );
 	  }
 	});
+
+	module.exports = SignUpForm;
 
 /***/ },
 /* 264 */

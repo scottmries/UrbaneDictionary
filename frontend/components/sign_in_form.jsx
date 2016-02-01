@@ -3,7 +3,7 @@ var SessionsApiUtil = require('./../util/sessions_api_util');
 var History = require('react-router').History;
 var Modal = require('./modal');
 var GuestSignIn = require('./guest_sign_in');
-
+var SignUpForm = require('./sign_up_form');
 var SignInForm = React.createClass({
 
   mixins: [History],
@@ -38,15 +38,16 @@ var SignInForm = React.createClass({
         <GuestSignIn />
           <form action="api/users" method="post" onSubmit={this.submit}>
             <div className="form-inner">
-                <label>Username:
+                <label>Username:<br />
                 <input type="text" name="user[username]" onChange={this.handleUsernameChange} value={this.state.username} />
-              </label>
-              <label>Password:
+              </label><br />
+              <label>Password:<br />
                 <input type="password" name="user[password]" onChange={this.handlePasswordChange} value={this.state.password} />
               </label>
             </div>
             <input type="submit" value="Sign In" />
           </form>
+          <SignUpForm />
           </Modal>
       </section>
     );

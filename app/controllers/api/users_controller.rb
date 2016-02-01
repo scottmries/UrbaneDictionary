@@ -9,6 +9,7 @@
 
     if @user.save
       sign_in!(@user)
+      # render json: user
       render "api/terms/index"
       # redirect_to terms_url
       # render json: @user
