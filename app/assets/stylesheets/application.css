@@ -222,3 +222,15 @@ main {
 .yt-video {
   margin-top: 10px;
 }
+
+.logo h1 {
+  color: white;
+}
+
+.logo h1:hover {
+  color: #134FE6;
+}
+
+.header-inner a {
+  text-decoration: none;
+}

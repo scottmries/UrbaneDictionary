@@ -27,7 +27,8 @@ scott.createTerm({    term: "It ain't all ham and plaques.",
   })
 scott.createTerm(  {    term: "The bee's knees",
     definition: "A thing that is good.",
-    usage: "This artisanal honey and ham hock charcuterie is the bee's knees."
+    usage: "This artisanal honey and ham hock charcuterie is the bee's knees.",
+    video_url: "https://www.youtube.com/embed/Xm9cIOoer4o"
   })
 scott.createTerm ({    term: "The cat's pajamas",
     definition: "A thing that is good.",
@@ -98,7 +99,8 @@ minijo.createTerm ({
 minijo.createTerm ({
     term: "Forty-niner",
     definition: "A male gold-digger",
-    usage: "I heard ol' Joe Montana was a real forty-niner."
+    usage: "I heard ol' Joe Montana was a real forty-niner.",
+    video_url: "https://www.youtube.com/embed/ShyB5h9p7jk"
   })
 minijo.createTerm ({
     term: "Kick the gong around",

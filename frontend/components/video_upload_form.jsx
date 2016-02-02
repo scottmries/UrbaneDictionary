@@ -9,9 +9,24 @@ var VideoUploadForm = React.createClass({
     this.setState({ video_url: e.currentTarget.value });
   },
 
+  parseEmbedCode: function (video_url) {
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = video_url.match(regExp);
+
+    if (match && match[2].length >= 10) {
+      debugger
+        return "http://youtube.com/embed/" + match[2];
+    } else {
+      debugger
+        return 'error';
+    }
+  },
+
   submit: function (e) {
+
     e.preventDefault();
-    var video_url = {video_url: this.state.video_url};
+    var video_url = {video_url: this.parseEmbedCode(this.state.video_url)};
+    debugger
     // var credentials = $(e.currentTarget).serializeJSON().user;
       ApiUtil.addVideoURL(this.props.term, video_url, function () {
         // this.history.pushState({}, "/terms/" + this.props.term.id);
