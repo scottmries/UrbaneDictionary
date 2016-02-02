@@ -11,6 +11,10 @@
   float: left;
 }
 
+.term a:hover {
+  color: #05ff56;
+}
+
 .term-list {
   width: 620px;
   float: left;
@@ -18,6 +22,7 @@
 
 .term a {
   text-decoration: none;
+  color: #134FE6;
 }
 
 strong.term-header {
@@ -30,7 +35,6 @@ strong.term-header {
 }
 
 .term h2 {
-  color: #134FE6;
   font-family: "Lora", Georgia, Cambria, "Times New Roman", Times, serif;
   font-size: 32px;
   display: block;

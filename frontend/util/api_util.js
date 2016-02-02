@@ -37,7 +37,8 @@ ApiUtil = {
   //     dataType: 'json',
   //     url: 'api/terms',
   //     success: function (terms) {
-  //       ApiActions.receiveAllTerms(terms);
+  //       debugger
+  //       ApiActions.receiveTermsByAuthor(terms);
   //     }
   //   });
   // },

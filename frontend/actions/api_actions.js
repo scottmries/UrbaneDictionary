@@ -14,6 +14,13 @@ ApiActions = {
       actionType: TermConstants.TERM_RECEIVED,
       term: term
     });
+  },
+
+  receiveTermsByAuthor: function(terms) {
+    AppDispatcher.dispatch({
+      actionsType: TermConstants.AUTHOR_TERMS_RECEIVED,
+      terms: terms
+    })
   }
 };
 

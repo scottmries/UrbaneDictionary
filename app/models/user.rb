@@ -4,12 +4,7 @@ class User < ActiveRecord::Base
 
   attr_reader :password
 
-  has_many(
-    :terms,
-    class_name: "Term",
-    foreign_key: :user_id,
-    primary_key: :id
-  )
+  has_many :terms
 
   after_initialize :ensure_session_token
 

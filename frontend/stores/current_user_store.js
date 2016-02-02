@@ -11,7 +11,11 @@ CurrentUserStore.currentUser = function () {
 };
 
 CurrentUserStore.isLoggedIn = function () {
-  return !!_currentUser.id;
+  if (typeof _currentUser.user !== "undefined"){
+    return !!_currentUser.user.id;
+  } else {
+    return false;
+  }
 };
 
 CurrentUserStore.hasBeenFetched = function () {

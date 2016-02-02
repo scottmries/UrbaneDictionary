@@ -26,31 +26,34 @@ var TermListItem = React.createClass({
   render: function () {
     var months = ["January", "February", "March", "April", "May",
       "June", "July", "August", "September", "October", "November", "December"];
-    var usage;
-    var date = new Date(this.props.term.created_at);
+    var usage = "";
+    var date = new Date();
+    var author = "";
+    var youtubeVideo = <div></div>;
+    var term = "";
+    var definition = "";
+    if (typeof this.props.term !== "undefined"){
+      date = new Date(this.props.term.created_at);
+      if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7){
+        youtubeVideo = <YoutubeVideo video={this.props.term.video_url} />;
+      }
+      if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0){
+        usage = <p className="usage">{this.props.term.usage}</p>;
+      }
+      author = <a href="#" onClick={this.showUserTerms}>  {this.props.user.username} </a>;
+      term = this.props.term.term;
+      definition = this.props.term.definition;
+    }
     var shortMonth = months[date.getMonth()].slice(0,3);
     var dateString = shortMonth + " " + date.getDate();
-    var youtubeVideo;
-    if (this.props.term.video_url !== null){
-      youtubeVideo = <YoutubeVideo video={this.props.term.video_url} />;
-    } else {
-      youtubeVideo = <div></div>;
-    }
-    if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0){
-      usage = <p className="usage">{this.props.term.usage}</p>;
-    } else {
-      usage = "";
-    }
-    var author = this.props.term.user.username;
-    // var author = <a href="#" onClick={this.showUserTerms}>  {this.props.term.user.username} </a>
     return (
       <article className="term term_list_item group">
         <TermHeader termHeader={dateString} />
         <a href="#" onClick={this.showTerm}>
-          <h2>{this.props.term.term}</h2>
+          <h2>{term}</h2>
         </a>
         <p className="definition">
-          {this.props.term.definition}
+          {definition}
         </p>
         {usage}
         <p className="author">

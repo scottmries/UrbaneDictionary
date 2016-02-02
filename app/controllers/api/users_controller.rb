@@ -23,14 +23,17 @@
   end
 
   def index
-    @user = User.all
+    @users = User.all
+    @users_with_terms = []
+    @users.each do |user|
+      @users_with_terms << {user: user, terms: user.terms.to_a}
+    end
   end
 
   def show
     @user = User.find(params[:id])
-    @terms = @user.terms
+    @terms = @user.terms.to_a
     @user_with_terms = {user: @user, terms: @terms}
-    byebug
   end
 
   private

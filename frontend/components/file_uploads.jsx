@@ -14,8 +14,12 @@ var FileUploads = React.createClass({
     };
   },
 
-  componentWillMount: function () {
-    TermStore.addListener(this._termChange);
+  componentDidMount: function () {
+    this.term_listener = TermStore.addListener(this._termChange);
+  },
+
+  componentWillUnmount: function () {
+    this.term_listener.remove();
   },
 
   _termChange: function () {
@@ -70,13 +74,19 @@ var FileUploads = React.createClass({
     var modal;
     switch (this.state.modal) {
       case "image":
-        modal = <Modal closeHandler={this.closeHandler}><ImageUploadForm term={this.props.term}/></Modal>;
+        modal = <Modal closeHandler={this.closeHandler}>
+            <ImageUploadForm term={this.props.term}/>
+          </Modal>;
         break;
       case "video":
-        modal = <Modal closeHandler={this.closeHandler}><VideoUploadForm term={this.props.term}/></Modal>;
+        modal = <Modal closeHandler={this.closeHandler}>
+            <VideoUploadForm term={this.props.term}/>
+          </Modal>;
         break;
       case "audio":
-        modal = <Modal closeHandler={this.closeHandler}><AudioUploadForm term={this.props.term}/></Modal>;
+        modal = <Modal closeHandler={this.closeHandler}>
+            <AudioUploadForm term={this.props.term}/>
+          </Modal>;
         break;
       default:
         modal = <div></div>;

@@ -9,12 +9,14 @@ var TermList = React.createClass({
   },
 
   componentDidMount: function () {
-    TermStore.addListener(this._onChange);
-    SearchResultsStore.addListener(this._onSearch);
+    this.term_listener = TermStore.addListener(this._onChange);
+    this.search_listener = SearchResultsStore.addListener(this._onSearch);
     ApiUtil.fetchTerms();
   },
 
   componentWillUnmount: function () {
+    this.term_listener.remove();
+    this.search_listener.remove();
     // TermStore.removeListener(this._onChange);
     // SearchResultsStore.removeListener(this._onSearch);
   },
@@ -40,6 +42,7 @@ var TermList = React.createClass({
             <TermListItem
             term={term}
             key={term.id}
+            user={term.user}
             />
           );
         })

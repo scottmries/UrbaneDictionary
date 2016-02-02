@@ -12,23 +12,23 @@ var Author = require('./components/author');
 var Header = require('./components/header');
 var CurrentUserStore = require('./stores/current_user_store');
 var SessionsApiUtil = require('./util/sessions_api_util');
+var TermListItem = require('./components/term_list_item');
 
 
 var routes = (
   // <Route path="/" component={App} onEnter={_ensureLoggedIn}>
   <Route path="/" component={App}>
-    <IndexRoute component={Terms} onEnter={_ensureLoggedIn}/>
+    <Route path="terms" component={Terms} onEnter={_ensureLoggedIn}/>
+    // <IndexRoute component={Terms} onEnter={_ensureLoggedIn}/>
     <Route path="login" component={SignInForm} />
     <Route path="users/new" component={SignUpForm} />
-    <Route path="terms/:id" component={SingleTerm} />
+    <Route path="terms/:id" component={TermListItem} />
     <Route path="users/:id" component={Author} />
   </Route>
 );
 
-// var loggedIn = false;
-
 function _ensureLoggedIn(nextState, replace, callback) {
-
+  debugger
   if (CurrentUserStore.hasBeenFetched()) {
     _redirectIfNotLoggedIn();
   } else {

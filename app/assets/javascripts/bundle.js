@@ -58,23 +58,24 @@
 	var Header = __webpack_require__(256);
 	var CurrentUserStore = __webpack_require__(252);
 	var SessionsApiUtil = __webpack_require__(245);
+	var TermListItem = __webpack_require__(233);
 
 	var routes =
 	// <Route path="/" component={App} onEnter={_ensureLoggedIn}>
 	React.createElement(
 	  Route,
 	  { path: '/', component: App },
+	  React.createElement(Route, { path: 'terms', component: Terms, onEnter: _ensureLoggedIn }),
+	  '// ',
 	  React.createElement(IndexRoute, { component: Terms, onEnter: _ensureLoggedIn }),
 	  React.createElement(Route, { path: 'login', component: SignInForm }),
 	  React.createElement(Route, { path: 'users/new', component: SignUpForm }),
-	  React.createElement(Route, { path: 'terms/:id', component: SingleTerm }),
+	  React.createElement(Route, { path: 'terms/:id', component: TermListItem }),
 	  React.createElement(Route, { path: 'users/:id', component: Author })
 	);
 
-	// var loggedIn = false;
-
 	function _ensureLoggedIn(nextState, replace, callback) {
-
+	  debugger;
 	  if (CurrentUserStore.hasBeenFetched()) {
 	    _redirectIfNotLoggedIn();
 	  } else {
@@ -24079,7 +24080,7 @@
 	      fetchingModalIsOpen: true
 	    };
 	  },
-
+	  // refactor: move modal logic to a store
 	  openFetchingModal: function () {
 	    this.setState({
 	      fetchingModalIsOpen: true,
@@ -24207,7 +24208,8 @@
 	  //     dataType: 'json',
 	  //     url: 'api/terms',
 	  //     success: function (terms) {
-	  //       ApiActions.receiveAllTerms(terms);
+	  //       debugger
+	  //       ApiActions.receiveTermsByAuthor(terms);
 	  //     }
 	  //   });
 	  // },
@@ -24274,6 +24276,13 @@
 	    AppDispatcher.dispatch({
 	      actionType: TermConstants.TERM_RECEIVED,
 	      term: term
+	    });
+	  },
+
+	  receiveTermsByAuthor: function (terms) {
+	    AppDispatcher.dispatch({
+	      actionsType: TermConstants.AUTHOR_TERMS_RECEIVED,
+	      terms: terms
 	    });
 	  }
 	};
@@ -24602,7 +24611,8 @@
 
 	TermConstants = {
 	  TERMS_RECEIVED: "TERMS_RECEIVED",
-	  TERM_RECEIVED: "TERM_RECEIVED"
+	  TERM_RECEIVED: "TERM_RECEIVED",
+	  AUTHOR_TERMS_RECEIVED: "AUTHOR_TERMS_RECEIVED"
 	};
 
 	module.exports = TermConstants;
@@ -31122,12 +31132,14 @@
 	  },
 
 	  componentDidMount: function () {
-	    TermStore.addListener(this._onChange);
-	    SearchResultsStore.addListener(this._onSearch);
+	    this.term_listener = TermStore.addListener(this._onChange);
+	    this.search_listener = SearchResultsStore.addListener(this._onSearch);
 	    ApiUtil.fetchTerms();
 	  },
 
 	  componentWillUnmount: function () {
+	    this.term_listener.remove();
+	    this.search_listener.remove();
 	    // TermStore.removeListener(this._onChange);
 	    // SearchResultsStore.removeListener(this._onSearch);
 	  },
@@ -31150,7 +31162,8 @@
 	      this.state.terms.map(function (term) {
 	        return React.createElement(TermListItem, {
 	          term: term,
-	          key: term.id
+	          key: term.id,
+	          user: term.user
 	        });
 	      })
 	    );
@@ -31191,27 +31204,36 @@
 
 	  render: function () {
 	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	    var usage;
-	    var date = new Date(this.props.term.created_at);
+	    var usage = "";
+	    var date = new Date();
+	    var author = "";
+	    var youtubeVideo = React.createElement('div', null);
+	    var term = "";
+	    var definition = "";
+	    if (typeof this.props.term !== "undefined") {
+	      date = new Date(this.props.term.created_at);
+	      if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7) {
+	        youtubeVideo = React.createElement(YoutubeVideo, { video: this.props.term.video_url });
+	      }
+	      if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0) {
+	        usage = React.createElement(
+	          'p',
+	          { className: 'usage' },
+	          this.props.term.usage
+	        );
+	      }
+	      author = React.createElement(
+	        'a',
+	        { href: '#', onClick: this.showUserTerms },
+	        '  ',
+	        this.props.user.username,
+	        ' '
+	      );
+	      term = this.props.term.term;
+	      definition = this.props.term.definition;
+	    }
 	    var shortMonth = months[date.getMonth()].slice(0, 3);
 	    var dateString = shortMonth + " " + date.getDate();
-	    var youtubeVideo;
-	    if (this.props.term.video_url !== null) {
-	      youtubeVideo = React.createElement(YoutubeVideo, { video: this.props.term.video_url });
-	    } else {
-	      youtubeVideo = React.createElement('div', null);
-	    }
-	    if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0) {
-	      usage = React.createElement(
-	        'p',
-	        { className: 'usage' },
-	        this.props.term.usage
-	      );
-	    } else {
-	      usage = "";
-	    }
-	    var author = this.props.term.user.username;
-	    // var author = <a href="#" onClick={this.showUserTerms}>  {this.props.term.user.username} </a>
 	    return React.createElement(
 	      'article',
 	      { className: 'term term_list_item group' },
@@ -31222,13 +31244,13 @@
 	        React.createElement(
 	          'h2',
 	          null,
-	          this.props.term.term
+	          term
 	        )
 	      ),
 	      React.createElement(
 	        'p',
 	        { className: 'definition' },
-	        this.props.term.definition
+	        definition
 	      ),
 	      usage,
 	      React.createElement(
@@ -31273,8 +31295,12 @@
 	    };
 	  },
 
-	  componentWillMount: function () {
-	    TermStore.addListener(this._termChange);
+	  componentDidMount: function () {
+	    this.term_listener = TermStore.addListener(this._termChange);
+	  },
+
+	  componentWillUnmount: function () {
+	    this.term_listener.remove();
 	  },
 
 	  _termChange: function () {
@@ -32045,7 +32071,11 @@
 	};
 
 	CurrentUserStore.isLoggedIn = function () {
-	  return !!_currentUser.id;
+	  if (typeof _currentUser.user !== "undefined") {
+	    return !!_currentUser.user.id;
+	  } else {
+	    return false;
+	  }
 	};
 
 	CurrentUserStore.hasBeenFetched = function () {
@@ -32173,44 +32203,55 @@
 
 	var React = __webpack_require__(1);
 	var TermStore = __webpack_require__(214);
+	var TermListItem = __webpack_require__(233);
+	var TermList = __webpack_require__(232);
+	var UserApiUtil = __webpack_require__(262);
+	var UserStore = __webpack_require__(265);
 
 	var Author = React.createClass({
 	  displayName: 'Author',
 
 	  getInitialState: function () {
 	    var id = this.props.params.id;
-	    return { terms: TermStore.findByAuthorId(id) };
+	    return { user: { username: "" }, terms: [] };
 	    // return null;
 	  },
 
 	  componentDidMount: function () {
-	    TermStore.addListener(this._onChange);
-	    ApiUtil.fetchTerms();
-	    debugger;
+	    var id = parseInt(this.props.params.id);
+	    this.user_listener = UserStore.addListener(this._onChange);
+	    UserApiUtil.fetchUser(id);
 	  },
 
 	  componentWillUnmount: function () {
-	    TermStore.removeListener(this._onChange);
+	    this.user_listener.remove();
 	  },
 
 	  _onChange: function () {
-	    // TermStore.fetchTerms();
-	    var id = this.props.params.id;
-	    this.setState({ terms: TermStore.findByAuthorId(id) });
-	    console.log(this.state.terms);
+	    var id = parseInt(this.props.params.id);
+	    var userTerms = UserStore.getAuthorTerms();
+	    debugger;
+	    console.log("old state terms:" + this.state);
+	    this.setState({ user: userTerms.user, terms: userTerms.terms });
+	    console.log("state terms: " + this.state);
 	  },
 
 	  render: function () {
+	    // console.log(this.state.terms);
 	    return React.createElement(
 	      'div',
-	      { className: 'term_list' },
+	      { className: 'author-terms' },
 	      this.state.terms.map(function (term) {
+	        // console.log(term);
 	        return React.createElement(TermListItem, {
-	          id: term.id,
-	          key: term.id
+	          term: term,
+	          key: term.id,
+	          user: this.state.user
 	        });
-	      })
-	    );
+	      }.bind(this))
+	    )
+	    //was div
+	    ;
 	  }
 	});
 
@@ -32457,6 +32498,120 @@
 	});
 
 	module.exports = Spinner;
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UserActions = __webpack_require__(263);
+
+	var UserApiUtil = {
+
+	  fetchUsers: function () {
+	    $.ajax({
+	      url: '/api/users',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (data) {
+	        console.log(data);
+	        UserActions.receiveUsers(data);
+	      },
+	      error: function () {}
+	    });
+	  },
+
+	  fetchUser: function (id) {
+	    $.ajax({
+	      url: '/api/users/' + id,
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (data) {
+
+	        console.log(data);
+	        UserActions.receiveUser(data);
+	      },
+	      error: function () {}
+	    });
+	  }
+
+	};
+
+	module.exports = UserApiUtil;
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var UserConstants = __webpack_require__(264);
+	var AppDispatcher = __webpack_require__(209);
+
+	UserApiUtil = {
+	  receiveUsers: function (users) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.USERS_RECEIVED,
+	      users: users
+	    });
+	  },
+	  receiveUser: function (user) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.USER_RECEIVED,
+	      user: user
+	    });
+	  }
+	};
+
+	module.exports = UserApiUtil;
+
+/***/ },
+/* 264 */
+/***/ function(module, exports) {
+
+	UserConstants = {
+	  USERS_RECEIVED: "USERS_RECEIVED",
+	  USER_RECEIVED: "USER_RECEIVED"
+	};
+
+	module.exports = UserConstants;
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(215).Store;
+	var AppDispatcher = __webpack_require__(209);
+	var UserConstants = __webpack_require__(264);
+
+	var _users = [];
+
+	var UserStore = new Store(AppDispatcher);
+
+	UserStore.all = function () {
+	  return _users.slice(0);
+	};
+
+	var reset = function (users) {
+	  _users = users;
+	};
+
+	UserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.USERS_RECEIVED:
+	      reset(payload.users);
+	      UserStore.__emitChange();
+	      break;
+	    case UserConstants.USER_RECEIVED:
+	      reset(payload.user);
+	      UserStore.__emitChange();
+	      break;
+	  }
+	};
+
+	UserStore.getAuthorTerms = function (id) {
+	  return _users;
+	};
+
+	module.exports = UserStore;
 
 /***/ }
 /******/ ]);

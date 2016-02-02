@@ -40,7 +40,7 @@ var App = React.createClass({
       fetchingModalIsOpen: true
     });
   },
-
+  // refactor: move modal logic to a store
   openFetchingModal: function () {
     this.setState({
       fetchingModalIsOpen: true,
