@@ -17,6 +17,7 @@ var reset = function (terms) {
 TermStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case TermConstants.TERMS_RECEIVED:
+      debugger
       reset(payload.terms);
       TermStore.__emitChange();
       break;

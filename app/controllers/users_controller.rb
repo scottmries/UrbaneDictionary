@@ -1,5 +1,4 @@
- class Api::UsersController < ApplicationController
-
+class UsersController < ApplicationController
   def create
     if user_params[:username] == "guest"
       @user = User.create_guest_user
@@ -28,9 +27,6 @@
 
   def show
     @user = User.find(params[:id])
-    @terms = @user.terms
-    @user_with_terms = {user: @user, terms: @terms}
-    byebug
   end
 
   private

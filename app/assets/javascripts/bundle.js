@@ -25255,6 +25255,7 @@
 	TermStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case TermConstants.TERMS_RECEIVED:
+	      debugger;
 	      reset(payload.terms);
 	      TermStore.__emitChange();
 	      break;
@@ -31811,6 +31812,7 @@
 
 	  showUserTerms: function (e) {
 	    e.preventDefault();
+	    debugger;
 	    this.history.pushState(this.state, "/users/" + this.props.term.user_id);
 	  },
 
@@ -31835,7 +31837,8 @@
 	    } else {
 	      usage = "";
 	    }
-
+	    var author = this.props.term.user.username;
+	    // var author = <a href="#" onClick={this.showUserTerms}>  {this.props.term.user.username} </a>
 	    return React.createElement(
 	      'article',
 	      { className: 'term term_list_item group' },
@@ -31859,13 +31862,7 @@
 	        'p',
 	        { className: 'author' },
 	        'by ',
-	        React.createElement(
-	          'a',
-	          { href: '#', onClick: this.showUserTerms },
-	          '  ',
-	          this.props.term.user.username,
-	          ' '
-	        ),
+	        author,
 	        ' ',
 	        months[date.getMonth()],
 	        ' ',
@@ -32500,10 +32497,11 @@
 	  componentDidMount: function () {
 	    TermStore.addListener(this._onChange);
 	    ApiUtil.fetchTerms();
+	    debugger;
 	  },
 
 	  componentWillUnmount: function () {
-	    TermStore.removeChangeListener(this._onChange);
+	    TermStore.removeListener(this._onChange);
 	  },
 
 	  _onChange: function () {
@@ -32518,7 +32516,7 @@
 	      'div',
 	      { className: 'term_list' },
 	      this.state.terms.map(function (term) {
-	        return React.createElement(Term, {
+	        return React.createElement(TermListItem, {
 	          id: term.id,
 	          key: term.id
 	        });

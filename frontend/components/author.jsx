@@ -12,10 +12,11 @@ var Author = React.createClass({
     componentDidMount: function () {
       TermStore.addListener(this._onChange);
       ApiUtil.fetchTerms();
+      debugger
     },
 
     componentWillUnmount: function () {
-      TermStore.removeChangeListener(this._onChange);
+      TermStore.removeListener(this._onChange);
     },
 
     _onChange: function () {
@@ -28,7 +29,7 @@ var Author = React.createClass({
     render: function () {
       return (<div className="term_list">
           {this.state.terms.map (function (term){
-            return (<Term
+            return (<TermListItem
               id={term.id}
               key={term.id}
               />

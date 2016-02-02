@@ -20,6 +20,7 @@ var TermListItem = React.createClass({
 
   showUserTerms: function (e) {
     e.preventDefault();
+    debugger
     this.history.pushState(this.state, "/users/" + this.props.term.user_id);
   },
 
@@ -41,7 +42,8 @@ var TermListItem = React.createClass({
     } else {
       usage = "";
     }
-
+    var author = this.props.term.user.username;
+    // var author = <a href="#" onClick={this.showUserTerms}>  {this.props.term.user.username} </a>
     return (
       <article className="term term_list_item group">
         <TermHeader termHeader={dateString} />
@@ -53,7 +55,7 @@ var TermListItem = React.createClass({
         </p>
         {usage}
         <p className="author">
-          by <a href="#" onClick={this.showUserTerms}>  {this.props.term.user.username} </a> {months[date.getMonth()]} {date.getDate()}, {date.getFullYear()}
+          by {author} {months[date.getMonth()]} {date.getDate()}, {date.getFullYear()}
         </p>
         <FileUploads term={this.props.term} />
         {youtubeVideo}
