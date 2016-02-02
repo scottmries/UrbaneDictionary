@@ -8,14 +8,15 @@ var TermList = React.createClass({
     return { terms: TermStore.all()};
   },
 
-  componentWillMount: function () {
+  componentDidMount: function () {
     TermStore.addListener(this._onChange);
     SearchResultsStore.addListener(this._onSearch);
     ApiUtil.fetchTerms();
   },
 
   componentWillUnmount: function () {
-    this.listener.remove();
+    // TermStore.removeListener(this._onChange);
+    // SearchResultsStore.removeListener(this._onSearch);
   },
 
   _onSearch: function () {

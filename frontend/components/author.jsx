@@ -6,6 +6,7 @@ var Author = React.createClass({
     getInitialState: function () {
       var id = this.props.params.id;
       return { terms: TermStore.findByAuthorId(id)};
+      // return null;
     },
 
     componentDidMount: function () {
@@ -13,9 +14,15 @@ var Author = React.createClass({
       ApiUtil.fetchTerms();
     },
 
+    componentWillUnmount: function () {
+      TermStore.removeChangeListener(this._onChange);
+    },
+
     _onChange: function () {
+      // TermStore.fetchTerms();
       var id = this.props.params.id;
-      this.setState({ terms: TermStore.find_by_author_id(id) });
+      this.setState({ terms: TermStore.findByAuthorId(id) });
+      console.log(this.state.terms);
     },
 
     render: function () {

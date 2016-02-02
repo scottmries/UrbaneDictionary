@@ -25,7 +25,8 @@ class Api::TermsController < ApplicationController
   end
 
   def update
-    @term = Term.find(term_params[:id])
+    # byebug
+    @term = Term.find(params[:id])
     if @term.update(term_params)
       render :show
     else
@@ -42,7 +43,7 @@ class Api::TermsController < ApplicationController
   private
 
   def term_params
-    params.require(:term).permit(:term, :definition, :usage, :user_id, :image)
+    params.require(:term).permit(:term, :definition, :usage, :user_id, :image, :video_url)
   end
 
 end

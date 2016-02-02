@@ -127,6 +127,7 @@ main {
   height: 100%;
   background-color: rgba(19, 79, 230, 0.5);
   padding-top: 30px;
+  z-index: 1;
 }
 
 .modal h2 {
@@ -216,4 +217,8 @@ main {
 
 .logInStatus button:hover {
   color: #EFFF00;
+}
+
+.yt-video {
+  margin-top: 10px;
 }

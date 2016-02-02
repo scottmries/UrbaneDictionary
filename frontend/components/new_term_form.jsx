@@ -13,18 +13,18 @@ var NewTermForm = React.createClass({
   },
 
   handleClick: function () {
-    
+
   },
 
-  handleDefinitionChange: function () {
+  handleDefinitionChange: function (e) {
     this.setState( {definition: e.currentTarget.value });
   },
 
-  handleTermChange: function () {
+  handleTermChange: function (e) {
     this.setState( {term: e.currentTarget.value });
   },
 
-  handleUsageChange: function () {
+  handleUsageChange: function (e) {
     this.setState( {usage: e.currentTarget.value });
   },
 

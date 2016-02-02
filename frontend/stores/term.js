@@ -39,6 +39,7 @@ TermStore.findByAuthorId = function(id) {
   return _terms.filter(function (term){
     return term.user_id === id;
   });
+  // return AuthorTerms;
 };
 
 module.exports = TermStore;

@@ -21,7 +21,7 @@ module UrbaneDictionary
     # config.i18n.default_locale = :de
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
-    PayPal::SDK::Core::Config.load('spec/config/paypal.yml',  ENV['RACK_ENV'] || 'development')
+    # PayPal::SDK::Core::Config.load('spec/config/paypal.yml',  ENV['RACK_ENV'] || 'development')
     config.active_record.raise_in_transactional_callbacks = true
 
     config.paperclip_defaults = {

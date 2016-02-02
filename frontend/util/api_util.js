@@ -31,6 +31,17 @@ ApiUtil = {
     });
   },
 
+  // fetchTermsByUserId: function (id) {
+  //   $.ajax({
+  //     type: 'get',
+  //     dataType: 'json',
+  //     url: 'api/terms',
+  //     success: function (terms) {
+  //       ApiActions.receiveAllTerms(terms);
+  //     }
+  //   });
+  // },
+
   fetchSingleTerm: function (id) {
     $.ajax({
       type: 'get',
@@ -49,12 +60,24 @@ ApiUtil = {
   createTerm: function (term) {
     $.ajax({
       type: 'post',
-      dataType: false,
-      processData: false,
+      dataType: 'json',
+      // processData: false,
       url: 'api/terms',
       data: {term: term},
       success: function (term) {
         ApiUtil.fetchTerms();
+      }
+    });
+  },
+
+  addVideoURL: function (term, video_url, cb) {
+    $.ajax({
+      type: 'put',
+      dataType: 'json',
+      url: 'api/terms/' + term.id,
+      data: {term: video_url},
+      success: function (term) {
+        ApiActions.receiveSingleTerm(term);
       }
     });
   }

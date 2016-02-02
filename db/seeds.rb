@@ -100,6 +100,12 @@ minijo.createTerm ({
     definition: "A male gold-digger",
     usage: "I heard ol' Joe Montana was a real forty-niner."
   })
+minijo.createTerm ({
+    term: "Kick the gong around",
+    definition: "Smoke opium",
+    usage: "\"He took her down to Chinatown, and taught how to kick the gong around.\"",
+    video_url: "https://www.youtube.com/embed/8mq4UT4VnbE"
+  })
   # .createTerm ({
   #  #   term: "See you on the flip side.",
   #   definition: "Fare thee well, fine fellow.",

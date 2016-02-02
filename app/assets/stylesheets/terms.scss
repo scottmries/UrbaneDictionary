@@ -92,6 +92,11 @@ button.pressed {
   background: #05ff56;
 }
 
+//TEMPORARY
+.audio-upload, .image-upload {
+  display: none;
+}
+
 .upload-buttons button {
   background: white;
 }

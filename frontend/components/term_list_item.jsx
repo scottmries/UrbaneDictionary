@@ -3,6 +3,7 @@ var TermStore = require('../stores/term');
 var History = require('react-router').History;
 var FileUploads = require('./file_uploads');
 var TermHeader = require('./term_header');
+var YoutubeVideo = require('./youtube_video');
 
 var TermListItem = React.createClass({
 
@@ -29,11 +30,18 @@ var TermListItem = React.createClass({
     var date = new Date(this.props.term.created_at);
     var shortMonth = months[date.getMonth()].slice(0,3);
     var dateString = shortMonth + " " + date.getDate();
+    var youtubeVideo;
+    if (this.props.term.video_url !== null){
+      youtubeVideo = <YoutubeVideo video={this.props.term.video_url} />;
+    } else {
+      youtubeVideo = <div></div>;
+    }
     if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0){
       usage = <p className="usage">{this.props.term.usage}</p>;
     } else {
       usage = "";
     }
+
     return (
       <article className="term term_list_item group">
         <TermHeader termHeader={dateString} />
@@ -47,7 +55,8 @@ var TermListItem = React.createClass({
         <p className="author">
           by <a href="#" onClick={this.showUserTerms}>  {this.props.term.user.username} </a> {months[date.getMonth()]} {date.getDate()}, {date.getFullYear()}
         </p>
-        <FileUploads />
+        <FileUploads term={this.props.term} />
+        {youtubeVideo}
       </article>
     );
   }

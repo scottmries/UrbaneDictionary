@@ -24826,6 +24826,17 @@
 	    });
 	  },
 
+	  // fetchTermsByUserId: function (id) {
+	  //   $.ajax({
+	  //     type: 'get',
+	  //     dataType: 'json',
+	  //     url: 'api/terms',
+	  //     success: function (terms) {
+	  //       ApiActions.receiveAllTerms(terms);
+	  //     }
+	  //   });
+	  // },
+
 	  fetchSingleTerm: function (id) {
 	    $.ajax({
 	      type: 'get',
@@ -24844,12 +24855,24 @@
 	  createTerm: function (term) {
 	    $.ajax({
 	      type: 'post',
-	      dataType: false,
-	      processData: false,
+	      dataType: 'json',
+	      // processData: false,
 	      url: 'api/terms',
 	      data: { term: term },
 	      success: function (term) {
 	        ApiUtil.fetchTerms();
+	      }
+	    });
+	  },
+
+	  addVideoURL: function (term, video_url, cb) {
+	    $.ajax({
+	      type: 'put',
+	      dataType: 'json',
+	      url: 'api/terms/' + term.id,
+	      data: { term: video_url },
+	      success: function (term) {
+	        ApiActions.receiveSingleTerm(term);
 	      }
 	    });
 	  }
@@ -25254,6 +25277,7 @@
 	  return _terms.filter(function (term) {
 	    return term.user_id === id;
 	  });
+	  // return AuthorTerms;
 	};
 
 	module.exports = TermStore;
@@ -31722,14 +31746,15 @@
 	    return { terms: TermStore.all() };
 	  },
 
-	  componentWillMount: function () {
+	  componentDidMount: function () {
 	    TermStore.addListener(this._onChange);
 	    SearchResultsStore.addListener(this._onSearch);
 	    ApiUtil.fetchTerms();
 	  },
 
 	  componentWillUnmount: function () {
-	    this.listener.remove();
+	    // TermStore.removeListener(this._onChange);
+	    // SearchResultsStore.removeListener(this._onSearch);
 	  },
 
 	  _onSearch: function () {
@@ -31768,6 +31793,7 @@
 	var History = __webpack_require__(159).History;
 	var FileUploads = __webpack_require__(245);
 	var TermHeader = __webpack_require__(246);
+	var YoutubeVideo = __webpack_require__(272);
 
 	var TermListItem = React.createClass({
 	  displayName: 'TermListItem',
@@ -31794,6 +31820,12 @@
 	    var date = new Date(this.props.term.created_at);
 	    var shortMonth = months[date.getMonth()].slice(0, 3);
 	    var dateString = shortMonth + " " + date.getDate();
+	    var youtubeVideo;
+	    if (this.props.term.video_url !== null) {
+	      youtubeVideo = React.createElement(YoutubeVideo, { video: this.props.term.video_url });
+	    } else {
+	      youtubeVideo = React.createElement('div', null);
+	    }
 	    if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0) {
 	      usage = React.createElement(
 	        'p',
@@ -31803,6 +31835,7 @@
 	    } else {
 	      usage = "";
 	    }
+
 	    return React.createElement(
 	      'article',
 	      { className: 'term term_list_item group' },
@@ -31840,7 +31873,8 @@
 	        ', ',
 	        date.getFullYear()
 	      ),
-	      React.createElement(FileUploads, null)
+	      React.createElement(FileUploads, { term: this.props.term }),
+	      youtubeVideo
 	    );
 	  }
 	});
@@ -31852,29 +31886,45 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var ImageUploadForm = __webpack_require__(269);
+	var VideoUploadForm = __webpack_require__(270);
+	var AudioUploadForm = __webpack_require__(271);
+	var Modal = __webpack_require__(252);
 
 	var FileUploads = React.createClass({
-	  displayName: "FileUploads",
+	  displayName: 'FileUploads',
 
 	  getInitialState: function () {
 
-	    return { buttons_shown: false };
+	    return {
+	      buttons_shown: false,
+	      modal: ""
+	    };
 	  },
 
 	  handleEllipsisClick: function () {
-	    this.setState({ buttons_shown: !this.state.buttons_shown });
+	    this.setState({
+	      buttons_shown: !this.state.buttons_shown,
+	      modal: ""
+	    });
 	  },
 
 	  handleImageClick: function (e) {
-	    return;
+	    this.setState({ buttons_shown: false, modal: "image" });
 	  },
 
 	  handleAudioClick: function (e) {
-	    return;
+	    this.setState({ buttons_shown: false, modal: "audio" });
 	  },
 
 	  handleVideoClick: function (e) {
-	    return;
+	    this.setState({ buttons_shown: false, modal: "video" });
+	  },
+
+	  closeHandler: function () {
+	    this.setState({
+	      modal: ""
+	    });
 	  },
 
 	  render: function () {
@@ -31883,34 +31933,66 @@
 	    if (this.state.buttons_shown) {
 	      pressedClass = "pressed";
 	      uploadButtons = React.createElement(
-	        "div",
-	        { className: "upload-buttons" },
+	        'div',
+	        { className: 'upload-buttons' },
 	        React.createElement(
-	          "button",
-	          { className: "image-upload", onClick: this.handleImageClick },
-	          React.createElement("i", { className: "fa fa-camera" })
+	          'button',
+	          { className: 'image-upload', onClick: this.handleImageClick },
+	          React.createElement('i', { className: 'fa fa-camera' })
 	        ),
 	        React.createElement(
-	          "button",
-	          { className: "audio-upload", onClick: this.handleAudioClick },
-	          React.createElement("i", { className: "fa fa-microphone" })
+	          'button',
+	          { className: 'audio-upload', onClick: this.handleAudioClick },
+	          React.createElement('i', { className: 'fa fa-microphone' })
 	        ),
 	        React.createElement(
-	          "button",
-	          { className: "video-upload", onClick: this.handleVideoClick },
-	          React.createElement("i", { className: "fa fa-video-camera" })
+	          'button',
+	          { className: 'video-upload', onClick: this.handleVideoClick },
+	          React.createElement('i', { className: 'fa fa-video-camera' })
 	        )
 	      );
 	    }
+	    var modal;
+	    switch (this.state.modal) {
+	      case "image":
+	        modal = React.createElement(
+	          Modal,
+	          { closeHandler: this.closeHandler },
+	          React.createElement(ImageUploadForm, { term: this.props.term })
+	        );
+	        break;
+	      case "video":
+	        modal = React.createElement(
+	          Modal,
+	          { closeHandler: this.closeHandler },
+	          React.createElement(VideoUploadForm, { term: this.props.term })
+	        );
+	        break;
+	      case "audio":
+	        modal = React.createElement(
+	          Modal,
+	          { closeHandler: this.closeHandler },
+	          React.createElement(AudioUploadForm, { term: this.props.term })
+	        );
+	        break;
+	      default:
+	        modal = React.createElement('div', null);
+
+	    }
 	    return React.createElement(
-	      "div",
-	      { className: "file-uploads" },
+	      'div',
+	      null,
+	      modal,
 	      React.createElement(
-	        "button",
-	        { className: pressedClass, onClick: this.handleEllipsisClick },
-	        React.createElement("i", { className: "fa fa-ellipsis-h" })
-	      ),
-	      uploadButtons
+	        'div',
+	        { className: 'file-uploads' },
+	        React.createElement(
+	          'button',
+	          { className: pressedClass, onClick: this.handleEllipsisClick },
+	          React.createElement('i', { className: 'fa fa-ellipsis-h' })
+	        ),
+	        uploadButtons
+	      )
 	    );
 	  }
 	});
@@ -32233,15 +32315,15 @@
 
 	  handleClick: function () {},
 
-	  handleDefinitionChange: function () {
+	  handleDefinitionChange: function (e) {
 	    this.setState({ definition: e.currentTarget.value });
 	  },
 
-	  handleTermChange: function () {
+	  handleTermChange: function (e) {
 	    this.setState({ term: e.currentTarget.value });
 	  },
 
-	  handleUsageChange: function () {
+	  handleUsageChange: function (e) {
 	    this.setState({ usage: e.currentTarget.value });
 	  },
 
@@ -32412,6 +32494,7 @@
 	  getInitialState: function () {
 	    var id = this.props.params.id;
 	    return { terms: TermStore.findByAuthorId(id) };
+	    // return null;
 	  },
 
 	  componentDidMount: function () {
@@ -32419,9 +32502,15 @@
 	    ApiUtil.fetchTerms();
 	  },
 
+	  componentWillUnmount: function () {
+	    TermStore.removeChangeListener(this._onChange);
+	  },
+
 	  _onChange: function () {
+	    // TermStore.fetchTerms();
 	    var id = this.props.params.id;
-	    this.setState({ terms: TermStore.find_by_author_id(id) });
+	    this.setState({ terms: TermStore.findByAuthorId(id) });
+	    console.log(this.state.terms);
 	  },
 
 	  render: function () {
@@ -32798,8 +32887,10 @@
 	      url: '/api/search',
 	      type: 'GET',
 	      dataType: 'json',
+	      // processData: false,
 	      data: { query: query, page: page },
 	      success: function (data) {
+	        console.log(data);
 	        SearchActions.receiveResults(data);
 	      },
 	      error: function () {}
@@ -32828,6 +32919,137 @@
 	};
 
 	module.exports = SearchApiUtil;
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var ImageUploadForm = React.createClass({
+	  displayName: "ImageUploadForm",
+
+	  getInitialState: function () {
+	    return {
+	      imageFile: null,
+	      imageUrl: ""
+	    };
+	  },
+
+	  changeFile: function (e) {
+	    var reader = new FileReader();
+	    var file = e.currentTarget.files[0];
+
+	    reader.onloadend = function () {
+	      this.setState({ imageFile: file, imageUrl: reader.result });
+	    }.bind(this);
+
+	    if (file) {
+	      reader.readAsDataURL(file);
+	    } else {
+	      this.setState({ imageFile: null, imageUrl: "" });
+	    }
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      "form",
+	      { onSubmit: this.submit },
+	      React.createElement("input", { type: "file", onChange: this.changeFile })
+	    );
+	  }
+	});
+
+	module.exports = ImageUploadForm;
+
+/***/ },
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var VideoUploadForm = React.createClass({
+	  displayName: "VideoUploadForm",
+
+	  getInitialState: function () {
+	    return { video_url: "" };
+	  },
+
+	  change: function (e) {
+	    this.setState({ video_url: e.currentTarget.value });
+	  },
+
+	  submit: function (e) {
+	    e.preventDefault();
+	    var video_url = { video_url: this.state.video_url };
+	    // var credentials = $(e.currentTarget).serializeJSON().user;
+	    ApiUtil.addVideoURL(this.props.term, video_url, function () {
+	      // this.history.pushState({}, "/terms/" + this.props.term.id);
+	    }.bind(this));
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      "form",
+	      { onSubmit: this.submit },
+	      React.createElement(
+	        "div",
+	        { className: "form-inner" },
+	        React.createElement(
+	          "label",
+	          null,
+	          "YouTube URL:",
+	          React.createElement("input", { type: "text", onChange: this.change, value: this.state.video_url })
+	        ),
+	        React.createElement(
+	          "button",
+	          null,
+	          "Submit"
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = VideoUploadForm;
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var AudioUploadForm = React.createClass({
+	  displayName: 'AudioUploadForm',
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'THE FORM'
+	    );
+	  }
+	});
+
+	module.exports = AudioUploadForm;
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var YoutubeVideo = React.createClass({
+	  displayName: "YoutubeVideo",
+
+	  render: function () {
+	    return React.createElement("iframe", { width: "420", height: "315",
+	      src: this.props.video, frameBorder: "0",
+	      allowFullScreen: true, className: "yt-video" });
+	  }
+	});
+
+	module.exports = YoutubeVideo;
 
 /***/ }
 /******/ ]);

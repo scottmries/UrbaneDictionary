@@ -7,8 +7,10 @@ var SearchApiUtil = {
       url: '/api/search',
       type: 'GET',
       dataType: 'json',
+      // processData: false,
       data: {query: query, page: page},
       success: function (data) {
+        console.log(data);
         SearchActions.receiveResults(data);
       },
       error: function () {
