@@ -20,7 +20,6 @@ var TermListItem = React.createClass({
 
   showUserTerms: function (e) {
     e.preventDefault();
-    debugger
     this.history.pushState(this.state, "/users/" + this.props.term.user_id);
   },
 

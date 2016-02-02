@@ -3,6 +3,7 @@ var ImageUploadForm = require('./image_upload_form');
 var VideoUploadForm = require('./video_upload_form');
 var AudioUploadForm = require('./audio_upload_form');
 var Modal = require('./modal');
+var TermStore = require('./../stores/term');
 
 var FileUploads = React.createClass({
   getInitialState: function () {
@@ -11,6 +12,16 @@ var FileUploads = React.createClass({
       buttons_shown: false,
       modal: ""
     };
+  },
+
+  componentWillMount: function () {
+    TermStore.addListener(this._termChange);
+  },
+
+  _termChange: function () {
+    console.log(this.state.modal);
+    this.setState({ modal: "" });
+    console.log(this.state.modal);
   },
 
   handleEllipsisClick: function () {

@@ -31186,7 +31186,6 @@
 
 	  showUserTerms: function (e) {
 	    e.preventDefault();
-	    debugger;
 	    this.history.pushState(this.state, "/users/" + this.props.term.user_id);
 	  },
 
@@ -31261,6 +31260,7 @@
 	var VideoUploadForm = __webpack_require__(236);
 	var AudioUploadForm = __webpack_require__(237);
 	var Modal = __webpack_require__(238);
+	var TermStore = __webpack_require__(214);
 
 	var FileUploads = React.createClass({
 	  displayName: 'FileUploads',
@@ -31271,6 +31271,16 @@
 	      buttons_shown: false,
 	      modal: ""
 	    };
+	  },
+
+	  componentWillMount: function () {
+	    TermStore.addListener(this._termChange);
+	  },
+
+	  _termChange: function () {
+	    console.log(this.state.modal);
+	    this.setState({ modal: "" });
+	    console.log(this.state.modal);
 	  },
 
 	  handleEllipsisClick: function () {
@@ -31434,10 +31444,8 @@
 	    var match = video_url.match(regExp);
 
 	    if (match && match[2].length >= 10) {
-	      debugger;
 	      return "http://youtube.com/embed/" + match[2];
 	    } else {
-	      debugger;
 	      return 'error';
 	    }
 	  },
@@ -31446,7 +31454,6 @@
 
 	    e.preventDefault();
 	    var video_url = { video_url: this.parseEmbedCode(this.state.video_url) };
-	    debugger;
 	    // var credentials = $(e.currentTarget).serializeJSON().user;
 	    ApiUtil.addVideoURL(this.props.term, video_url, function () {
 	      // this.history.pushState({}, "/terms/" + this.props.term.id);

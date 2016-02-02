@@ -14,10 +14,8 @@ var VideoUploadForm = React.createClass({
     var match = video_url.match(regExp);
 
     if (match && match[2].length >= 10) {
-      debugger
         return "http://youtube.com/embed/" + match[2];
     } else {
-      debugger
         return 'error';
     }
   },
@@ -26,7 +24,6 @@ var VideoUploadForm = React.createClass({
 
     e.preventDefault();
     var video_url = {video_url: this.parseEmbedCode(this.state.video_url)};
-    debugger
     // var credentials = $(e.currentTarget).serializeJSON().user;
       ApiUtil.addVideoURL(this.props.term, video_url, function () {
         // this.history.pushState({}, "/terms/" + this.props.term.id);
