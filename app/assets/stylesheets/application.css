@@ -164,6 +164,10 @@ main {
   margin: 10px 0;
 }
 
+.modal .form-inner input[type="file"] {
+  padding-top: 15px;
+}
+
 .modal button {
   color: white;
 }

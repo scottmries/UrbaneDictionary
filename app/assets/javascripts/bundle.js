@@ -75,7 +75,6 @@
 	);
 
 	function _ensureLoggedIn(nextState, replace, callback) {
-	  debugger;
 	  if (CurrentUserStore.hasBeenFetched()) {
 	    _redirectIfNotLoggedIn();
 	  } else {
@@ -24252,6 +24251,21 @@
 	        ApiActions.receiveSingleTerm(term);
 	      }
 	    });
+	  },
+
+	  addImage: function (term_id, image, cb) {
+	    debugger;
+	    $.ajax({
+	      type: 'put',
+	      dataType: 'json',
+	      processData: false,
+	      contentType: false,
+	      url: 'api/terms/' + term_id,
+	      data: image,
+	      success: function (term) {
+	        ApiActions.receiveSingleTerm(term);
+	      }
+	    });
 	  }
 	};
 
@@ -31437,11 +31451,31 @@
 	    }
 	  },
 
+	  submit: function (e) {
+	    e.preventDefault();
+	    var formData = new FormData();
+
+	    // formData.append("term[id]", this.props.id);
+	    formData.append("term[image]", this.state.imageFile);
+	    debugger;
+	    ApiUtil.addImage(this.props.term.id, formData, function () {});
+	    // ApiUtil.addImage(this.props.term, formData, function(){});
+	  },
+
 	  render: function () {
 	    return React.createElement(
 	      "form",
 	      { onSubmit: this.submit },
-	      React.createElement("input", { type: "file", onChange: this.changeFile })
+	      React.createElement(
+	        "div",
+	        { className: "form-inner" },
+	        React.createElement("input", { type: "file", onChange: this.changeFile })
+	      ),
+	      React.createElement(
+	        "button",
+	        null,
+	        "Submit"
+	      )
 	    );
 	  }
 	});

@@ -81,6 +81,21 @@ ApiUtil = {
         ApiActions.receiveSingleTerm(term);
       }
     });
+  },
+
+  addImage: function (term_id, image, cb) {
+    debugger
+    $.ajax({
+      type: 'put',
+      dataType: 'json',
+      processData: false,
+      contentType: false,
+      url: 'api/terms/' + term_id,
+      data: image,
+      success: function (term) {
+        ApiActions.receiveSingleTerm(term);
+      }
+    });
   }
 };
 

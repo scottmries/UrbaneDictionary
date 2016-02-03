@@ -28,7 +28,6 @@ var routes = (
 );
 
 function _ensureLoggedIn(nextState, replace, callback) {
-  debugger
   if (CurrentUserStore.hasBeenFetched()) {
     _redirectIfNotLoggedIn();
   } else {

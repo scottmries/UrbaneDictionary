@@ -24,10 +24,24 @@ var ImageUploadForm = React.createClass({
     }
   },
 
+  submit: function (e) {
+    e.preventDefault();
+    var formData = new FormData();
+
+    // formData.append("term[id]", this.props.id);
+    formData.append("term[image]", this.state.imageFile);
+    debugger
+    ApiUtil.addImage(this.props.term.id, formData, function () {});
+    // ApiUtil.addImage(this.props.term, formData, function(){});
+  },
+
   render: function () {
     return (
       <form onSubmit={this.submit}>
-        <input type="file" onChange={this.changeFile} />
+        <div className="form-inner">
+          <input type="file" onChange={this.changeFile} />
+        </div>
+        <button>Submit</button>
       </form>
     );
   }
