@@ -31222,12 +31222,16 @@
 	    var date = new Date();
 	    var author = "";
 	    var youtubeVideo = React.createElement('div', null);
+	    var image = React.createElement('div', null);
 	    var term = "";
 	    var definition = "";
 	    if (typeof this.props.term !== "undefined") {
 	      date = new Date(this.props.term.created_at);
 	      if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7) {
 	        youtubeVideo = React.createElement(YoutubeVideo, { video: this.props.term.video_url });
+	      }
+	      if (typeof this.props.term.image_url === "string" && this.props.term.image_url > 1) {
+	        image = React.createElement('img', { src: this.props.term.image_url });
 	      }
 	      if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0) {
 	        usage = React.createElement(
@@ -31280,6 +31284,7 @@
 	        date.getFullYear()
 	      ),
 	      React.createElement(FileUploads, { term: this.props.term }),
+	      image,
 	      youtubeVideo
 	    );
 	  }

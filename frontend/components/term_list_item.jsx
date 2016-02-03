@@ -30,12 +30,16 @@ var TermListItem = React.createClass({
     var date = new Date();
     var author = "";
     var youtubeVideo = <div></div>;
+    var image = <div></div>;
     var term = "";
     var definition = "";
     if (typeof this.props.term !== "undefined"){
       date = new Date(this.props.term.created_at);
       if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7){
         youtubeVideo = <YoutubeVideo video={this.props.term.video_url} />;
+      }
+      if (typeof this.props.term.image_url === "string" && this.props.term.image_url > 1){
+        image = <img src={this.props.term.image_url} />;
       }
       if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0){
         usage = <p className="usage">{this.props.term.usage}</p>;
@@ -60,6 +64,7 @@ var TermListItem = React.createClass({
           by {author} {months[date.getMonth()]} {date.getDate()}, {date.getFullYear()}
         </p>
         <FileUploads term={this.props.term} />
+        {image}
         {youtubeVideo}
       </article>
     );
