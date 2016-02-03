@@ -24262,7 +24262,6 @@
 	      url: 'api/terms/' + term_id,
 	      data: image,
 	      success: function (term) {
-	        debugger;
 	        ApiActions.receiveSingleTerm(term);
 	      }
 	    });
@@ -31217,7 +31216,7 @@
 	  },
 
 	  render: function () {
-	    console.log(this.props.term.term, this.props.term.image_url);
+	    console.log(this.props);
 	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	    var usage = "";
 	    var date = new Date();
@@ -31463,7 +31462,6 @@
 
 	    // formData.append("term[id]", this.props.id);
 	    formData.append("term[image]", this.state.imageFile);
-	    debugger;
 	    ApiUtil.addImage(this.props.term.id, formData, function () {});
 	    // ApiUtil.addImage(this.props.term, formData, function(){});
 	  },
@@ -31582,14 +31580,18 @@
 	  displayName: "Modal",
 
 	  render: function () {
-	    return React.createElement(
-	      "section",
-	      { className: "modal" },
-	      React.createElement(
+	    var closeButton = React.createElement("div", null);
+	    if (this.props.showClosebutton) {
+	      closeButton = React.createElement(
 	        "button",
 	        { className: "closeModal", onClick: this.props.closeHandler },
 	        React.createElement("i", { className: "fa fa-times" })
-	      ),
+	      );
+	    }
+	    return React.createElement(
+	      "section",
+	      { className: "modal" },
+	      closeButton,
 	      React.createElement(
 	        "section",
 	        { className: "modalContent" },
@@ -32271,7 +32273,6 @@
 	  _onChange: function () {
 	    var id = parseInt(this.props.params.id);
 	    var userTerms = UserStore.getAuthorTerms();
-	    debugger;
 	    console.log("old state terms:" + this.state);
 	    this.setState({ user: userTerms.user, terms: userTerms.terms });
 	    console.log("state terms: " + this.state);
@@ -32281,7 +32282,7 @@
 	    // console.log(this.state.terms);
 	    return React.createElement(
 	      'div',
-	      { className: 'author-terms' },
+	      { className: 'author-terms group' },
 	      this.state.terms.map(function (term) {
 	        // console.log(term);
 	        return React.createElement(TermListItem, {
@@ -32346,7 +32347,11 @@
 	  },
 
 	  componentDidMount: function () {
-	    CurrentUserStore.addListener(this._onChange);
+	    this.currentUserListener = CurrentUserStore.addListener(this._onChange);
+	  },
+
+	  componentWillUnmount: function () {
+	    this.currentUserListener.remove();
 	  },
 
 	  _onChange: function () {
@@ -32532,7 +32537,17 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'spinner' },
+	      { className: 'group form-inner' },
+	      React.createElement(
+	        'div',
+	        { className: 'spinner' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Urbane Dictionary'
+	        ),
+	        React.createElement('br', null)
+	      ),
 	      React.createElement('i', { className: 'fa fa-circle-o-notch fa-spin' })
 	    );
 	  }

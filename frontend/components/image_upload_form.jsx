@@ -30,7 +30,6 @@ var ImageUploadForm = React.createClass({
 
     // formData.append("term[id]", this.props.id);
     formData.append("term[image]", this.state.imageFile);
-    debugger
     ApiUtil.addImage(this.props.term.id, formData, function () {});
     // ApiUtil.addImage(this.props.term, formData, function(){});
   },

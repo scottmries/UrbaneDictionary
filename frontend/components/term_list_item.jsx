@@ -24,7 +24,7 @@ var TermListItem = React.createClass({
   },
 
   render: function () {
-    console.log(this.props.term.term, this.props.term.image_url);
+    console.log(this.props);
     var months = ["January", "February", "March", "April", "May",
       "June", "July", "August", "September", "October", "November", "December"];
     var usage = "";

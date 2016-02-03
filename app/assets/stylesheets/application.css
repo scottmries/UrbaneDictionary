@@ -27,6 +27,14 @@
      box-sizing: border-box;
  }
 
+ html, body {
+   height: 100%;
+ }
+
+ h1 {
+   font-size: 2em;
+ }
+
 #root {
   /*width: 940px;*/
   margin: auto;
@@ -120,11 +128,11 @@ main {
 }
 
 .modal {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(19, 79, 230, 0.5);
   padding-top: 30px;
   z-index: 1;

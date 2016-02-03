@@ -86,7 +86,7 @@ var App = React.createClass({
 
     if (this.state.fetchingModalIsOpen) {
       fetchingModal = (
-        <Modal closeHandler={this.closeFetchingModal}>
+        <Modal closeHandler={this.closeFetchingModal} >
           <Spinner />
         </Modal>
 
@@ -96,7 +96,7 @@ var App = React.createClass({
     }
 
     if (this.state.newTermModalIsOpen){
-      newTermModal = <Modal closeHandler={this.closeNewTermModal}>
+      newTermModal = <Modal closeHandler={this.closeNewTermModal} >
         <NewTermForm />
       </Modal>;
     } else {

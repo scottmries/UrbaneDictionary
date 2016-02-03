@@ -108,6 +108,17 @@ button.pressed {
   color:black;
 }
 
+.spinner {
+  text-align:center;
+  margin: auto;
+  font-size: 20px;
+  font-family: 'Special Elite', cursive;
+}
+i.fa-spin {
+  color: #134FE6;
+  font-size: 64px;
+}
+
 .ellipsis:hover{
   background: #05ff56;
 }
@@ -129,4 +140,8 @@ button.pressed {
   max-width: 300px;
   margin: 20px auto;
   display: block;
+}
+
+.closeModal {
+  font-size: 24px;
 }

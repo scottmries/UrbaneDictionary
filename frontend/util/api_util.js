@@ -92,7 +92,6 @@ ApiUtil = {
       url: 'api/terms/' + term_id,
       data: image,
       success: function (term) {
-        debugger
         ApiActions.receiveSingleTerm(term);
       }
     });

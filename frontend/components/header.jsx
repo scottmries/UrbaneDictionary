@@ -15,7 +15,11 @@ var Header = React.createClass({
   },
 
   componentDidMount: function () {
-    CurrentUserStore.addListener(this._onChange);
+    this.currentUserListener = CurrentUserStore.addListener(this._onChange);
+  },
+
+  componentWillUnmount: function () {
+    this.currentUserListener.remove();
   },
 
   _onChange: function () {

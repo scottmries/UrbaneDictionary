@@ -26,7 +26,6 @@ var Author = React.createClass({
     _onChange: function () {
       var id = parseInt(this.props.params.id);
       var userTerms = UserStore.getAuthorTerms();
-      debugger
       console.log("old state terms:" + this.state);
       this.setState({ user: userTerms.user, terms: userTerms.terms });
       console.log("state terms: " + this.state);
@@ -34,7 +33,7 @@ var Author = React.createClass({
 
     render: function () {
       // console.log(this.state.terms);
-      return (<div className="author-terms">
+      return (<div className="author-terms group">
 
           {this.state.terms.map (function (term){
             // console.log(term);
