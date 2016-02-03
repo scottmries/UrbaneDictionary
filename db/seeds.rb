@@ -108,6 +108,26 @@ minijo.createTerm ({
     usage: "\"He took her down to Chinatown, and taught how to kick the gong around.\"",
     video_url: "https://www.youtube.com/embed/8mq4UT4VnbE"
   })
+scott.createTerm ({
+  term: "Drop that back into low and go by once more.",
+  definition: "Can you say that again please.",
+  usage: "Drop that back into low and go by once more, Javascript."
+  })
+scott.createTerm ({
+  term: "For you and me the chill is on.",
+  definition: "Our relationship is over.",
+  usage: "For you and me, Winter, the chill is on."
+  })
+scott.createTerm ({
+  term: "Give [someone] the air.",
+  definition: "Tell [someone] goodbye, finish the relationship, ignore [someone].",
+  usage: "I had had about enough of Johnny Utah, my skydiving tandem, so I gave him the air."
+  })
+scott.createTerm ({
+  term: "Go home and wrastle with that one.",
+  definition: "That's what I can do. See if you can do better.",
+  usage: "Samuel Beckett used to drive Andre the Giant to school. Go home and wrastle with that one."
+  })
   # .createTerm ({
   #  #   term: "See you on the flip side.",
   #   definition: "Fare thee well, fine fellow.",
