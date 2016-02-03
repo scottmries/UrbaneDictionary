@@ -24,6 +24,7 @@ var TermListItem = React.createClass({
   },
 
   render: function () {
+    console.log(this.props.term.term, this.props.term.image_url);
     var months = ["January", "February", "March", "April", "May",
       "June", "July", "August", "September", "October", "November", "December"];
     var usage = "";
@@ -38,8 +39,8 @@ var TermListItem = React.createClass({
       if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7){
         youtubeVideo = <YoutubeVideo video={this.props.term.video_url} />;
       }
-      if (typeof this.props.term.image_url === "string" && this.props.term.image_url > 1){
-        image = <img src={this.props.term.image_url} />;
+      if (typeof this.props.term.image_url === "string" && this.props.term.image_url.length > 1){
+        image = <img className="termImg" src={this.props.term.image_url} />;
       }
       if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0){
         usage = <p className="usage">{this.props.term.usage}</p>;

@@ -124,3 +124,9 @@ button.pressed {
 .subnav input[type="text"]:placeholder-shown {
   color: #888;
 }
+
+.termImg, .preview-image {
+  max-width: 300px;
+  margin: 20px auto;
+  display: block;
+}

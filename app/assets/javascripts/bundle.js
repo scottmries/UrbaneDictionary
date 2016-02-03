@@ -24254,7 +24254,6 @@
 	  },
 
 	  addImage: function (term_id, image, cb) {
-	    debugger;
 	    $.ajax({
 	      type: 'put',
 	      dataType: 'json',
@@ -24263,6 +24262,7 @@
 	      url: 'api/terms/' + term_id,
 	      data: image,
 	      success: function (term) {
+	        debugger;
 	        ApiActions.receiveSingleTerm(term);
 	      }
 	    });
@@ -31217,6 +31217,7 @@
 	  },
 
 	  render: function () {
+	    console.log(this.props.term.term, this.props.term.image_url);
 	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	    var usage = "";
 	    var date = new Date();
@@ -31230,8 +31231,8 @@
 	      if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7) {
 	        youtubeVideo = React.createElement(YoutubeVideo, { video: this.props.term.video_url });
 	      }
-	      if (typeof this.props.term.image_url === "string" && this.props.term.image_url > 1) {
-	        image = React.createElement('img', { src: this.props.term.image_url });
+	      if (typeof this.props.term.image_url === "string" && this.props.term.image_url.length > 1) {
+	        image = React.createElement('img', { className: 'termImg', src: this.props.term.image_url });
 	      }
 	      if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0) {
 	        usage = React.createElement(
@@ -31474,7 +31475,8 @@
 	      React.createElement(
 	        "div",
 	        { className: "form-inner" },
-	        React.createElement("input", { type: "file", onChange: this.changeFile })
+	        React.createElement("input", { type: "file", onChange: this.changeFile }),
+	        React.createElement("img", { className: "preview-image", src: this.state.imageUrl })
 	      ),
 	      React.createElement(
 	        "button",

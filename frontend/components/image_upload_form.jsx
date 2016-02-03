@@ -40,6 +40,7 @@ var ImageUploadForm = React.createClass({
       <form onSubmit={this.submit}>
         <div className="form-inner">
           <input type="file" onChange={this.changeFile} />
+          <img className="preview-image" src={this.state.imageUrl}/>
         </div>
         <button>Submit</button>
       </form>

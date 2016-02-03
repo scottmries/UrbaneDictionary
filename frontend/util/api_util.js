@@ -84,7 +84,6 @@ ApiUtil = {
   },
 
   addImage: function (term_id, image, cb) {
-    debugger
     $.ajax({
       type: 'put',
       dataType: 'json',
@@ -93,6 +92,7 @@ ApiUtil = {
       url: 'api/terms/' + term_id,
       data: image,
       success: function (term) {
+        debugger
         ApiActions.receiveSingleTerm(term);
       }
     });
