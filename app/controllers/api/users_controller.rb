@@ -10,9 +10,10 @@
     if @user.save
       sign_in!(@user)
       # render json: user
-      render "api/terms/index"
+      # render "api/terms/index"
       # redirect_to terms_url
-      # render json: @user
+      @user_with_terms = {user: @user, terms: @user.terms}
+      render "api/users/show"
     else
       render json: @user.errors.full_messages, status: 422
     end

@@ -20,7 +20,7 @@ ApiActions = {
     AppDispatcher.dispatch({
       actionsType: TermConstants.AUTHOR_TERMS_RECEIVED,
       terms: terms
-    })
+    });
   }
 };
 

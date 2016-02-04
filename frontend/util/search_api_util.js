@@ -10,7 +10,6 @@ var SearchApiUtil = {
       // processData: false,
       data: {query: query, page: page},
       success: function (data) {
-        console.log(data);
         SearchActions.receiveResults(data);
       },
       error: function () {

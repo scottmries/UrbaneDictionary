@@ -63,9 +63,9 @@ desireemervau.createTerm ({    term: "Applesauce!",
     definition: "Rubbish! Piffle! (Cassell)",
     usage: "Aloysius: \"You would really enjoy these Granny Smiths I have cooked down.\"\rGertrude: \"Applesauce!\""
   })
-katehurley.createTerm ({    term: "Fuck that noise!",
+katehurley.createTerm ({    term: "F@#& that noise!",
     definition: "No! No way!",
-    usage: "Aloysius \"Would you care to attend Stravinsky's 'Rite of Spring,' conducted by Toscanini, this evening?\"\rGertrude: \"Fuck that noise!\""
+    usage: "Aloysius \"Would you care to attend Stravinsky's 'Rite of Spring,' conducted by Toscanini, this evening?\"\rGertrude: \"F@#& that noise!\""
   })
 minijo.createTerm ({    term: "Caddywompus",
     definition: "Old codger",

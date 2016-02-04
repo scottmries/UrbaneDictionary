@@ -14,6 +14,22 @@ class User < ActiveRecord::Base
     user
   end
 
+  def self.find_or_create_by_auth_hash(auth_hash)
+    provider = auth_hash[:provider]
+    uid = auth_hash[:uid]
+
+    user = User.find_by(provider: provider, uid: uid)
+
+    return user if user
+
+    User.create(
+      provider: provider,
+      uid: uid,
+      email: auth_hash[:info][:name],
+      password: SecureRandom::urlsafe_base64
+    )
+  end
+
   def createTerm(term_params)
     term_params[:user_id] = self.id
     term = Term.new(term_params)
@@ -37,6 +53,14 @@ class User < ActiveRecord::Base
     self.session_token = SecureRandom.urlsafe_base64(16)
     self.save!
     self.session_token
+  end
+
+  def email
+    self.username
+  end
+
+  def email=(email)
+    self.username = email
   end
 
   private

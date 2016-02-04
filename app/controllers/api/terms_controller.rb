@@ -25,7 +25,6 @@ class Api::TermsController < ApplicationController
   end
 
   def update
-    # byebug
     @term = Term.find(params[:id])
     if @term.update(term_params)
       render :show

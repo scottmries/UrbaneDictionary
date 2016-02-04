@@ -2,7 +2,7 @@ var Store = require('flux/utils').Store;
 var AppDispatcher = require('../dispatcher/dispatcher');
 var CurrentUserConstants = require('../constants/current_user_constants');
 
-var _currentUser = {};
+var _currentUser = {user: {}};
 var _currentUserHasBeenFetched = false;
 var CurrentUserStore = new Store(AppDispatcher);
 
@@ -11,9 +11,13 @@ CurrentUserStore.currentUser = function () {
 };
 
 CurrentUserStore.isLoggedIn = function () {
-  if (typeof _currentUser.user !== "undefined"){
+  console.log("current user store", _currentUser);
+  var loginstatus;
+  if (_currentUser && typeof _currentUser.user !== "undefined"){
+    console.log("_currentUser is defined and it's id is", _currentUser.user.id);
     return !!_currentUser.user.id;
   } else {
+    console.log("_currentUser is not defined or _current.user is not defined", false);
     return false;
   }
 };
@@ -31,8 +35,8 @@ CurrentUserStore.__onDispatch = function (payload) {
       break;
     case CurrentUserConstants.LOGOUT_CURRENT_USER:
 
-      _currentUserHasBeenFetched = false;
-      _currentUser = {};
+      // _currentUserHasBeenFetched = false;
+      _currentUser = {user: {}};
       CurrentUserStore.__emitChange();
       break;
   }

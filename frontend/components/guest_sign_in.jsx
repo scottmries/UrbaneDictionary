@@ -4,11 +4,12 @@ var History = require('react-router').History;
 
 var GuestSignIn = React.createClass({
   mixins: [History],
-  
+
   submit: function (e) {
     e.preventDefault();
-    var user = $(e.currentTarget).serializeJSON().user;
-    ApiUtil.newUser(user, function () {
+    var newUser = $(e.currentTarget).serializeJSON().user;
+    debugger
+    ApiUtil.newUser(newUser, function () {
       this.history.pushState({}, "/");
     }.bind(this));
   },

@@ -11,6 +11,7 @@ var Author = require('./author');
 var Sidebar = require('./sidebar');
 var Header = require('./header');
 var CurrentUserStore = require('./../stores/current_user_store');
+var TermStore = require('./../stores/term');
 var SessionsApiUtil = require('./../util/sessions_api_util');
 var Spinner = require('./spinner');
 var History = require('react-router').History;
@@ -20,9 +21,15 @@ var App = React.createClass({
   mixins: [History],
 
   componentDidMount: function () {
-    CurrentUserStore.addListener(this.forceUpdate.bind(this));
-    CurrentUserStore.addListener(this._onChange);
+    // CurrentUserStore.addListener(this.forceUpdate.bind(this));
+    this.userlistener = CurrentUserStore.addListener(this._onChange);
+    this.termlistener = TermStore.addListener(this._newTerms);
     SessionsApiUtil.fetchCurrentUser();
+  },
+
+  componentWillUnmount: function () {
+    this.userlistener.remove();
+    this.termlistener.remove();
   },
 
   _onChange: function () {
@@ -33,11 +40,18 @@ var App = React.createClass({
     }
   },
 
+  _newTerms: function () {
+    console.log("new terms");
+    this.setState({
+      newTermModalIsOpen: false
+    });
+  },
+
   getInitialState: function () {
     return ({
       signInModalIsOpen: false,
       newTermModalIsOpen: false,
-      fetchingModalIsOpen: true
+      fetchingModalIsOpen: false
     });
   },
   // refactor: move modal logic to a store
@@ -96,7 +110,7 @@ var App = React.createClass({
     }
 
     if (this.state.newTermModalIsOpen){
-      newTermModal = <Modal closeHandler={this.closeNewTermModal} >
+      newTermModal = <Modal closeHandler={this.closeNewTermModal} closeButton="show" >
         <NewTermForm />
       </Modal>;
     } else {

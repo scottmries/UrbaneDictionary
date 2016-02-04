@@ -24,14 +24,13 @@ var TermListItem = React.createClass({
   },
 
   render: function () {
-    console.log(this.props);
     var months = ["January", "February", "March", "April", "May",
       "June", "July", "August", "September", "October", "November", "December"];
     var usage = "";
     var date = new Date();
     var author = "";
     var youtubeVideo = <div></div>;
-    var image = <div></div>;
+    var image = <img className="termImg" src={this.props.term.image_url} />;
     var term = "";
     var definition = "";
     if (typeof this.props.term !== "undefined"){
@@ -39,11 +38,11 @@ var TermListItem = React.createClass({
       if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7){
         youtubeVideo = <YoutubeVideo video={this.props.term.video_url} />;
       }
-      if (typeof this.props.term.image_url === "string" && this.props.term.image_url.length > 1){
-        image = <img className="termImg" src={this.props.term.image_url} />;
-      }
       if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0){
         usage = <p className="usage">{this.props.term.usage}</p>;
+      }
+      if (this.props.term.image_url.slice(0,4) === "http"){
+        <img className="termImg" src={this.props.term.image_url} />;
       }
       author = <a href="#" onClick={this.showUserTerms}>  {this.props.user.username} </a>;
       term = this.props.term.term;
@@ -53,7 +52,7 @@ var TermListItem = React.createClass({
     var dateString = shortMonth + " " + date.getDate();
     return (
       <article className="term term_list_item group">
-        <TermHeader termHeader={dateString} />
+        <TermHeader termHeader={dateString} termId={this.props.term.id}/>
         <a href="#" onClick={this.showTerm}>
           <h2>{term}</h2>
         </a>

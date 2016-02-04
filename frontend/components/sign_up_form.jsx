@@ -33,7 +33,7 @@ var SignUpForm = React.createClass({
 
   render: function () {
     return (
-      <form onSubmit={this.submit}>
+      <form onSubmit={this.submit} className="sign-up">
         <div className="form-inner">
             <label>Username:<br />
             <input type="text" name="user[username]" onChange={this.handleUsernameChange} value={this.state.username} />
@@ -43,7 +43,7 @@ var SignUpForm = React.createClass({
             <input type="password" name="user[password]" onChange={this.handlePasswordChange} value={this.state.password} />
           </label>
         </div>
-        <input type="submit" value="Sign Up" />
+        <input type="submit" value="Sign Up" className="sign-up-button"/>
       </form>
     );
   }

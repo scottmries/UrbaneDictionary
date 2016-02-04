@@ -3,24 +3,33 @@ var SessionsApiUtil = require('./../util/sessions_api_util');
 var History = require('react-router').History;
 var Modal = require('./modal');
 var GuestSignIn = require('./guest_sign_in');
+var FacebookSignIn = require('./facebook_sign_in');
 var SignUpForm = require('./sign_up_form');
 var SignInForm = React.createClass({
 
   mixins: [History],
 
   getInitialState: function () {
-    return { username: "", password: "" };
+    return { signInUsername: "", signUpUsername: "", signInPassword: "", signUpPassword: "" };
   },
 
-  handleUsernameChange: function (e) {
-    this.setState({ username: e.currentTarget.value });
+  handleSignInUsernameChange: function (e) {
+    this.setState({ signInUsername: e.currentTarget.value });
   },
 
-  handlePasswordChange: function (e) {
-    this.setState({ password: e.currentTarget.value });
+  handleSignUpUsernameChange: function (e) {
+    this.setState({ signUpUsername: e.currentTarget.value });
   },
 
-  submit: function (e) {
+  handleSignInPasswordChange: function (e) {
+    this.setState({ signInPassword: e.currentTarget.value });
+  },
+
+  handleSignUpPasswordChange: function (e) {
+    this.setState({ signUpPassword: e.currentTarget.value });
+  },
+
+  signin: function (e) {
     e.preventDefault();
     var credentials = $(e.currentTarget).serializeJSON().user;
     SessionsApiUtil.login(credentials, function () {
@@ -29,25 +38,48 @@ var SignInForm = React.createClass({
 
   },
 
+  signup: function (e) {
+    e.preventDefault();
+    var user = $(e.currentTarget).serializeJSON().user;
+    // SessionsApiUtil.login(credentials, function () {
+    //   this.history.pushState({}, "/");
+    // }.bind(this));
+    ApiUtil.newUser(user, function () {
+      this.history.pushState({}, "/");
+    }.bind(this));
+  },
+
   render: function () {
 
     return (
-      <section className="sign-in">
+      <section className="sign-in-modal">
       <Modal>
         <h2>Say, Jim, fancy a sign in?</h2>
         <GuestSignIn />
-          <form action="api/users" method="post" onSubmit={this.submit}>
+        <FacebookSignIn />
+          <form onSubmit={this.signin} className="sign-in">
             <div className="form-inner">
                 <label>Username:<br />
-                <input type="text" name="user[username]" onChange={this.handleUsernameChange} value={this.state.username} />
+                <input type="text" name="user[username]" onChange={this.handleSignInUsernameChange} value={this.state.username} />
               </label><br />
               <label>Password:<br />
-                <input type="password" name="user[password]" onChange={this.handlePasswordChange} value={this.state.password} />
+                <input type="password" name="user[password]" onChange={this.handleSignInPasswordChange} value={this.state.password} />
               </label>
             </div>
-            <input type="submit" value="Sign In" />
+            <input type="submit" value="Sign In" className="sign-in-button"/>
           </form>
-          <SignUpForm />
+          <form onSubmit={this.signup} className="sign-up">
+            <div className="form-inner">
+                <label>Username:<br />
+                <input type="text" name="user[username]" onChange={this.handleSignUpUsernameChange} value={this.state.username} />
+              </label>
+              <br />
+              <label>Password:<br />
+                <input type="password" name="user[password]" onChange={this.handleSignUpPasswordChange} value={this.state.password} />
+              </label>
+            </div>
+            <input type="submit" value="Sign Up" className="sign-up-button"/>
+          </form>
           </Modal>
       </section>
     );

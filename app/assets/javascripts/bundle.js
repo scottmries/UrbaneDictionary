@@ -55,22 +55,18 @@
 	var SignUpForm = __webpack_require__(249);
 	var SingleTerm = __webpack_require__(253);
 	var Author = __webpack_require__(254);
-	var Header = __webpack_require__(256);
+	var Header = __webpack_require__(260);
 	var CurrentUserStore = __webpack_require__(252);
 	var SessionsApiUtil = __webpack_require__(245);
 	var TermListItem = __webpack_require__(233);
 
-	var routes =
-	// <Route path="/" component={App} onEnter={_ensureLoggedIn}>
-	React.createElement(
+	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: App },
-	  React.createElement(Route, { path: 'terms', component: Terms, onEnter: _ensureLoggedIn }),
-	  '// ',
 	  React.createElement(IndexRoute, { component: Terms, onEnter: _ensureLoggedIn }),
 	  React.createElement(Route, { path: 'login', component: SignInForm }),
 	  React.createElement(Route, { path: 'users/new', component: SignUpForm }),
-	  React.createElement(Route, { path: 'terms/:id', component: TermListItem }),
+	  React.createElement(Route, { path: 'terms/:id', component: SingleTerm }),
 	  React.createElement(Route, { path: 'users/:id', component: Author })
 	);
 
@@ -78,7 +74,6 @@
 	  if (CurrentUserStore.hasBeenFetched()) {
 	    _redirectIfNotLoggedIn();
 	  } else {
-
 	    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
 	  }
 
@@ -24046,11 +24041,12 @@
 	var Modal = __webpack_require__(238);
 	var SingleTerm = __webpack_require__(253);
 	var Author = __webpack_require__(254);
-	var Sidebar = __webpack_require__(255);
-	var Header = __webpack_require__(256);
+	var Sidebar = __webpack_require__(259);
+	var Header = __webpack_require__(260);
 	var CurrentUserStore = __webpack_require__(252);
+	var TermStore = __webpack_require__(214);
 	var SessionsApiUtil = __webpack_require__(245);
-	var Spinner = __webpack_require__(261);
+	var Spinner = __webpack_require__(265);
 	var History = __webpack_require__(159).History;
 
 	var App = React.createClass({
@@ -24059,9 +24055,15 @@
 	  mixins: [History],
 
 	  componentDidMount: function () {
-	    CurrentUserStore.addListener(this.forceUpdate.bind(this));
-	    CurrentUserStore.addListener(this._onChange);
+	    // CurrentUserStore.addListener(this.forceUpdate.bind(this));
+	    this.userlistener = CurrentUserStore.addListener(this._onChange);
+	    this.termlistener = TermStore.addListener(this._newTerms);
 	    SessionsApiUtil.fetchCurrentUser();
+	  },
+
+	  componentWillUnmount: function () {
+	    this.userlistener.remove();
+	    this.termlistener.remove();
 	  },
 
 	  _onChange: function () {
@@ -24072,11 +24074,18 @@
 	    }
 	  },
 
+	  _newTerms: function () {
+	    console.log("new terms");
+	    this.setState({
+	      newTermModalIsOpen: false
+	    });
+	  },
+
 	  getInitialState: function () {
 	    return {
 	      signInModalIsOpen: false,
 	      newTermModalIsOpen: false,
-	      fetchingModalIsOpen: true
+	      fetchingModalIsOpen: false
 	    };
 	  },
 	  // refactor: move modal logic to a store
@@ -24136,7 +24145,7 @@
 	    if (this.state.newTermModalIsOpen) {
 	      newTermModal = React.createElement(
 	        Modal,
-	        { closeHandler: this.closeNewTermModal },
+	        { closeHandler: this.closeNewTermModal, closeButton: 'show' },
 	        React.createElement(NewTermForm, null)
 	      );
 	    } else {
@@ -24179,7 +24188,8 @@
 	      dataType: 'json',
 	      url: 'api/users',
 	      data: { user: user },
-	      success: function () {
+	      success: function (currentUser) {
+	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        cb();
 	      },
 	      error: function () {}
@@ -24192,26 +24202,11 @@
 	      dataType: 'json',
 	      url: 'api/terms',
 	      success: function (terms) {
-	        ApiActions.receiveAllTerms(terms);
-	        // console.log("Now those are some nice terms.", terms);
+	        ApiActions.receiveAllTerms(terms.reverse());
 	      },
-	      error: function () {
-	        // console.log("Whoops a daisy. Fetching terms is broken. :(");
-	      }
+	      error: function () {}
 	    });
 	  },
-
-	  // fetchTermsByUserId: function (id) {
-	  //   $.ajax({
-	  //     type: 'get',
-	  //     dataType: 'json',
-	  //     url: 'api/terms',
-	  //     success: function (terms) {
-	  //       debugger
-	  //       ApiActions.receiveTermsByAuthor(terms);
-	  //     }
-	  //   });
-	  // },
 
 	  fetchSingleTerm: function (id) {
 	    $.ajax({
@@ -24219,12 +24214,9 @@
 	      dataType: 'json',
 	      url: 'api/terms/' + id,
 	      success: function (term) {
-	        // console.log("Here's your single term already: ", term);
 	        ApiActions.receiveSingleTerm(term);
 	      },
-	      error: function () {
-	        // console.log("Uh ohz, fetching a single term failed.");
-	      }
+	      error: function () {}
 	    });
 	  },
 
@@ -24237,7 +24229,8 @@
 	      data: { term: term },
 	      success: function (term) {
 	        ApiUtil.fetchTerms();
-	      }
+	      },
+	      error: function () {}
 	    });
 	  },
 
@@ -24653,6 +24646,7 @@
 	TermStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case TermConstants.TERMS_RECEIVED:
+	      console.log("terms received in the store");
 	      reset(payload.terms);
 	      TermStore.__emitChange();
 	      break;
@@ -25904,7 +25898,6 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule invariant
 	 */
 
 	'use strict';
@@ -25960,7 +25953,6 @@
 	 * LICENSE file in the root directory of this source tree. An additional grant
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 *
-	 * @providesModule emptyFunction
 	 */
 
 	"use strict";
@@ -31216,13 +31208,12 @@
 	  },
 
 	  render: function () {
-	    console.log(this.props);
 	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	    var usage = "";
 	    var date = new Date();
 	    var author = "";
 	    var youtubeVideo = React.createElement('div', null);
-	    var image = React.createElement('div', null);
+	    var image = React.createElement('img', { className: 'termImg', src: this.props.term.image_url });
 	    var term = "";
 	    var definition = "";
 	    if (typeof this.props.term !== "undefined") {
@@ -31230,15 +31221,15 @@
 	      if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7) {
 	        youtubeVideo = React.createElement(YoutubeVideo, { video: this.props.term.video_url });
 	      }
-	      if (typeof this.props.term.image_url === "string" && this.props.term.image_url.length > 1) {
-	        image = React.createElement('img', { className: 'termImg', src: this.props.term.image_url });
-	      }
 	      if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0) {
 	        usage = React.createElement(
 	          'p',
 	          { className: 'usage' },
 	          this.props.term.usage
 	        );
+	      }
+	      if (this.props.term.image_url.slice(0, 4) === "http") {
+	        React.createElement('img', { className: 'termImg', src: this.props.term.image_url });
 	      }
 	      author = React.createElement(
 	        'a',
@@ -31255,7 +31246,7 @@
 	    return React.createElement(
 	      'article',
 	      { className: 'term term_list_item group' },
-	      React.createElement(TermHeader, { termHeader: dateString }),
+	      React.createElement(TermHeader, { termHeader: dateString, termId: this.props.term.id }),
 	      React.createElement(
 	        'a',
 	        { href: '#', onClick: this.showTerm },
@@ -31323,9 +31314,7 @@
 	  },
 
 	  _termChange: function () {
-	    console.log(this.state.modal);
 	    this.setState({ modal: "" });
-	    console.log(this.state.modal);
 	  },
 
 	  handleEllipsisClick: function () {
@@ -31383,21 +31372,21 @@
 	      case "image":
 	        modal = React.createElement(
 	          Modal,
-	          { closeHandler: this.closeHandler },
+	          { closeHandler: this.closeHandler, closeButton: 'show' },
 	          React.createElement(ImageUploadForm, { term: this.props.term })
 	        );
 	        break;
 	      case "video":
 	        modal = React.createElement(
 	          Modal,
-	          { closeHandler: this.closeHandler },
+	          { closeHandler: this.closeHandler, closeButton: 'show' },
 	          React.createElement(VideoUploadForm, { term: this.props.term })
 	        );
 	        break;
 	      case "audio":
 	        modal = React.createElement(
 	          Modal,
-	          { closeHandler: this.closeHandler },
+	          { closeHandler: this.closeHandler, closeButton: 'show' },
 	          React.createElement(AudioUploadForm, { term: this.props.term })
 	        );
 	        break;
@@ -31581,7 +31570,7 @@
 
 	  render: function () {
 	    var closeButton = React.createElement("div", null);
-	    if (this.props.showClosebutton) {
+	    if (this.props.closeButton === "show") {
 	      closeButton = React.createElement(
 	        "button",
 	        { className: "closeModal", onClick: this.props.closeHandler },
@@ -31608,15 +31597,21 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var FacebookLike = __webpack_require__(266);
 
 	var TermHeader = React.createClass({
-	  displayName: "TermHeader",
+	  displayName: 'TermHeader',
 
 	  render: function () {
 	    return React.createElement(
-	      "strong",
-	      { className: "term-header" },
-	      this.props.termHeader
+	      'div',
+	      null,
+	      React.createElement(
+	        'strong',
+	        { className: 'term-header' },
+	        this.props.termHeader
+	      ),
+	      React.createElement(FacebookLike, { termId: this.props.termId })
 	    );
 	  }
 	});
@@ -31631,15 +31626,6 @@
 
 	var YoutubeVideo = React.createClass({
 	  displayName: "YoutubeVideo",
-
-	  // getInitialState: function () {
-	  //   // return ({ video_url: "" });
-	  // },
-	  //
-	  // componentWillMount: function () {
-	  //   console.log("component will mount");
-	  //   // this.setState({ video_url: this.parseEmbedCode() });
-	  // },
 
 	  render: function () {
 	    return React.createElement("iframe", { width: "420", height: "315",
@@ -31727,6 +31713,7 @@
 	var History = __webpack_require__(159).History;
 	var Modal = __webpack_require__(238);
 	var GuestSignIn = __webpack_require__(248);
+	var FacebookSignIn = __webpack_require__(268);
 	var SignUpForm = __webpack_require__(249);
 	var SignInForm = React.createClass({
 	  displayName: 'SignInForm',
@@ -31734,21 +31721,40 @@
 	  mixins: [History],
 
 	  getInitialState: function () {
-	    return { username: "", password: "" };
+	    return { signInUsername: "", signUpUsername: "", signInPassword: "", signUpPassword: "" };
 	  },
 
-	  handleUsernameChange: function (e) {
-	    this.setState({ username: e.currentTarget.value });
+	  handleSignInUsernameChange: function (e) {
+	    this.setState({ signInUsername: e.currentTarget.value });
 	  },
 
-	  handlePasswordChange: function (e) {
-	    this.setState({ password: e.currentTarget.value });
+	  handleSignUpUsernameChange: function (e) {
+	    this.setState({ signUpUsername: e.currentTarget.value });
 	  },
 
-	  submit: function (e) {
+	  handleSignInPasswordChange: function (e) {
+	    this.setState({ signInPassword: e.currentTarget.value });
+	  },
+
+	  handleSignUpPasswordChange: function (e) {
+	    this.setState({ signUpPassword: e.currentTarget.value });
+	  },
+
+	  signin: function (e) {
 	    e.preventDefault();
 	    var credentials = $(e.currentTarget).serializeJSON().user;
 	    SessionsApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+
+	  signup: function (e) {
+	    e.preventDefault();
+	    var user = $(e.currentTarget).serializeJSON().user;
+	    // SessionsApiUtil.login(credentials, function () {
+	    //   this.history.pushState({}, "/");
+	    // }.bind(this));
+	    ApiUtil.newUser(user, function () {
 	      this.history.pushState({}, "/");
 	    }.bind(this));
 	  },
@@ -31757,7 +31763,7 @@
 
 	    return React.createElement(
 	      'section',
-	      { className: 'sign-in' },
+	      { className: 'sign-in-modal' },
 	      React.createElement(
 	        Modal,
 	        null,
@@ -31767,9 +31773,10 @@
 	          'Say, Jim, fancy a sign in?'
 	        ),
 	        React.createElement(GuestSignIn, null),
+	        React.createElement(FacebookSignIn, null),
 	        React.createElement(
 	          'form',
-	          { action: 'api/users', method: 'post', onSubmit: this.submit },
+	          { onSubmit: this.signin, className: 'sign-in' },
 	          React.createElement(
 	            'div',
 	            { className: 'form-inner' },
@@ -31778,7 +31785,7 @@
 	              null,
 	              'Username:',
 	              React.createElement('br', null),
-	              React.createElement('input', { type: 'text', name: 'user[username]', onChange: this.handleUsernameChange, value: this.state.username })
+	              React.createElement('input', { type: 'text', name: 'user[username]', onChange: this.handleSignInUsernameChange, value: this.state.username })
 	            ),
 	            React.createElement('br', null),
 	            React.createElement(
@@ -31786,12 +31793,35 @@
 	              null,
 	              'Password:',
 	              React.createElement('br', null),
-	              React.createElement('input', { type: 'password', name: 'user[password]', onChange: this.handlePasswordChange, value: this.state.password })
+	              React.createElement('input', { type: 'password', name: 'user[password]', onChange: this.handleSignInPasswordChange, value: this.state.password })
 	            )
 	          ),
-	          React.createElement('input', { type: 'submit', value: 'Sign In' })
+	          React.createElement('input', { type: 'submit', value: 'Sign In', className: 'sign-in-button' })
 	        ),
-	        React.createElement(SignUpForm, null)
+	        React.createElement(
+	          'form',
+	          { onSubmit: this.signup, className: 'sign-up' },
+	          React.createElement(
+	            'div',
+	            { className: 'form-inner' },
+	            React.createElement(
+	              'label',
+	              null,
+	              'Username:',
+	              React.createElement('br', null),
+	              React.createElement('input', { type: 'text', name: 'user[username]', onChange: this.handleSignUpUsernameChange, value: this.state.username })
+	            ),
+	            React.createElement('br', null),
+	            React.createElement(
+	              'label',
+	              null,
+	              'Password:',
+	              React.createElement('br', null),
+	              React.createElement('input', { type: 'password', name: 'user[password]', onChange: this.handleSignUpPasswordChange, value: this.state.password })
+	            )
+	          ),
+	          React.createElement('input', { type: 'submit', value: 'Sign Up', className: 'sign-up-button' })
+	        )
 	      )
 	    );
 	  }
@@ -31806,6 +31836,7 @@
 	var CurrentUserActions = __webpack_require__(246);
 	var SessionsApiUtil = {
 	  login: function (credentials, success) {
+	    console.log(credentials);
 	    $.ajax({
 	      url: 'api/session',
 	      type: 'POST',
@@ -31895,8 +31926,9 @@
 
 	  submit: function (e) {
 	    e.preventDefault();
-	    var user = $(e.currentTarget).serializeJSON().user;
-	    ApiUtil.newUser(user, function () {
+	    var newUser = $(e.currentTarget).serializeJSON().user;
+	    debugger;
+	    ApiUtil.newUser(newUser, function () {
 	      this.history.pushState({}, "/");
 	    }.bind(this));
 	  },
@@ -31955,7 +31987,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'form',
-	      { onSubmit: this.submit },
+	      { onSubmit: this.submit, className: 'sign-up' },
 	      React.createElement(
 	        'div',
 	        { className: 'form-inner' },
@@ -31975,7 +32007,7 @@
 	          React.createElement('input', { type: 'password', name: 'user[password]', onChange: this.handlePasswordChange, value: this.state.password })
 	        )
 	      ),
-	      React.createElement('input', { type: 'submit', value: 'Sign Up' })
+	      React.createElement('input', { type: 'submit', value: 'Sign Up', className: 'sign-up-button' })
 	    );
 	  }
 	});
@@ -32045,9 +32077,10 @@
 	  },
 
 	  submit: function (e) {
+	    console.log("submit");
 	    e.preventDefault();
 	    var term = $(e.currentTarget).serializeJSON();
-	    term.user_id = this.currentUser().id;
+	    term.user_id = this.currentUser().user.id;
 	    ApiUtil.createTerm(term);
 	  },
 
@@ -32105,7 +32138,7 @@
 	var AppDispatcher = __webpack_require__(209);
 	var CurrentUserConstants = __webpack_require__(247);
 
-	var _currentUser = {};
+	var _currentUser = { user: {} };
 	var _currentUserHasBeenFetched = false;
 	var CurrentUserStore = new Store(AppDispatcher);
 
@@ -32114,9 +32147,13 @@
 	};
 
 	CurrentUserStore.isLoggedIn = function () {
-	  if (typeof _currentUser.user !== "undefined") {
+	  console.log("current user store", _currentUser);
+	  var loginstatus;
+	  if (_currentUser && typeof _currentUser.user !== "undefined") {
+	    console.log("_currentUser is defined and it's id is", _currentUser.user.id);
 	    return !!_currentUser.user.id;
 	  } else {
+	    console.log("_currentUser is not defined or _current.user is not defined", false);
 	    return false;
 	  }
 	};
@@ -32134,8 +32171,8 @@
 	      break;
 	    case CurrentUserConstants.LOGOUT_CURRENT_USER:
 
-	      _currentUserHasBeenFetched = false;
-	      _currentUser = {};
+	      // _currentUserHasBeenFetched = false;
+	      _currentUser = { user: {} };
 	      CurrentUserStore.__emitChange();
 	      break;
 	  }
@@ -32151,6 +32188,7 @@
 	var TermStore = __webpack_require__(214);
 	var History = __webpack_require__(159).History;
 	var TermHeader = __webpack_require__(239);
+	var FileUploads = __webpack_require__(234);
 
 	var SingleTerm = React.createClass({
 	  displayName: 'SingleTerm',
@@ -32180,61 +32218,76 @@
 	  },
 
 	  render: function () {
-	    if (this.state) {
-	      var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	      var usage;
-	      var date = new Date(this.state.term.created_at);
-	      var shortMonth = months[date.getMonth()].slice(0, 3);
-	      var dateString = shortMonth + " " + date.getDate();
-	      if (this.state.term.usage.length > 0) {
+	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	    var usage = "";
+	    var date = new Date();
+	    var author = "";
+	    var youtubeVideo = React.createElement('div', null);
+	    var image = React.createElement('div', null);
+	    var term = "";
+	    var definition = "";
+	    if (typeof this.state.term !== "undefined") {
+	      date = new Date(this.state.term.created_at);
+	      if (typeof this.state.term.video_url === "string" && this.state.term.video_url.length > 7) {
+	        youtubeVideo = React.createElement(YoutubeVideo, { video: this.state.term.video_url });
+	      }
+	      if (typeof this.state.term.image_url === "string" && this.state.term.image_url.length > 1) {
+	        image = React.createElement('img', { className: 'termImg', src: this.state.term.image_url });
+	      }
+	      if (typeof this.state.term.usage !== "undefined" && this.state.term.usage.length > 0) {
 	        usage = React.createElement(
 	          'p',
 	          { className: 'usage' },
 	          this.state.term.usage
 	        );
-	      } else {
-	        usage = "";
 	      }
-	      return React.createElement(
-	        'article',
-	        { className: 'term' },
-	        React.createElement(TermHeader, { termHeader: dateString }),
-	        React.createElement(
-	          'a',
-	          { href: '#', onClick: this.showTerm },
-	          React.createElement(
-	            'h2',
-	            null,
-	            this.state.term.term
-	          )
-	        ),
-	        React.createElement(
-	          'p',
-	          { className: 'definition' },
-	          this.state.term.definition
-	        ),
-	        usage,
-	        React.createElement(
-	          'p',
-	          { className: 'author' },
-	          'by ',
-	          React.createElement(
-	            'a',
-	            { href: '#', onClick: this.showUserTerms },
-	            '  ',
-	            this.state.term.user.username
-	          ),
-	          ' ',
-	          months[date.getMonth()],
-	          ' ',
-	          date.getDate(),
-	          ', ',
-	          date.getFullYear()
-	        )
+	      author = React.createElement(
+	        'a',
+	        { href: '#', onClick: this.showUserTerms },
+	        '  ',
+	        this.state.term.user.username,
+	        ' '
 	      );
-	    } else {
-	      return React.createElement('div', null);
+	      term = this.state.term.term;
+	      definition = this.state.term.definition;
 	    }
+	    var shortMonth = months[date.getMonth()].slice(0, 3);
+	    var dateString = shortMonth + " " + date.getDate();
+	    return React.createElement(
+	      'article',
+	      { className: 'term term_list_item group' },
+	      React.createElement(TermHeader, { termHeader: dateString }),
+	      React.createElement(
+	        'a',
+	        { href: '#', onClick: this.showTerm },
+	        React.createElement(
+	          'h2',
+	          null,
+	          term
+	        )
+	      ),
+	      React.createElement(
+	        'p',
+	        { className: 'definition' },
+	        definition
+	      ),
+	      usage,
+	      React.createElement(
+	        'p',
+	        { className: 'author' },
+	        'by ',
+	        author,
+	        ' ',
+	        months[date.getMonth()],
+	        ' ',
+	        date.getDate(),
+	        ', ',
+	        date.getFullYear()
+	      ),
+	      React.createElement(FileUploads, { term: this.state.term }),
+	      image,
+	      youtubeVideo
+	    );
 	  }
 	});
 
@@ -32248,8 +32301,8 @@
 	var TermStore = __webpack_require__(214);
 	var TermListItem = __webpack_require__(233);
 	var TermList = __webpack_require__(232);
-	var UserApiUtil = __webpack_require__(262);
-	var UserStore = __webpack_require__(265);
+	var UserApiUtil = __webpack_require__(255);
+	var UserStore = __webpack_require__(258);
 
 	var Author = React.createClass({
 	  displayName: 'Author',
@@ -32273,27 +32326,21 @@
 	  _onChange: function () {
 	    var id = parseInt(this.props.params.id);
 	    var userTerms = UserStore.getAuthorTerms();
-	    console.log("old state terms:" + this.state);
 	    this.setState({ user: userTerms.user, terms: userTerms.terms });
-	    console.log("state terms: " + this.state);
 	  },
 
 	  render: function () {
-	    // console.log(this.state.terms);
 	    return React.createElement(
 	      'div',
 	      { className: 'author-terms group' },
 	      this.state.terms.map(function (term) {
-	        // console.log(term);
 	        return React.createElement(TermListItem, {
 	          term: term,
 	          key: term.id,
 	          user: this.state.user
 	        });
 	      }.bind(this))
-	    )
-	    //was div
-	    ;
+	    );
 	  }
 	});
 
@@ -32301,6 +32348,117 @@
 
 /***/ },
 /* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UserActions = __webpack_require__(256);
+
+	var UserApiUtil = {
+
+	  fetchUsers: function () {
+	    $.ajax({
+	      url: '/api/users',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (data) {
+	        UserActions.receiveUsers(data);
+	      },
+	      error: function () {}
+	    });
+	  },
+
+	  fetchUser: function (id) {
+	    $.ajax({
+	      url: '/api/users/' + id,
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (data) {
+	        UserActions.receiveUser(data);
+	      },
+	      error: function () {}
+	    });
+	  }
+
+	};
+
+	module.exports = UserApiUtil;
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var UserConstants = __webpack_require__(257);
+	var AppDispatcher = __webpack_require__(209);
+
+	UserApiUtil = {
+	  receiveUsers: function (users) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.USERS_RECEIVED,
+	      users: users
+	    });
+	  },
+	  receiveUser: function (user) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.USER_RECEIVED,
+	      user: user
+	    });
+	  }
+	};
+
+	module.exports = UserApiUtil;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports) {
+
+	UserConstants = {
+	  USERS_RECEIVED: "USERS_RECEIVED",
+	  USER_RECEIVED: "USER_RECEIVED"
+	};
+
+	module.exports = UserConstants;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(215).Store;
+	var AppDispatcher = __webpack_require__(209);
+	var UserConstants = __webpack_require__(257);
+
+	var _users = [];
+
+	var UserStore = new Store(AppDispatcher);
+
+	UserStore.all = function () {
+	  return _users.slice(0);
+	};
+
+	var reset = function (users) {
+	  _users = users;
+	};
+
+	UserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.USERS_RECEIVED:
+	      reset(payload.users);
+	      UserStore.__emitChange();
+	      break;
+	    case UserConstants.USER_RECEIVED:
+	      reset(payload.user);
+	      UserStore.__emitChange();
+	      break;
+	  }
+	};
+
+	UserStore.getAuthorTerms = function (id) {
+	  return _users;
+	};
+
+	module.exports = UserStore;
+
+/***/ },
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32326,7 +32484,7 @@
 	module.exports = Sidebar;
 
 /***/ },
-/* 256 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32334,15 +32492,15 @@
 	var NewTermButton = __webpack_require__(250);
 	var CurrentUserStore = __webpack_require__(252);
 	var SessionsApiUtil = __webpack_require__(245);
-	var Logo = __webpack_require__(257);
-	var SearchBar = __webpack_require__(258);
+	var Logo = __webpack_require__(261);
+	var SearchBar = __webpack_require__(262);
 
 	var Header = React.createClass({
 	  displayName: 'Header',
 
 	  getInitialState: function () {
 	    return {
-	      currentUser: {}
+	      currentUser: { user: {} }
 	    };
 	  },
 
@@ -32355,7 +32513,7 @@
 	  },
 
 	  _onChange: function () {
-	    this.setState({ currentUser: CurrentUserStore.currentUser() });
+	    this.setState({ currentUser: { user: CurrentUserStore.currentUser() } });
 	  },
 
 	  logout: function () {
@@ -32364,13 +32522,14 @@
 
 	  render: function () {
 	    var logInStatus;
-	    if (CurrentUserStore.isLoggedIn()) {
+	    console.log("header", CurrentUserStore.currentUser());
+	    if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) {
 	      // if we're logged in....
 	      logInStatus = React.createElement(
 	        'div',
 	        { className: 'logInStatus' },
 	        'Logged in as ',
-	        this.state.currentUser.username,
+	        this.state.currentUser.user.user.username,
 	        React.createElement('br', null),
 	        React.createElement(
 	          'button',
@@ -32416,7 +32575,7 @@
 	module.exports = Header;
 
 /***/ },
-/* 257 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32444,11 +32603,11 @@
 	module.exports = Logo;
 
 /***/ },
-/* 258 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SearchApiUtil = __webpack_require__(259);
+	var SearchApiUtil = __webpack_require__(263);
 
 	var SearchBar = React.createClass({
 	  displayName: 'SearchBar',
@@ -32479,10 +32638,10 @@
 	module.exports = SearchBar;
 
 /***/ },
-/* 259 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SearchActions = __webpack_require__(260);
+	var SearchActions = __webpack_require__(264);
 
 	var SearchApiUtil = {
 
@@ -32494,7 +32653,6 @@
 	      // processData: false,
 	      data: { query: query, page: page },
 	      success: function (data) {
-	        console.log(data);
 	        SearchActions.receiveResults(data);
 	      },
 	      error: function () {}
@@ -32505,7 +32663,7 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
-/* 260 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32525,11 +32683,11 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
-/* 261 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var Logo = __webpack_require__(257);
+	var Logo = __webpack_require__(261);
 
 	var Spinner = React.createClass({
 	  displayName: 'Spinner',
@@ -32556,118 +32714,93 @@
 	module.exports = Spinner;
 
 /***/ },
-/* 262 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserActions = __webpack_require__(263);
+	/* WEBPACK VAR INJECTION */(function(module) {var React = __webpack_require__(1);
 
-	var UserApiUtil = {
+	var FacebookLike = React.createClass({
+	  displayName: "FacebookLike",
 
-	  fetchUsers: function () {
-	    $.ajax({
-	      url: '/api/users',
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function (data) {
-	        console.log(data);
-	        UserActions.receiveUsers(data);
-	      },
-	      error: function () {}
-	    });
-	  },
-
-	  fetchUser: function (id) {
-	    $.ajax({
-	      url: '/api/users/' + id,
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function (data) {
-
-	        console.log(data);
-	        UserActions.receiveUser(data);
-	      },
-	      error: function () {}
-	    });
+	  render: function () {
+	    var termUrl = "/terms/" + self.props.term_id;
+	    return React.createElement(
+	      "div",
+	      { className: "fb-like-button" },
+	      React.createElement("div", { id: "fb-root" }),
+	      React.createElement("div", { "class": "fb-like",
+	        "data-href": termUrl,
+	        "data-layout": "standard",
+	        "data-action": "like",
+	        "data-show-faces": "false" })
+	    );
 	  }
+	});
 
-	};
-
-	module.exports = UserApiUtil;
+	module.export = FacebookLike;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(267)(module)))
 
 /***/ },
-/* 263 */
+/* 267 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var UserConstants = __webpack_require__(264);
-	var AppDispatcher = __webpack_require__(209);
+	var ApiUtil = __webpack_require__(207);
+	var History = __webpack_require__(159).History;
 
-	UserApiUtil = {
-	  receiveUsers: function (users) {
-	    AppDispatcher.dispatch({
-	      actionType: UserConstants.USERS_RECEIVED,
-	      users: users
-	    });
+	var FacebookSignIn = React.createClass({
+	  displayName: 'FacebookSignIn',
+
+	  mixins: [History],
+
+	  submit: function (e) {
+	    e.preventDefault();
 	  },
-	  receiveUser: function (user) {
-	    AppDispatcher.dispatch({
-	      actionType: UserConstants.USER_RECEIVED,
-	      user: user
-	    });
+
+	  render: function () {
+	    return(
+	      // <form onSubmit={this.submit} >
+	      React.createElement(
+	        'div',
+	        { className: 'facebook-login group' },
+	        React.createElement(
+	          'a',
+	          { href: '/auth/facebook' },
+	          React.createElement(
+	            'button',
+	            null,
+	            React.createElement(
+	              'span',
+	              null,
+	              'Sign In with ',
+	              React.createElement('i', { className: 'fa fa-facebook-official' })
+	            )
+	          )
+	        )
+	      )
+	      // </form>
+
+	    );
 	  }
-	};
+	});
 
-	module.exports = UserApiUtil;
-
-/***/ },
-/* 264 */
-/***/ function(module, exports) {
-
-	UserConstants = {
-	  USERS_RECEIVED: "USERS_RECEIVED",
-	  USER_RECEIVED: "USER_RECEIVED"
-	};
-
-	module.exports = UserConstants;
-
-/***/ },
-/* 265 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(215).Store;
-	var AppDispatcher = __webpack_require__(209);
-	var UserConstants = __webpack_require__(264);
-
-	var _users = [];
-
-	var UserStore = new Store(AppDispatcher);
-
-	UserStore.all = function () {
-	  return _users.slice(0);
-	};
-
-	var reset = function (users) {
-	  _users = users;
-	};
-
-	UserStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case UserConstants.USERS_RECEIVED:
-	      reset(payload.users);
-	      UserStore.__emitChange();
-	      break;
-	    case UserConstants.USER_RECEIVED:
-	      reset(payload.user);
-	      UserStore.__emitChange();
-	      break;
-	  }
-	};
-
-	UserStore.getAuthorTerms = function (id) {
-	  return _users;
-	};
-
-	module.exports = UserStore;
+	module.exports = FacebookSignIn;
 
 /***/ }
 /******/ ]);

@@ -23,9 +23,7 @@ var FileUploads = React.createClass({
   },
 
   _termChange: function () {
-    console.log(this.state.modal);
     this.setState({ modal: "" });
-    console.log(this.state.modal);
   },
 
   handleEllipsisClick: function () {
@@ -74,17 +72,17 @@ var FileUploads = React.createClass({
     var modal;
     switch (this.state.modal) {
       case "image":
-        modal = <Modal closeHandler={this.closeHandler}>
+        modal = <Modal closeHandler={this.closeHandler} closeButton="show">
             <ImageUploadForm term={this.props.term}/>
           </Modal>;
         break;
       case "video":
-        modal = <Modal closeHandler={this.closeHandler}>
+        modal = <Modal closeHandler={this.closeHandler} closeButton="show">
             <VideoUploadForm term={this.props.term}/>
           </Modal>;
         break;
       case "audio":
-        modal = <Modal closeHandler={this.closeHandler}>
+        modal = <Modal closeHandler={this.closeHandler} closeButton="show">
             <AudioUploadForm term={this.props.term}/>
           </Modal>;
         break;

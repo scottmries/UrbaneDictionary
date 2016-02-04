@@ -10,7 +10,7 @@ var Header = React.createClass({
 
   getInitialState: function () {
     return {
-      currentUser: {}
+      currentUser: { user: {} }
     };
   },
 
@@ -23,7 +23,7 @@ var Header = React.createClass({
   },
 
   _onChange: function () {
-    this.setState({currentUser: CurrentUserStore.currentUser()});
+    this.setState({currentUser: {user: CurrentUserStore.currentUser()}});
   },
 
   logout: function () {
@@ -32,10 +32,11 @@ var Header = React.createClass({
 
   render: function () {
     var logInStatus;
-    if (CurrentUserStore.isLoggedIn()) { // if we're logged in....
+    console.log("header", CurrentUserStore.currentUser());
+    if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) { // if we're logged in....
       logInStatus =  (
         <div className="logInStatus">
-          Logged in as { this.state.currentUser.username }<br />
+          Logged in as { this.state.currentUser.user.user.username }<br />
           <button onClick={ this.logout }>LOG OUT</button>
         </div>
       );

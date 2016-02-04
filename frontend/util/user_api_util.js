@@ -8,7 +8,6 @@ var UserApiUtil = {
       type: 'GET',
       dataType: 'json',
       success: function (data) {
-        console.log(data);
         UserActions.receiveUsers(data);
       },
       error: function () {
@@ -22,8 +21,6 @@ var UserApiUtil = {
       type: 'GET',
       dataType: 'json',
       success: function (data) {
-
-        console.log(data);
         UserActions.receiveUser(data);
       },
       error: function () {

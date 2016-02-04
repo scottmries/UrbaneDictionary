@@ -8,7 +8,8 @@ ApiUtil = {
       dataType: 'json',
       url: 'api/users',
       data: {user: user},
-      success: function () {
+      success: function (currentUser) {
+        CurrentUserActions.receiveCurrentUser(currentUser);
         cb();
       },
       error: function () {
@@ -22,26 +23,12 @@ ApiUtil = {
       dataType: 'json',
       url: 'api/terms',
       success: function (terms) {
-        ApiActions.receiveAllTerms(terms);
-        // console.log("Now those are some nice terms.", terms);
+        ApiActions.receiveAllTerms(terms.reverse());
       },
       error: function () {
-        // console.log("Whoops a daisy. Fetching terms is broken. :(");
       }
     });
   },
-
-  // fetchTermsByUserId: function (id) {
-  //   $.ajax({
-  //     type: 'get',
-  //     dataType: 'json',
-  //     url: 'api/terms',
-  //     success: function (terms) {
-  //       debugger
-  //       ApiActions.receiveTermsByAuthor(terms);
-  //     }
-  //   });
-  // },
 
   fetchSingleTerm: function (id) {
     $.ajax({
@@ -49,11 +36,9 @@ ApiUtil = {
       dataType: 'json',
       url: 'api/terms/' + id,
       success: function (term) {
-        // console.log("Here's your single term already: ", term);
         ApiActions.receiveSingleTerm(term);
       },
       error: function () {
-        // console.log("Uh ohz, fetching a single term failed.");
       }
     });
   },
@@ -67,6 +52,9 @@ ApiUtil = {
       data: {term: term},
       success: function (term) {
         ApiUtil.fetchTerms();
+      },
+      error: function () {
+
       }
     });
   },
