@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   attr_reader :password
 
   has_many :terms
+  has_many :opinions
+  has_many :opinioned_terms, through: :opinions
 
   after_initialize :ensure_session_token
 

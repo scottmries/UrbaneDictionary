@@ -33,7 +33,6 @@ var NewTermForm = React.createClass({
   },
 
   submit: function (e) {
-    console.log("submit");
     e.preventDefault();
     var term = $(e.currentTarget).serializeJSON();
     term.user_id = this.currentUser().user.id;

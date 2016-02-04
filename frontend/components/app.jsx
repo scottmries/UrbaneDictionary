@@ -41,7 +41,6 @@ var App = React.createClass({
   },
 
   _newTerms: function () {
-    console.log("new terms");
     this.setState({
       newTermModalIsOpen: false
     });

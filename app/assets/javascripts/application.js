@@ -13,5 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require serialize-json
+//= require facebook
 //= require bundle
 //= require_tree .

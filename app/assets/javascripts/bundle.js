@@ -24075,7 +24075,6 @@
 	  },
 
 	  _newTerms: function () {
-	    console.log("new terms");
 	    this.setState({
 	      newTermModalIsOpen: false
 	    });
@@ -24646,7 +24645,6 @@
 	TermStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case TermConstants.TERMS_RECEIVED:
-	      console.log("terms received in the store");
 	      reset(payload.terms);
 	      TermStore.__emitChange();
 	      break;
@@ -31187,6 +31185,7 @@
 	var FileUploads = __webpack_require__(234);
 	var TermHeader = __webpack_require__(239);
 	var YoutubeVideo = __webpack_require__(240);
+	var Opinion = __webpack_require__(269);
 
 	var TermListItem = React.createClass({
 	  displayName: 'TermListItem',
@@ -31276,7 +31275,8 @@
 	      ),
 	      React.createElement(FileUploads, { term: this.props.term }),
 	      image,
-	      youtubeVideo
+	      youtubeVideo,
+	      React.createElement(Opinion, null)
 	    );
 	  }
 	});
@@ -31605,7 +31605,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'term-header-container group' },
 	      React.createElement(
 	        'strong',
 	        { className: 'term-header' },
@@ -31836,7 +31836,6 @@
 	var CurrentUserActions = __webpack_require__(246);
 	var SessionsApiUtil = {
 	  login: function (credentials, success) {
-	    console.log(credentials);
 	    $.ajax({
 	      url: 'api/session',
 	      type: 'POST',
@@ -32077,7 +32076,6 @@
 	  },
 
 	  submit: function (e) {
-	    console.log("submit");
 	    e.preventDefault();
 	    var term = $(e.currentTarget).serializeJSON();
 	    term.user_id = this.currentUser().user.id;
@@ -32147,13 +32145,12 @@
 	};
 
 	CurrentUserStore.isLoggedIn = function () {
-	  console.log("current user store", _currentUser);
 	  var loginstatus;
 	  if (_currentUser && typeof _currentUser.user !== "undefined") {
-	    console.log("_currentUser is defined and it's id is", _currentUser.user.id);
+
 	    return !!_currentUser.user.id;
 	  } else {
-	    console.log("_currentUser is not defined or _current.user is not defined", false);
+
 	    return false;
 	  }
 	};
@@ -32522,7 +32519,6 @@
 
 	  render: function () {
 	    var logInStatus;
-	    console.log("header", CurrentUserStore.currentUser());
 	    if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) {
 	      // if we're logged in....
 	      logInStatus = React.createElement(
@@ -32717,46 +32713,26 @@
 /* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {var React = __webpack_require__(1);
+	var React = __webpack_require__(1);
 
 	var FacebookLike = React.createClass({
 	  displayName: "FacebookLike",
 
 	  render: function () {
-	    var termUrl = "/terms/" + self.props.term_id;
+	    var termUrl = "/terms/" + this.props.termId;
 	    return React.createElement(
 	      "div",
 	      { className: "fb-like-button" },
 	      React.createElement("div", { id: "fb-root" }),
-	      React.createElement("div", { "class": "fb-like",
-	        "data-href": termUrl,
-	        "data-layout": "standard",
-	        "data-action": "like",
-	        "data-show-faces": "false" })
+	      React.createElement("div", { className: "fb-like", "data-href": termUrl, "data-layout": "button", "data-action": "like", "data-show-faces": "false" })
 	    );
 	  }
 	});
 
-	module.export = FacebookLike;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(267)(module)))
+	module.exports = FacebookLike;
 
 /***/ },
-/* 267 */
-/***/ function(module, exports) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
+/* 267 */,
 /* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32801,6 +32777,79 @@
 	});
 
 	module.exports = FacebookSignIn;
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var Opinion = React.createClass({
+	  displayName: "Opinion",
+
+	  getInitialState: function () {
+	    return {
+	      currentUserLiked: null,
+	      "likes": 0,
+	      "dislikes": 0
+	    };
+	  },
+
+	  componentDidMount: function () {
+	    this.termListener = TermStore.addListener(this._onChange);
+	  },
+
+	  componentWillUnmount: function () {
+	    this.termListener.remove();
+	  },
+
+	  _onChange: function () {
+	    //if the user does not have an opinion about the term: null
+	    //if liked, true, else false
+	    //increment/decrement on the backend, then pass down the opinions as like/dislike integers
+
+	    //Disable the button that corresponds to the current opinion
+	    this.setState({ "currentUserLiked": "stuff" });
+	    this.dislikeDisabled = this.state.currentUserLiked === false ? " disable" : "";
+	    this.likeDisabled = this.state.currentUserLiked === true ? " disable" : "";
+	  },
+
+	  handleDislike: function () {
+	    this.setState({ "currentUserLiked": false });
+	    ApiUtil.setLike(false);
+	  },
+
+	  handleLike: function () {
+	    this.setState({ "currentUserLiked": true });
+	    ApiUtil.setLike(true);
+	  },
+
+	  render: function () {
+
+	    return React.createElement(
+	      "div",
+	      { className: "opinion" },
+	      React.createElement(
+	        "button",
+	        { className: "dislike", onClick: handleDislike },
+	        this.state.dislikes,
+	        " ",
+	        this.dislikeDisabled,
+	        ">"
+	      ),
+	      React.createElement(
+	        "button",
+	        { className: "like", onClick: handleLike },
+	        this.state.likes,
+	        " ",
+	        this.likeDisabled,
+	        ">"
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Opinion;
 
 /***/ }
 /******/ ]);

@@ -4,6 +4,7 @@ var History = require('react-router').History;
 var FileUploads = require('./file_uploads');
 var TermHeader = require('./term_header');
 var YoutubeVideo = require('./youtube_video');
+var Opinion = require('./opinion');
 
 var TermListItem = React.createClass({
 
@@ -66,6 +67,7 @@ var TermListItem = React.createClass({
         <FileUploads term={this.props.term} />
         {image}
         {youtubeVideo}
+        <Opinion />
       </article>
     );
   }

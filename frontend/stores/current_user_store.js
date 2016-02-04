@@ -11,13 +11,12 @@ CurrentUserStore.currentUser = function () {
 };
 
 CurrentUserStore.isLoggedIn = function () {
-  console.log("current user store", _currentUser);
   var loginstatus;
   if (_currentUser && typeof _currentUser.user !== "undefined"){
-    console.log("_currentUser is defined and it's id is", _currentUser.user.id);
+
     return !!_currentUser.user.id;
   } else {
-    console.log("_currentUser is not defined or _current.user is not defined", false);
+
     return false;
   }
 };

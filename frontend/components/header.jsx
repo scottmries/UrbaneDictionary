@@ -32,7 +32,6 @@ var Header = React.createClass({
 
   render: function () {
     var logInStatus;
-    console.log("header", CurrentUserStore.currentUser());
     if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) { // if we're logged in....
       logInStatus =  (
         <div className="logInStatus">
