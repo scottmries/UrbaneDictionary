@@ -1,4 +1,6 @@
 var React = require('react');
+var TermStore = require('./../stores/term');
+var CurrentStore = require('./../stores/current_user_store');
 
 var Opinion = React.createClass({
   getInitialState: function (){
@@ -11,7 +13,7 @@ var Opinion = React.createClass({
 
   componentDidMount: function () {
     this.termListener = TermStore.addListener(this._onTermChange);
-    this.currentUserListener = TermStore.addListener(this._onCurrentUserChange);
+    this.currentUserListener = CurrentStore.addListener(this._onCurrentUserChange);
   },
 
   componentWillUnmount: function () {
@@ -45,8 +47,8 @@ var Opinion = React.createClass({
 
     return (
       <div className="opinion">
-        <button className="dislike" onClick={this.handleDislike} disabled={this.state.currentUserLiked === false}><i class="fa fa-thumbs-down"></i> {this.state.dislikes}></button>
-        <button className="like" onClick={this.handleLike} disabled={this.state.currentUserLiked}><i class="fa fa-thumbs-up"></i> {this.state.likes}</button>
+        <button className="dislike" onClick={this.handleDislike} disabled={this.state.currentUserLiked === false}><i className="fa fa-thumbs-down"></i> {this.state.dislikes}</button>
+        <button className="like" onClick={this.handleLike} disabled={this.state.currentUserLiked}><i className="fa fa-thumbs-up"></i> {this.state.likes}</button>
       </div>
     );
   }

@@ -67,6 +67,9 @@ ApiUtil = {
       data: {term: video_url},
       success: function (term) {
         ApiActions.receiveSingleTerm(term);
+      },
+      error: function () {
+
       }
     });
   },
@@ -81,6 +84,24 @@ ApiUtil = {
       data: image,
       success: function (term) {
         ApiActions.receiveSingleTerm(term);
+      },
+      error: function () {
+
+      }
+    });
+  },
+
+  setLike: function (opinion_id, term_id, user_id, liked, cb) {
+    $.ajax({
+      type: 'put',
+      dataType: 'json',
+      url: 'api/opinions/' + opinion_id,
+      data: [term_id, user_id, liked],
+      success: function (term) {
+        ApiActions.receiveSingleTerm(term);
+      },
+      error: function () {
+
       }
     });
   }

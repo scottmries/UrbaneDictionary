@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     resources :users
     resource :session, only: [:create, :destroy, :show]
     resources :terms
+    # resources :opinions, only: [:create, :destroy, :show]
     get "search", to: "utils#search"
+    post "opine", to: "opinions#opine"
   end
 end

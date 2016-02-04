@@ -24241,7 +24241,8 @@
 	      data: { term: video_url },
 	      success: function (term) {
 	        ApiActions.receiveSingleTerm(term);
-	      }
+	      },
+	      error: function () {}
 	    });
 	  },
 
@@ -24255,7 +24256,21 @@
 	      data: image,
 	      success: function (term) {
 	        ApiActions.receiveSingleTerm(term);
-	      }
+	      },
+	      error: function () {}
+	    });
+	  },
+
+	  setLike: function (opinion_id, term_id, user_id, liked, cb) {
+	    $.ajax({
+	      type: 'put',
+	      dataType: 'json',
+	      url: 'api/opinions/' + opinion_id,
+	      data: [term_id, user_id, liked],
+	      success: function (term) {
+	        ApiActions.receiveSingleTerm(term);
+	      },
+	      error: function () {}
 	    });
 	  }
 	};
@@ -32784,9 +32799,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var TermStore = __webpack_require__(214);
+	var CurrentStore = __webpack_require__(252);
 
 	var Opinion = React.createClass({
-	  displayName: "Opinion",
+	  displayName: 'Opinion',
 
 	  getInitialState: function () {
 	    return {
@@ -32798,7 +32815,7 @@
 
 	  componentDidMount: function () {
 	    this.termListener = TermStore.addListener(this._onTermChange);
-	    this.currentUserListener = TermStore.addListener(this._onCurrentUserChange);
+	    this.currentUserListener = CurrentStore.addListener(this._onCurrentUserChange);
 	  },
 
 	  componentWillUnmount: function () {
@@ -32831,21 +32848,20 @@
 	  render: function () {
 
 	    return React.createElement(
-	      "div",
-	      { className: "opinion" },
+	      'div',
+	      { className: 'opinion' },
 	      React.createElement(
-	        "button",
-	        { className: "dislike", onClick: this.handleDislike, disabled: this.state.currentUserLiked === false },
-	        React.createElement("i", { "class": "fa fa-thumbs-down" }),
-	        " ",
-	        this.state.dislikes,
-	        ">"
+	        'button',
+	        { className: 'dislike', onClick: this.handleDislike, disabled: this.state.currentUserLiked === false },
+	        React.createElement('i', { className: 'fa fa-thumbs-down' }),
+	        ' ',
+	        this.state.dislikes
 	      ),
 	      React.createElement(
-	        "button",
-	        { className: "like", onClick: this.handleLike, disabled: this.state.currentUserLiked },
-	        React.createElement("i", { "class": "fa fa-thumbs-up" }),
-	        " ",
+	        'button',
+	        { className: 'like', onClick: this.handleLike, disabled: this.state.currentUserLiked },
+	        React.createElement('i', { className: 'fa fa-thumbs-up' }),
+	        ' ',
 	        this.state.likes
 	      )
 	    );

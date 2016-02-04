@@ -301,3 +301,29 @@ main {
 .facebook-like {
   float:right;
 }
+
+.opinion button {
+  width: 70px;
+  height: 45px;
+  border: 1px solid black;
+  box-shadow: 0px 2px 0px #000;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.opinion button .fa {
+  font-size: 14px;
+}
+
+.opinion button:hover {
+  background: #05ff56;
+}
+
+.opinion button.dislike {
+  border-radius: 50% 0 0 50% / 20px 0 0 20px;
+}
+
+.opinion button.like {
+  border-radius: 0 50% 50% 0 / 0 20px 20px 0;
+}
