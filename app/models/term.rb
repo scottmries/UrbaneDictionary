@@ -5,7 +5,7 @@ class Term < ActiveRecord::Base
 
   belongs_to :user
   has_many :opinions
-  has_many :opinioned_users, through: :opinions
+  has_many :opinioned_users, through: :opinions, source: :user
 
   multisearchable :against => [:term]
 

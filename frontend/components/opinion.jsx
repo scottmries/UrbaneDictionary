@@ -10,22 +10,25 @@ var Opinion = React.createClass({
   },
 
   componentDidMount: function () {
-    this.termListener = TermStore.addListener(this._onChange);
+    this.termListener = TermStore.addListener(this._onTermChange);
+    this.currentUserListener = TermStore.addListener(this._onCurrentUserChange);
   },
 
   componentWillUnmount: function () {
     this.termListener.remove();
   },
 
-  _onChange: function () {
+  _onCurrentUserChange: function () {
     //if the user does not have an opinion about the term: null
     //if liked, true, else false
     //increment/decrement on the backend, then pass down the opinions as like/dislike integers
 
     //Disable the button that corresponds to the current opinion
-    this.setState({ "currentUserLiked": "stuff" });
-    this.dislikeDisabled = this.state.currentUserLiked === false ? " disable" : "";
-    this.likeDisabled = this.state.currentUserLiked === true ? " disable" : "";
+    this.setState({ "currentUserLiked": "STUFF" });
+  },
+
+  _onTermChange: function () {
+    this.setState({ "likes": "STUFF", "dislikes": "STUFF"});
   },
 
   handleDislike: function () {
@@ -42,8 +45,8 @@ var Opinion = React.createClass({
 
     return (
       <div className="opinion">
-        <button className="dislike" onClick={handleDislike}>{this.state.dislikes} {this.dislikeDisabled}></button>
-        <button className="like" onClick={handleLike}>{this.state.likes} {this.likeDisabled}></button>
+        <button className="dislike" onClick={this.handleDislike} disabled={this.state.currentUserLiked === false}><i class="fa fa-thumbs-down"></i> {this.state.dislikes}></button>
+        <button className="like" onClick={this.handleLike} disabled={this.state.currentUserLiked}><i class="fa fa-thumbs-up"></i> {this.state.likes}</button>
       </div>
     );
   }

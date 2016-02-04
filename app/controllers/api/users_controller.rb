@@ -27,14 +27,15 @@
     @users = User.all
     @users_with_terms = []
     @users.each do |user|
-      @users_with_terms << {user: user, terms: user.terms.to_a}
+      @users_with_terms << {user: user, terms: user.terms.to_a, opinions: user.opinions, opinioned_terms: user.opinioned_terms}
     end
+    byebug
   end
 
   def show
     @user = User.find(params[:id])
     @terms = @user.terms.to_a
-    @user_with_terms = {user: @user, terms: @terms}
+    @user_with_terms = {user: @user, terms: @user.terms.to_a, opinions: @user.opinions, opinioned_terms: @user.opinioned_terms}
   end
 
   private

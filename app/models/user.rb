@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
   has_many :terms
   has_many :opinions
-  has_many :opinioned_terms, through: :opinions
+  has_many :opinioned_terms, through: :opinions, source: :term
 
   after_initialize :ensure_session_token
 

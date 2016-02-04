@@ -4,7 +4,7 @@ class Api::SessionsController < ApplicationController
 
     if current_user
       @user = current_user
-      @user_with_terms = {user: @user, terms: @user.terms}
+      @user_with_terms = {user: @user, terms: @user.terms, opinions: @user.opinions, opinioned_terms: @user.opinioned_terms}
       render "api/users/show"
     else
       render json: {}
@@ -21,7 +21,8 @@ class Api::SessionsController < ApplicationController
       render json: ["Wrong email/password combo!"], status: 401
     else
       sign_in!(@user)
-      @user_with_terms = {user: @user, terms: @user.terms}
+      @user_with_terms = {user: @user, terms: @user.terms, opinions: @user.opinions, opinioned_terms: @user.opinioned_terms}
+      byebug
       render "api/users/show"
     end
   end

@@ -32163,6 +32163,7 @@
 	  switch (payload.actionType) {
 	    case CurrentUserConstants.RECEIVE_CURRENT_USER:
 	      _currentUserHasBeenFetched = true;
+	      console.log(payload.currentUser);
 	      _currentUser = payload.currentUser;
 	      CurrentUserStore.__emitChange();
 	      break;
@@ -32796,22 +32797,25 @@
 	  },
 
 	  componentDidMount: function () {
-	    this.termListener = TermStore.addListener(this._onChange);
+	    this.termListener = TermStore.addListener(this._onTermChange);
+	    this.currentUserListener = TermStore.addListener(this._onCurrentUserChange);
 	  },
 
 	  componentWillUnmount: function () {
 	    this.termListener.remove();
 	  },
 
-	  _onChange: function () {
+	  _onCurrentUserChange: function () {
 	    //if the user does not have an opinion about the term: null
 	    //if liked, true, else false
 	    //increment/decrement on the backend, then pass down the opinions as like/dislike integers
 
 	    //Disable the button that corresponds to the current opinion
-	    this.setState({ "currentUserLiked": "stuff" });
-	    this.dislikeDisabled = this.state.currentUserLiked === false ? " disable" : "";
-	    this.likeDisabled = this.state.currentUserLiked === true ? " disable" : "";
+	    this.setState({ "currentUserLiked": "STUFF" });
+	  },
+
+	  _onTermChange: function () {
+	    this.setState({ "likes": "STUFF", "dislikes": "STUFF" });
 	  },
 
 	  handleDislike: function () {
@@ -32831,19 +32835,18 @@
 	      { className: "opinion" },
 	      React.createElement(
 	        "button",
-	        { className: "dislike", onClick: handleDislike },
-	        this.state.dislikes,
+	        { className: "dislike", onClick: this.handleDislike, disabled: this.state.currentUserLiked === false },
+	        React.createElement("i", { "class": "fa fa-thumbs-down" }),
 	        " ",
-	        this.dislikeDisabled,
+	        this.state.dislikes,
 	        ">"
 	      ),
 	      React.createElement(
 	        "button",
-	        { className: "like", onClick: handleLike },
-	        this.state.likes,
+	        { className: "like", onClick: this.handleLike, disabled: this.state.currentUserLiked },
+	        React.createElement("i", { "class": "fa fa-thumbs-up" }),
 	        " ",
-	        this.likeDisabled,
-	        ">"
+	        this.state.likes
 	      )
 	    );
 	  }
