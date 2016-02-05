@@ -24223,7 +24223,6 @@
 	    $.ajax({
 	      type: 'post',
 	      dataType: 'json',
-	      // processData: false,
 	      url: 'api/terms',
 	      data: { term: term },
 	      success: function (term) {
@@ -24261,13 +24260,14 @@
 	    });
 	  },
 
-	  setLike: function (opinion_id, term_id, user_id, liked, cb) {
+	  setLike: function (term_id, user_id, liked, cb) {
 	    $.ajax({
-	      type: 'put',
+	      type: 'post',
 	      dataType: 'json',
-	      url: 'api/opinions/' + opinion_id,
-	      data: [term_id, user_id, liked],
+	      url: 'api/opine',
+	      data: { opinion: { term_id: term_id, user_id: user_id, liked: liked } },
 	      success: function (term) {
+	        console.log("term", term);
 	        ApiActions.receiveSingleTerm(term);
 	      },
 	      error: function () {}
@@ -31291,7 +31291,7 @@
 	      React.createElement(FileUploads, { term: this.props.term }),
 	      image,
 	      youtubeVideo,
-	      React.createElement(Opinion, null)
+	      React.createElement(Opinion, { term: this.props.term })
 	    );
 	  }
 	});
@@ -32800,66 +32800,79 @@
 
 	var React = __webpack_require__(1);
 	var TermStore = __webpack_require__(214);
-	var CurrentStore = __webpack_require__(252);
+	var CurrentUserStore = __webpack_require__(252);
 
 	var Opinion = React.createClass({
 	  displayName: 'Opinion',
 
 	  getInitialState: function () {
 	    return {
-	      currentUserLiked: null,
-	      "likes": 0,
-	      "dislikes": 0
+	      currentUserOpined: null,
+	      likes: NaN,
+	      dislikes: NaN
 	    };
 	  },
 
-	  componentDidMount: function () {
-	    this.termListener = TermStore.addListener(this._onTermChange);
-	    this.currentUserListener = CurrentStore.addListener(this._onCurrentUserChange);
+	  componentWillMount: function () {
+	    this.parseProps(this.props);
 	  },
 
-	  componentWillUnmount: function () {
-	    this.termListener.remove();
+	  componentWillReceiveProps: function (nextProps) {
+	    this.parseProps(nextProps);
 	  },
 
-	  _onCurrentUserChange: function () {
-	    //if the user does not have an opinion about the term: null
-	    //if liked, true, else false
-	    //increment/decrement on the backend, then pass down the opinions as like/dislike integers
+	  parseProps: function (props) {
+	    console.log("current user", CurrentUserStore.currentUser());
+	    console.log("before parsing props", props);
+	    var likes = 0;
+	    var dislikes = 0;
+	    var opinions = props.term.opinions;
+	    var currentUserOpined = null;
+	    for (var i = 0; i < opinions.length; i++) {
 
-	    //Disable the button that corresponds to the current opinion
-	    this.setState({ "currentUserLiked": "STUFF" });
-	  },
-
-	  _onTermChange: function () {
-	    this.setState({ "likes": "STUFF", "dislikes": "STUFF" });
+	      if (opinions[i].liked) {
+	        likes++;
+	      } else {
+	        dislikes++;
+	      }
+	      if (opinions[i].user_id === CurrentUserStore.currentUser().user.id) {
+	        currentUserOpined = opinions[i].liked;
+	      }
+	    }
+	    this.setState({
+	      likes: likes,
+	      dislikes: dislikes,
+	      currentUserOpined: currentUserOpined
+	    });
+	    console.log("State after parsing props", this.state);
 	  },
 
 	  handleDislike: function () {
-	    this.setState({ "currentUserLiked": false });
-	    ApiUtil.setLike(false);
+	    this.setState({ currentUserOpined: false });
+	    ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, false);
 	  },
 
 	  handleLike: function () {
-	    this.setState({ "currentUserLiked": true });
-	    ApiUtil.setLike(true);
+	    this.setState({ currentUserOpined: true });
+	    ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, true);
 	  },
 
 	  render: function () {
-
+	    var dislikeClass = this.state.currentUserOpined === false ? "dislike pressed" : "dislike";
+	    var likeClass = this.state.currentUserOpined === true ? "like pressed" : "like";
 	    return React.createElement(
 	      'div',
 	      { className: 'opinion' },
 	      React.createElement(
 	        'button',
-	        { className: 'dislike', onClick: this.handleDislike, disabled: this.state.currentUserLiked === false },
+	        { className: dislikeClass, onClick: this.handleDislike, disabled: this.state.currentUserOpined === false },
 	        React.createElement('i', { className: 'fa fa-thumbs-down' }),
 	        ' ',
 	        this.state.dislikes
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'like', onClick: this.handleLike, disabled: this.state.currentUserLiked },
+	        { className: likeClass, onClick: this.handleLike, disabled: this.state.currentUserOpined === true },
 	        React.createElement('i', { className: 'fa fa-thumbs-up' }),
 	        ' ',
 	        this.state.likes

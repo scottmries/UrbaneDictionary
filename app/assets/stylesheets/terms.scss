@@ -74,16 +74,31 @@ strong.term-header {
   height: 40px;
   border-radius: 50%;
   border: 1px solid black;
-  box-shadow: 0px 1px black;
+  box-shadow: 0px 2px black;
   margin: 2px;
   padding-top: 1px;
 }
 
 button.pressed {
   position: relative;
-  top: 1px;
+  top: 2px;
   box-shadow: 0px  0px black;
   background: #05ff56;
+}
+
+.opinion button {
+  box-shadow: 0px 2px black;
+}
+
+.opinion button.pressed {
+  background: white;
+  position: relative;
+  top: 1px;
+  box-shadow: 0px 0px black;
+}
+
+.opinion button:disabled {
+  color: black;
 }
 
 .upload-buttons {
@@ -149,4 +164,12 @@ i.fa-spin {
 
 .closeModal {
   font-size: 24px;
+}
+
+.yt-video {
+  margin-bottom: 20px;
+}
+
+.audio-upload {
+  display: none;
 }

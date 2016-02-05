@@ -67,7 +67,7 @@ var TermListItem = React.createClass({
         <FileUploads term={this.props.term} />
         {image}
         {youtubeVideo}
-        <Opinion />
+        <Opinion term={this.props.term}/>
       </article>
     );
   }

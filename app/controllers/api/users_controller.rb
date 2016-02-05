@@ -9,9 +9,6 @@
 
     if @user.save
       sign_in!(@user)
-      # render json: user
-      # render "api/terms/index"
-      # redirect_to terms_url
       @user_with_terms = {user: @user, terms: @user.terms}
       render "api/users/show"
     else
@@ -29,7 +26,6 @@
     @users.each do |user|
       @users_with_terms << {user: user, terms: user.terms.to_a, opinions: user.opinions, opinioned_terms: user.opinioned_terms}
     end
-    byebug
   end
 
   def show

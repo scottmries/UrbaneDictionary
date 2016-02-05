@@ -1,54 +1,67 @@
 var React = require('react');
 var TermStore = require('./../stores/term');
-var CurrentStore = require('./../stores/current_user_store');
+var CurrentUserStore = require('./../stores/current_user_store');
 
 var Opinion = React.createClass({
-  getInitialState: function (){
+  getInitialState: function () {
     return {
-      currentUserLiked: null,
-      "likes": 0,
-      "dislikes": 0
-   };
+      currentUserOpined: null,
+      likes: NaN,
+      dislikes: NaN
+    };
   },
 
-  componentDidMount: function () {
-    this.termListener = TermStore.addListener(this._onTermChange);
-    this.currentUserListener = CurrentStore.addListener(this._onCurrentUserChange);
+  componentWillMount: function () {
+    this.parseProps(this.props);
   },
 
-  componentWillUnmount: function () {
-    this.termListener.remove();
+  componentWillReceiveProps: function (nextProps) {
+    this.parseProps(nextProps);
   },
 
-  _onCurrentUserChange: function () {
-    //if the user does not have an opinion about the term: null
-    //if liked, true, else false
-    //increment/decrement on the backend, then pass down the opinions as like/dislike integers
+  parseProps: function (props) {
+    console.log("current user", CurrentUserStore.currentUser());
+    console.log("before parsing props", props);
+    var likes = 0;
+    var dislikes = 0;
+    var opinions = props.term.opinions;
+    var currentUserOpined = null;
+    for (var i = 0; i < opinions.length; i++){
 
-    //Disable the button that corresponds to the current opinion
-    this.setState({ "currentUserLiked": "STUFF" });
-  },
-
-  _onTermChange: function () {
-    this.setState({ "likes": "STUFF", "dislikes": "STUFF"});
+      if (opinions[i].liked){
+        likes++;
+      } else {
+        dislikes++;
+      }
+      if (opinions[i].user_id === CurrentUserStore.currentUser().user.id){
+        currentUserOpined = opinions[i].liked;
+      }
+    }
+    this.setState({
+      likes: likes,
+      dislikes: dislikes,
+      currentUserOpined: currentUserOpined
+    });
+    console.log("State after parsing props", this.state);
   },
 
   handleDislike: function () {
-    this.setState({ "currentUserLiked": false });
-    ApiUtil.setLike(false);
+    this.setState({ currentUserOpined: false });
+    ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, false);
   },
 
   handleLike: function () {
-    this.setState({ "currentUserLiked": true });
-    ApiUtil.setLike(true);
+    this.setState({ currentUserOpined: true });
+    ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, true);
   },
 
   render: function() {
-
+    var dislikeClass = this.state.currentUserOpined === false ? "dislike pressed" : "dislike";
+    var likeClass = this.state.currentUserOpined === true ? "like pressed" : "like";
     return (
       <div className="opinion">
-        <button className="dislike" onClick={this.handleDislike} disabled={this.state.currentUserLiked === false}><i className="fa fa-thumbs-down"></i> {this.state.dislikes}</button>
-        <button className="like" onClick={this.handleLike} disabled={this.state.currentUserLiked}><i className="fa fa-thumbs-up"></i> {this.state.likes}</button>
+      <button className={dislikeClass} onClick={this.handleDislike} disabled={this.state.currentUserOpined === false}><i className="fa fa-thumbs-down"></i> {this.state.dislikes}</button>
+      <button className={likeClass} onClick={this.handleLike} disabled={this.state.currentUserOpined === true}><i className="fa fa-thumbs-up"></i> {this.state.likes}</button>
       </div>
     );
   }

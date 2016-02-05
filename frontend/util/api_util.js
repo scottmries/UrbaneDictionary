@@ -47,7 +47,6 @@ ApiUtil = {
     $.ajax({
       type: 'post',
       dataType: 'json',
-      // processData: false,
       url: 'api/terms',
       data: {term: term},
       success: function (term) {
@@ -91,13 +90,14 @@ ApiUtil = {
     });
   },
 
-  setLike: function (opinion_id, term_id, user_id, liked, cb) {
+  setLike: function (term_id, user_id, liked, cb) {
     $.ajax({
-      type: 'put',
+      type: 'post',
       dataType: 'json',
-      url: 'api/opinions/' + opinion_id,
-      data: [term_id, user_id, liked],
+      url: 'api/opine',
+      data: {opinion: {term_id: term_id, user_id: user_id, liked: liked}},
       success: function (term) {
+        console.log("term", term);
         ApiActions.receiveSingleTerm(term);
       },
       error: function () {
