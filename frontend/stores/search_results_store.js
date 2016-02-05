@@ -5,7 +5,9 @@ var SearchConstants = require('../constants/search_constants');
 var _searchResults = [];
 var _meta = {};
 
+
 var SearchResultsStore = new Store(AppDispatcher);
+
 
 SearchResultsStore.all = function () {
   return _searchResults.slice();
@@ -24,5 +26,7 @@ SearchResultsStore.__onDispatch = function (payload) {
       break;
   }
 };
+
+SearchResultsStore.barIsFocused = false;
 
 module.exports = SearchResultsStore;

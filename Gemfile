@@ -38,6 +38,7 @@ gem 'paperclip'
 gem 'aws-sdk', '~> 1.6'
 
 gem 'omniauth-facebook'
+gem 'omniauth-twitter'
 gem 'figaro'
 
 gem 'pg_search'

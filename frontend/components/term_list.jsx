@@ -3,6 +3,8 @@ var TermStore = require('../stores/term');
 var TermListItem = require('./term_list_item');
 var SearchResultsStore = require('../stores/search_results_store');
 
+var searchResultFound = false;
+
 var TermList = React.createClass({
   getInitialState: function () {
     return { terms: TermStore.all()};
@@ -17,16 +19,22 @@ var TermList = React.createClass({
   componentWillUnmount: function () {
     this.term_listener.remove();
     this.search_listener.remove();
-    // TermStore.removeListener(this._onChange);
-    // SearchResultsStore.removeListener(this._onSearch);
   },
 
   _onSearch: function () {
     var searchResults = SearchResultsStore.all();
     if (searchResults.length !== 0){
-      this.setState({ terms: searchResults });
+        this.setState({
+          terms: searchResults,
+          searchText: "Search results:"
+        });
+        searchResultFound = true;
     } else {
-
+      if (!searchResultFound){
+        this.setState({ searchText: "No results. Be sure to type whole words." });
+      }
+      //if search bar is focused, say there are no results
+      //otherwise remove the searchText and maybe hide the div
     }
   },
 
@@ -37,6 +45,7 @@ var TermList = React.createClass({
   render: function () {
     return (
       <div className="term-list">
+      <div className="search-text">{this.state.searchText}</div>
         {this.state.terms.map (function (term){
           return (
             <TermListItem

@@ -31161,6 +31161,8 @@
 	var TermListItem = __webpack_require__(233);
 	var SearchResultsStore = __webpack_require__(241);
 
+	var searchResultFound = false;
+
 	var TermList = React.createClass({
 	  displayName: 'TermList',
 
@@ -31177,15 +31179,23 @@
 	  componentWillUnmount: function () {
 	    this.term_listener.remove();
 	    this.search_listener.remove();
-	    // TermStore.removeListener(this._onChange);
-	    // SearchResultsStore.removeListener(this._onSearch);
 	  },
 
 	  _onSearch: function () {
 	    var searchResults = SearchResultsStore.all();
 	    if (searchResults.length !== 0) {
-	      this.setState({ terms: searchResults });
-	    } else {}
+	      this.setState({
+	        terms: searchResults,
+	        searchText: "Search results:"
+	      });
+	      searchResultFound = true;
+	    } else {
+	      if (!searchResultFound) {
+	        this.setState({ searchText: "No results. Be sure to type whole words." });
+	      }
+	      //if search bar is focused, say there are no results
+	      //otherwise remove the searchText and maybe hide the div
+	    }
 	  },
 
 	  _onChange: function () {
@@ -31196,6 +31206,11 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'term-list' },
+	      React.createElement(
+	        'div',
+	        { className: 'search-text' },
+	        this.state.searchText
+	      ),
 	      this.state.terms.map(function (term) {
 	        return React.createElement(TermListItem, {
 	          term: term,
@@ -31705,6 +31720,8 @@
 	  }
 	};
 
+	SearchResultsStore.barIsFocused = false;
+
 	module.exports = SearchResultsStore;
 
 /***/ },
@@ -31752,6 +31769,7 @@
 	var Modal = __webpack_require__(238);
 	var GuestSignIn = __webpack_require__(248);
 	var FacebookSignIn = __webpack_require__(268);
+	var TwitterSignIn = __webpack_require__(270);
 	var SignUpForm = __webpack_require__(249);
 	var SignInForm = React.createClass({
 	  displayName: 'SignInForm',
@@ -31812,6 +31830,7 @@
 	        ),
 	        React.createElement(GuestSignIn, null),
 	        React.createElement(FacebookSignIn, null),
+	        React.createElement(TwitterSignIn, null),
 	        React.createElement(
 	          'form',
 	          { onSubmit: this.signin, className: 'sign-in' },
@@ -32649,6 +32668,7 @@
 
 	var React = __webpack_require__(1);
 	var SearchApiUtil = __webpack_require__(263);
+	var SearchResultsStore = __webpack_require__(241);
 
 	var SearchBar = React.createClass({
 	  displayName: 'SearchBar',
@@ -32672,7 +32692,7 @@
 	  },
 
 	  render: function () {
-	    return React.createElement('input', { type: 'text', onKeyUp: this.search, placeholder: 'Type any text here...' });
+	    return React.createElement('input', { type: 'text', onKeyUp: this.search, placeholder: 'Type whole words here...' });
 	  }
 	});
 
@@ -32915,6 +32935,52 @@
 	});
 
 	module.exports = Opinion;
+
+/***/ },
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(207);
+	var History = __webpack_require__(159).History;
+
+	var TwitterSignIn = React.createClass({
+	  displayName: 'TwitterSignIn',
+
+	  mixins: [History],
+
+	  submit: function (e) {
+	    e.preventDefault();
+	  },
+
+	  render: function () {
+	    return(
+	      // <form onSubmit={this.submit} >
+	      React.createElement(
+	        'div',
+	        { className: 'twitter-login group' },
+	        React.createElement(
+	          'a',
+	          { href: '/auth/twitter' },
+	          React.createElement(
+	            'button',
+	            null,
+	            React.createElement(
+	              'span',
+	              null,
+	              'Sign In with ',
+	              React.createElement('i', { className: 'fa fa-twitter-official' })
+	            )
+	          )
+	        )
+	      )
+	      // </form>
+
+	    );
+	  }
+	});
+
+	module.exports = TwitterSignIn;
 
 /***/ }
 /******/ ]);

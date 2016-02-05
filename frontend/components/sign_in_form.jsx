@@ -4,6 +4,7 @@ var History = require('react-router').History;
 var Modal = require('./modal');
 var GuestSignIn = require('./guest_sign_in');
 var FacebookSignIn = require('./facebook_sign_in');
+var TwitterSignIn = require('./twitter_sign_in');
 var SignUpForm = require('./sign_up_form');
 var SignInForm = React.createClass({
 
@@ -57,6 +58,7 @@ var SignInForm = React.createClass({
         <h2>Say, Jim, fancy a sign in?</h2>
         <GuestSignIn />
         <FacebookSignIn />
+        <TwitterSignIn />
           <form onSubmit={this.signin} className="sign-in">
             <div className="form-inner">
                 <label>Username:<br />

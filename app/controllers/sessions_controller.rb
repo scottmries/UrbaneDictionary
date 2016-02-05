@@ -23,6 +23,11 @@ class SessionsController < ApplicationController
     redirect_to root_url + '#/'
   end
 
+  def omniauth_twitter
+    @user = User.find_or_create_by_auth_hash(auth_hash)
+    sign_in!(@user)
+    redirect_to root_url + '#/'
+
   def destroy
     sign_out
     redirect_to new_session_url

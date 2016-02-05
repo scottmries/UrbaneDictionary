@@ -1,5 +1,6 @@
 var React = require('react');
 var SearchApiUtil = require('./../util/search_api_util');
+var SearchResultsStore = require('./../stores/search_results_store');
 
 var SearchBar = React.createClass ({
 
@@ -22,7 +23,7 @@ var SearchBar = React.createClass ({
   },
 
   render: function () {
-    return <input type="text" onKeyUp={this.search} placeholder="Type any text here..."></input>;
+    return <input type="text" onKeyUp={this.search}  placeholder="Type whole words here..."></input>;
   }
 });
 
