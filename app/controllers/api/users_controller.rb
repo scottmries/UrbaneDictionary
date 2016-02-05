@@ -21,9 +21,11 @@
   end
 
   def index
-    @users = User.all
+    @users = User.include(:terms).include(:opinions).include(:opinioned_terms)
     @users_with_terms = []
     @users.each do |user|
+
+      # @users_with_terms << user.include(:terms).include(:opinions).include(:opinioned_terms)
       @users_with_terms << {user: user, terms: user.terms.to_a, opinions: user.opinions, opinioned_terms: user.opinioned_terms}
     end
   end

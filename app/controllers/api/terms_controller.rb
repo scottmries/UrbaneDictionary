@@ -14,7 +14,7 @@ class Api::TermsController < ApplicationController
   end
 
   def index
-    @terms = Term.all
+    @terms = Term.include(:image_url).include(:opinions).include(:opinioned_users)
     render :index
   end
 
