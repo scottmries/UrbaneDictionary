@@ -1,8 +1,12 @@
 var React = require('react');
 var TermStore = require('./../stores/term');
 var CurrentUserStore = require('./../stores/current_user_store');
+var History = require('react-router').History;
 
 var Opinion = React.createClass({
+
+  mixins: [History],
+
   getInitialState: function () {
     return {
       currentUserOpined: null,
@@ -20,8 +24,6 @@ var Opinion = React.createClass({
   },
 
   parseProps: function (props) {
-    console.log("current user", CurrentUserStore.currentUser());
-    console.log("before parsing props", props);
     var likes = 0;
     var dislikes = 0;
     var opinions = props.term.opinions;
@@ -42,17 +44,20 @@ var Opinion = React.createClass({
       dislikes: dislikes,
       currentUserOpined: currentUserOpined
     });
-    console.log("State after parsing props", this.state);
   },
 
-  handleDislike: function () {
+  handleDislike: function (e) {
+    e.preventDefault();
     this.setState({ currentUserOpined: false });
     ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, false);
+    this.history.pushState({}, "/");
   },
 
-  handleLike: function () {
+  handleLike: function (e) {
+    e.preventDefault();
     this.setState({ currentUserOpined: true });
     ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, true);
+    this.history.pushState({}, "/");
   },
 
   render: function() {

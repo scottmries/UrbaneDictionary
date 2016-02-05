@@ -24267,8 +24267,7 @@
 	      url: 'api/opine',
 	      data: { opinion: { term_id: term_id, user_id: user_id, liked: liked } },
 	      success: function (term) {
-	        console.log("term", term);
-	        ApiActions.receiveSingleTerm(term);
+	        ApiActions.updateTerm(term);
 	      },
 	      error: function () {}
 	    });
@@ -24301,8 +24300,15 @@
 
 	  receiveTermsByAuthor: function (terms) {
 	    AppDispatcher.dispatch({
-	      actionsType: TermConstants.AUTHOR_TERMS_RECEIVED,
+	      actionType: TermConstants.AUTHOR_TERMS_RECEIVED,
 	      terms: terms
+	    });
+	  },
+
+	  updateTerm: function (term) {
+	    AppDispatcher.dispatch({
+	      actionType: TermConstants.UPDATE_TERM,
+	      term: term
 	    });
 	  }
 	};
@@ -24632,7 +24638,8 @@
 	TermConstants = {
 	  TERMS_RECEIVED: "TERMS_RECEIVED",
 	  TERM_RECEIVED: "TERM_RECEIVED",
-	  AUTHOR_TERMS_RECEIVED: "AUTHOR_TERMS_RECEIVED"
+	  AUTHOR_TERMS_RECEIVED: "AUTHOR_TERMS_RECEIVED",
+	  UPDATE_TERM: "UPDATE_TERM"
 	};
 
 	module.exports = TermConstants;
@@ -24667,6 +24674,10 @@
 	      reset([payload.term]);
 	      TermStore.__emitChange();
 	      break;
+	    case TermConstants.UPDATE_TERM:
+	      _terms[TermStore.findIndex(payload.term)] = payload.term;
+	      TermStore.__emitChange();
+	      break;
 	  }
 	};
 
@@ -24674,6 +24685,14 @@
 	  for (var i = 0; i < _terms.length; i++) {
 	    if (_terms[i].id === id) {
 	      return _terms[i];
+	    }
+	  }
+	};
+
+	TermStore.findIndex = function (term) {
+	  for (var i = 0; i < _terms.length; i++) {
+	    if (_terms[i].id === term.id) {
+	      return i;
 	    }
 	  }
 	};
@@ -31211,6 +31230,10 @@
 	    e.preventDefault();
 	  },
 
+	  componentWillReceiveProps: function () {
+	    // console.log(this.props);
+	  },
+
 	  showTerm: function (e) {
 	    e.preventDefault();
 	    this.history.pushState(this.state, "/terms/" + this.props.term.id);
@@ -31941,7 +31964,6 @@
 	  submit: function (e) {
 	    e.preventDefault();
 	    var newUser = $(e.currentTarget).serializeJSON().user;
-	    debugger;
 	    ApiUtil.newUser(newUser, function () {
 	      this.history.pushState({}, "/");
 	    }.bind(this));
@@ -32178,7 +32200,6 @@
 	  switch (payload.actionType) {
 	    case CurrentUserConstants.RECEIVE_CURRENT_USER:
 	      _currentUserHasBeenFetched = true;
-	      console.log(payload.currentUser);
 	      _currentUser = payload.currentUser;
 	      CurrentUserStore.__emitChange();
 	      break;
@@ -32591,21 +32612,29 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var History = __webpack_require__(159).History;
 
 	var Logo = React.createClass({
-	  displayName: "Logo",
+	  displayName: 'Logo',
+
+	  mixins: [History],
+
+	  clickHandler: function (e) {
+	    e.preventDefault();
+	    this.history.pushState({}, "/");
+	  },
 
 	  render: function () {
 	    return React.createElement(
-	      "a",
-	      { href: "/" },
+	      'a',
+	      { href: '/', onClick: this.clickHandler },
 	      React.createElement(
-	        "div",
-	        { className: "logo" },
+	        'div',
+	        { className: 'logo' },
 	        React.createElement(
-	          "h1",
+	          'h1',
 	          null,
-	          "Urbane Dictionary"
+	          'Urbane Dictionary'
 	        )
 	      )
 	    );
@@ -32801,9 +32830,12 @@
 	var React = __webpack_require__(1);
 	var TermStore = __webpack_require__(214);
 	var CurrentUserStore = __webpack_require__(252);
+	var History = __webpack_require__(159).History;
 
 	var Opinion = React.createClass({
 	  displayName: 'Opinion',
+
+	  mixins: [History],
 
 	  getInitialState: function () {
 	    return {
@@ -32822,8 +32854,6 @@
 	  },
 
 	  parseProps: function (props) {
-	    console.log("current user", CurrentUserStore.currentUser());
-	    console.log("before parsing props", props);
 	    var likes = 0;
 	    var dislikes = 0;
 	    var opinions = props.term.opinions;
@@ -32844,17 +32874,20 @@
 	      dislikes: dislikes,
 	      currentUserOpined: currentUserOpined
 	    });
-	    console.log("State after parsing props", this.state);
 	  },
 
-	  handleDislike: function () {
+	  handleDislike: function (e) {
+	    e.preventDefault();
 	    this.setState({ currentUserOpined: false });
 	    ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, false);
+	    this.history.pushState({}, "/");
 	  },
 
-	  handleLike: function () {
+	  handleLike: function (e) {
+	    e.preventDefault();
 	    this.setState({ currentUserOpined: true });
 	    ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, true);
+	    this.history.pushState({}, "/");
 	  },
 
 	  render: function () {

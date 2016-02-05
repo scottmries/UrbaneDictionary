@@ -8,7 +8,6 @@ var GuestSignIn = React.createClass({
   submit: function (e) {
     e.preventDefault();
     var newUser = $(e.currentTarget).serializeJSON().user;
-    debugger
     ApiUtil.newUser(newUser, function () {
       this.history.pushState({}, "/");
     }.bind(this));

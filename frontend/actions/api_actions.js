@@ -18,8 +18,15 @@ ApiActions = {
 
   receiveTermsByAuthor: function(terms) {
     AppDispatcher.dispatch({
-      actionsType: TermConstants.AUTHOR_TERMS_RECEIVED,
+      actionType: TermConstants.AUTHOR_TERMS_RECEIVED,
       terms: terms
+    });
+  },
+
+  updateTerm: function (term) {
+    AppDispatcher.dispatch({
+      actionType: TermConstants.UPDATE_TERM,
+      term: term
     });
   }
 };

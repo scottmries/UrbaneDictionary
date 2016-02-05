@@ -24,6 +24,10 @@ TermStore.__onDispatch = function (payload) {
       reset([payload.term]);
       TermStore.__emitChange();
       break;
+    case TermConstants.UPDATE_TERM:
+      _terms[TermStore.findIndex(payload.term)] = payload.term;
+      TermStore.__emitChange();
+      break;
   }
 };
 
@@ -31,6 +35,14 @@ TermStore.findById = function(id) {
   for(var i = 0; i < _terms.length; i++){
     if (_terms[i].id === id){
       return _terms[i];
+    }
+  }
+};
+
+TermStore.findIndex = function(term) {
+  for(var i = 0; i < _terms.length; i++){
+    if (_terms[i].id === term.id){
+      return i;
     }
   }
 };

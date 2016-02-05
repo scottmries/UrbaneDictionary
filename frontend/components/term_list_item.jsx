@@ -14,6 +14,10 @@ var TermListItem = React.createClass({
     e.preventDefault();
   },
 
+  componentWillReceiveProps: function () {
+    // console.log(this.props);
+  },
+
   showTerm: function (e) {
     e.preventDefault();
     this.history.pushState(this.state, "/terms/" + this.props.term.id);

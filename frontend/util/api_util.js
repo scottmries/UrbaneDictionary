@@ -97,8 +97,7 @@ ApiUtil = {
       url: 'api/opine',
       data: {opinion: {term_id: term_id, user_id: user_id, liked: liked}},
       success: function (term) {
-        console.log("term", term);
-        ApiActions.receiveSingleTerm(term);
+        ApiActions.updateTerm(term);
       },
       error: function () {
 
