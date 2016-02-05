@@ -12,7 +12,7 @@ var FacebookSignIn = React.createClass({
   render: function () {
     return (
       // <form onSubmit={this.submit} >
-      <div className="facebook-login group">
+      <div className="third-party-login facebook-login group">
         <a href="/auth/facebook">
           <button>
             <span>

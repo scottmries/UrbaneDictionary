@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160204163626) do
+ActiveRecord::Schema.define(version: 20160204193309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,9 @@ ActiveRecord::Schema.define(version: 20160204163626) do
     t.integer  "user_id"
     t.integer  "term_id"
   end
+
+  add_index "opinions", ["term_id"], name: "index_opinions_on_term_id", using: :btree
+  add_index "opinions", ["user_id", "term_id"], name: "index_opinions_on_user_id_and_term_id", unique: true, using: :btree
 
   create_table "pg_search_documents", force: :cascade do |t|
     t.text     "content"
@@ -57,6 +60,8 @@ ActiveRecord::Schema.define(version: 20160204163626) do
     t.text     "video_url"
   end
 
+  add_index "terms", ["id"], name: "index_terms_on_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "username",        null: false
     t.string   "password_digest", null: false
@@ -66,5 +71,7 @@ ActiveRecord::Schema.define(version: 20160204163626) do
     t.string   "provider"
     t.string   "uid"
   end
+
+  add_index "users", ["id"], name: "index_users_on_id", using: :btree
 
 end

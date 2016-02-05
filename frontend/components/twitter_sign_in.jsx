@@ -12,11 +12,11 @@ var TwitterSignIn = React.createClass({
   render: function () {
     return (
       // <form onSubmit={this.submit} >
-      <div className="twitter-login group">
+      <div className="third-party-login twitter-login group">
         <a href="/auth/twitter">
           <button>
             <span>
-              Sign In with <i className="fa fa-twitter-official"></i>
+              Sign In with <i className="fa fa-twitter"></i>
             </span>
 
           </button>

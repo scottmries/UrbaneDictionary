@@ -274,26 +274,38 @@ main {
   float: right;
 }
 
-.facebook-login {
+.third-party-login {
   text-align: center;
   font-size: 24px;
   margin:15px auto;
   padding: 10px;
   width: 390px;
-
+  background: #aaa;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px #000;
 }
 
-.facebook-login a button,  i.fa.fa-facebook-official  {
+.facebook-login {
+  float:left;
+}
+
+.twitter-login {
+  float: right;
+}
+
+.third-party-login a button,  i.fa.fa-facebook-official, i.fa.fa-twitter  {
   color: #1D2439;
   font-size: 24px;
 }
 
-.facebook-login:hover {
+.third-party-login:hover {
   background-color: #1D2439;
   border-radius: 3px;
 }
 
-.facebook-login:hover a button, .facebook-login:hover i.fa.fa-facebook-official {
+.third-party-login:hover a button,
+.third-party-login:hover i.fa.fa-facebook-official,
+.third-party-login:hover i.fa.fa-twitter {
   color: white;
 
 }

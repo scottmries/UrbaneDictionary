@@ -3,7 +3,7 @@ var TermStore = require('../stores/term');
 var History = require('react-router').History;
 var TermHeader = require('./term_header');
 var FileUploads = require('./file_uploads');
-
+var Opinion = require('./opinion');
 var SingleTerm = React.createClass({
 
   getInitialState: function () {
@@ -74,6 +74,7 @@ var SingleTerm = React.createClass({
         <FileUploads term={this.state.term} />
         {image}
         {youtubeVideo}
+        <Opinion term={this.state.term}/>
       </article>
     );
   }
