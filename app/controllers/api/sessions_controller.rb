@@ -22,7 +22,6 @@ class Api::SessionsController < ApplicationController
     else
       sign_in!(@user)
       @user_with_terms = {user: @user, terms: @user.terms, opinions: @user.opinions, opinioned_terms: @user.opinioned_terms}
-      byebug
       render "api/users/show"
     end
   end
