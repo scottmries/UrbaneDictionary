@@ -1,3 +1,4 @@
+var ErrorActions = require('../actions/error_actions.js');
 var SearchActions = require('../actions/search_actions');
 
 var SearchApiUtil = {
@@ -13,7 +14,7 @@ var SearchApiUtil = {
         SearchActions.receiveResults(data);
       },
       error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   }

@@ -24072,7 +24072,7 @@
 	    return {
 	      signInModalIsOpen: false,
 	      newTermModalIsOpen: false,
-	      fetchingModalIsOpen: false
+	      fetchingModalIsOpen: true
 	    };
 	  },
 	  // refactor: move modal logic to a store
@@ -24118,7 +24118,7 @@
 	    var signInModal;
 	    var newTermModal;
 	    var fetchingModal;
-
+	    console.log(this.state);
 	    if (this.state.fetchingModalIsOpen) {
 	      fetchingModal = React.createElement(
 	        Modal,
@@ -24167,6 +24167,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiActions = __webpack_require__(207);
+	var ErrorActions = __webpack_require__(272);
 	var TermsStore = __webpack_require__(213);
 
 	ApiUtil = {
@@ -24181,7 +24182,7 @@
 	        cb();
 	      },
 	      error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  },
@@ -24192,10 +24193,11 @@
 	      dataType: 'json',
 	      url: 'api/terms',
 	      success: function (terms) {
+	        console.log(terms);
 	        ApiActions.receiveAllTerms(terms.reverse());
 	      },
 	      error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  },
@@ -24206,10 +24208,11 @@
 	      dataType: 'json',
 	      url: 'api/terms/' + id,
 	      success: function (term) {
+	        console.log(term);
 	        ApiActions.receiveSingleTerm(term);
 	      },
 	      error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  },
@@ -24224,7 +24227,7 @@
 	        ApiUtil.fetchTerms();
 	      },
 	      error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  },
@@ -24239,7 +24242,7 @@
 	        ApiActions.receiveSingleTerm(term);
 	      },
 	      error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  },
@@ -24256,7 +24259,7 @@
 	        ApiActions.receiveSingleTerm(term);
 	      },
 	      error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  },
@@ -24271,7 +24274,7 @@
 	        ApiActions.updateTerm(term);
 	      },
 	      error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  }
@@ -24295,6 +24298,7 @@
 	  },
 
 	  receiveSingleTerm: function (term) {
+	    console.log("receiveSingleTerm", term);
 	    AppDispatcher.dispatch({
 	      actionType: TermConstants.TERM_RECEIVED,
 	      term: term
@@ -24657,6 +24661,8 @@
 
 	var _terms = [];
 
+	var section = 0;
+
 	var TermStore = new Store(AppDispatcher);
 
 	TermStore.all = function () {
@@ -24705,6 +24711,10 @@
 	    return term.user_id === id;
 	  });
 	  // return AuthorTerms;
+	};
+
+	TermStore.findGroup = function (start, end) {
+	  return _terms.slice(start, end);
 	};
 
 	module.exports = TermStore;
@@ -31170,7 +31180,7 @@
 	  displayName: 'TermList',
 
 	  getInitialState: function () {
-	    return { terms: TermStore.all() };
+	    return { terms: TermStore.all(), start: 0, end: 10 };
 	  },
 
 	  componentDidMount: function () {
@@ -32068,6 +32078,7 @@
 /* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var ErrorActions = __webpack_require__(272);
 	var CurrentUserActions = __webpack_require__(249);
 	var SessionsApiUtil = {
 	  login: function (credentials, success) {
@@ -32080,7 +32091,7 @@
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        success && success();
 	      }, error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  },
@@ -32094,7 +32105,7 @@
 	        CurrentUserActions.logoutCurrentUser();
 	        success && success();
 	      }, error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  },
@@ -32108,7 +32119,7 @@
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        cb && cb(currentUser);
 	      }, error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  }
@@ -32459,6 +32470,8 @@
 	var TermHeader = __webpack_require__(238);
 	var FileUploads = __webpack_require__(233);
 	var Opinion = __webpack_require__(241);
+	var YoutubeVideo = __webpack_require__(240);
+
 	var SingleTerm = React.createClass({
 	  displayName: 'SingleTerm',
 
@@ -32473,12 +32486,13 @@
 	  },
 
 	  componentWillMount: function () {
+	    ApiUtil.fetchSingleTerm(this.getId());
 	    TermStore.addListener(this._onChange);
 	  },
 
 	  componentDidMount: function () {
 	    var id = this.getId();
-	    ApiUtil.fetchSingleTerm(id);
+	    // ApiUtil.fetchSingleTerm(id);
 	  },
 
 	  _onChange: function () {
@@ -32600,6 +32614,7 @@
 	  },
 
 	  render: function () {
+	    console.log(this.state);
 	    return React.createElement(
 	      'div',
 	      { className: 'author-terms group' },
@@ -32621,6 +32636,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var UserActions = __webpack_require__(259);
+	var ErrorActions = __webpack_require__(272);
 
 	var UserApiUtil = {
 
@@ -32633,7 +32649,7 @@
 	        UserActions.receiveUsers(data);
 	      },
 	      error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  },
@@ -32647,7 +32663,7 @@
 	        UserActions.receiveUser(data);
 	      },
 	      error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  }
@@ -32923,6 +32939,7 @@
 /* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var ErrorActions = __webpack_require__(272);
 	var SearchActions = __webpack_require__(267);
 
 	var SearchApiUtil = {
@@ -32938,7 +32955,7 @@
 	        SearchActions.receiveResults(data);
 	      },
 	      error: function (error) {
-	        ErrorActions.receiveError(error);
+	        ErrorActions.receiveErrors(error);
 	      }
 	    });
 	  }
@@ -33080,6 +33097,25 @@
 	};
 
 	module.exports = ErrorConstants;
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ErrorConstants = __webpack_require__(271);
+	var AppDispatcher = __webpack_require__(208);
+
+	ErrorApiUtil = {
+	  receiveErrors: function (data) {
+	    AppDispatcher.dispatch({
+	      actionType: ErrorConstants.RECEIVE_ERRORS,
+	      errors: data.errors
+	    });
+	  }
+	};
+
+	module.exports = ErrorApiUtil;
 
 /***/ }
 /******/ ]);

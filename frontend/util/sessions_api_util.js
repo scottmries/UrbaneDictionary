@@ -1,3 +1,4 @@
+var ErrorActions = require('../actions/error_actions.js');
 var CurrentUserActions = require("./../actions/current_user_actions");
 var SessionsApiUtil = {
   login: function (credentials, success){
@@ -10,7 +11,7 @@ var SessionsApiUtil = {
         CurrentUserActions.receiveCurrentUser(currentUser);
         success && success();
       }, error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   },
@@ -24,7 +25,7 @@ var SessionsApiUtil = {
         CurrentUserActions.logoutCurrentUser();
         success && success();
       }, error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   },
@@ -38,7 +39,7 @@ var SessionsApiUtil = {
         CurrentUserActions.receiveCurrentUser(currentUser);
         cb && cb(currentUser);
       }, error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   }

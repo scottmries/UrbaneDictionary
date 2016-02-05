@@ -4,6 +4,8 @@ var History = require('react-router').History;
 var TermHeader = require('./term_header');
 var FileUploads = require('./file_uploads');
 var Opinion = require('./opinion');
+var YoutubeVideo = require('./youtube_video');
+
 var SingleTerm = React.createClass({
 
   getInitialState: function () {
@@ -17,12 +19,13 @@ var SingleTerm = React.createClass({
   },
 
   componentWillMount: function () {
+    ApiUtil.fetchSingleTerm(this.getId());
     TermStore.addListener(this._onChange);
   },
 
   componentDidMount: function () {
     var id = this.getId();
-    ApiUtil.fetchSingleTerm(id);
+    // ApiUtil.fetchSingleTerm(id);
   },
 
 

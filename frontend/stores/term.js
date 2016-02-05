@@ -4,6 +4,8 @@ var TermConstants = require('../constants/term_constants');
 
 var _terms = [];
 
+var section = 0;
+
 var TermStore = new Store(AppDispatcher);
 
 TermStore.all = function() {
@@ -52,6 +54,10 @@ TermStore.findByAuthorId = function(id) {
     return term.user_id === id;
   });
   // return AuthorTerms;
+};
+
+TermStore.findGroup = function(start, end){
+  return _terms.slice(start, end);
 };
 
 module.exports = TermStore;

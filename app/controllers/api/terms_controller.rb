@@ -16,11 +16,11 @@ class Api::TermsController < ApplicationController
   def index
     @terms = Term.all
     render :index
-
   end
 
   def show
     @term = Term.find(params[:id])
+    byebug
     render :show
   end
 

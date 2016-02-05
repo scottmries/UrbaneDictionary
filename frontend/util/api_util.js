@@ -1,4 +1,5 @@
 var ApiActions = require('../actions/api_actions.js');
+var ErrorActions = require('../actions/error_actions.js');
 var TermsStore = require('../stores/term');
 
 ApiUtil = {
@@ -13,7 +14,7 @@ ApiUtil = {
         cb();
       },
       error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   },
@@ -24,10 +25,11 @@ ApiUtil = {
       dataType: 'json',
       url: 'api/terms',
       success: function (terms) {
+        console.log(terms);
         ApiActions.receiveAllTerms(terms.reverse());
       },
       error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   },
@@ -38,10 +40,11 @@ ApiUtil = {
       dataType: 'json',
       url: 'api/terms/' + id,
       success: function (term) {
+        console.log(term);
         ApiActions.receiveSingleTerm(term);
       },
       error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   },
@@ -56,7 +59,7 @@ ApiUtil = {
         ApiUtil.fetchTerms();
       },
       error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   },
@@ -71,7 +74,7 @@ ApiUtil = {
         ApiActions.receiveSingleTerm(term);
       },
       error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   },
@@ -88,7 +91,7 @@ ApiUtil = {
         ApiActions.receiveSingleTerm(term);
       },
       error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   },
@@ -103,7 +106,7 @@ ApiUtil = {
         ApiActions.updateTerm(term);
       },
       error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   }

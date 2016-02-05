@@ -10,6 +10,7 @@ ApiActions = {
   },
 
   receiveSingleTerm: function(term) {
+    console.log("receiveSingleTerm", term);
     AppDispatcher.dispatch({
       actionType: TermConstants.TERM_RECEIVED,
       term: term

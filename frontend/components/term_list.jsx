@@ -7,7 +7,7 @@ var searchResultFound = false;
 
 var TermList = React.createClass({
   getInitialState: function () {
-    return { terms: TermStore.all()};
+    return { terms: TermStore.all(), start: 0, end: 10};
   },
 
   componentDidMount: function () {

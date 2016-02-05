@@ -51,7 +51,7 @@ var App = React.createClass({
     return ({
       signInModalIsOpen: false,
       newTermModalIsOpen: false,
-      fetchingModalIsOpen: false
+      fetchingModalIsOpen: true
     });
   },
   // refactor: move modal logic to a store
@@ -97,7 +97,7 @@ var App = React.createClass({
     var signInModal;
     var newTermModal;
     var fetchingModal;
-
+    console.log(this.state);
     if (this.state.fetchingModalIsOpen) {
       fetchingModal = (
         <Modal closeHandler={this.closeFetchingModal} >

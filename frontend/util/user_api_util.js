@@ -1,4 +1,5 @@
 var UserActions = require('../actions/user_actions');
+var ErrorActions = require('../actions/error_actions.js');
 
 var UserApiUtil = {
 
@@ -11,7 +12,7 @@ var UserApiUtil = {
         UserActions.receiveUsers(data);
       },
       error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   },
@@ -25,7 +26,7 @@ var UserApiUtil = {
         UserActions.receiveUser(data);
       },
       error: function (error) {
-        ErrorActions.receiveError(error);
+        ErrorActions.receiveErrors(error);
       }
     });
   }
