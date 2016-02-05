@@ -10,7 +10,8 @@ var UserApiUtil = {
       success: function (data) {
         UserActions.receiveUsers(data);
       },
-      error: function () {
+      error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   },
@@ -23,7 +24,8 @@ var UserApiUtil = {
       success: function (data) {
         UserActions.receiveUser(data);
       },
-      error: function () {
+      error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   }

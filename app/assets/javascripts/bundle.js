@@ -24035,6 +24035,7 @@
 	var SessionsApiUtil = __webpack_require__(248);
 	var Spinner = __webpack_require__(268);
 	var History = __webpack_require__(159).History;
+	var ErrorComponent = __webpack_require__(269);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -24142,6 +24143,7 @@
 	      { id: 'content' },
 	      fetchingModal,
 	      newTermModal,
+	      React.createElement(ErrorComponent, null),
 	      React.createElement(Header, { openNewTermModal: this.openNewTermModal,
 	        openSignInModal: this.openSignInModal }),
 	      React.createElement(
@@ -24178,7 +24180,9 @@
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        cb();
 	      },
-	      error: function () {}
+	      error: function (error) {
+	        ErrorActions.receiveError(error);
+	      }
 	    });
 	  },
 
@@ -24190,7 +24194,9 @@
 	      success: function (terms) {
 	        ApiActions.receiveAllTerms(terms.reverse());
 	      },
-	      error: function () {}
+	      error: function (error) {
+	        ErrorActions.receiveError(error);
+	      }
 	    });
 	  },
 
@@ -24202,7 +24208,9 @@
 	      success: function (term) {
 	        ApiActions.receiveSingleTerm(term);
 	      },
-	      error: function () {}
+	      error: function (error) {
+	        ErrorActions.receiveError(error);
+	      }
 	    });
 	  },
 
@@ -24215,7 +24223,9 @@
 	      success: function (term) {
 	        ApiUtil.fetchTerms();
 	      },
-	      error: function () {}
+	      error: function (error) {
+	        ErrorActions.receiveError(error);
+	      }
 	    });
 	  },
 
@@ -24228,7 +24238,9 @@
 	      success: function (term) {
 	        ApiActions.receiveSingleTerm(term);
 	      },
-	      error: function () {}
+	      error: function (error) {
+	        ErrorActions.receiveError(error);
+	      }
 	    });
 	  },
 
@@ -24243,7 +24255,9 @@
 	      success: function (term) {
 	        ApiActions.receiveSingleTerm(term);
 	      },
-	      error: function () {}
+	      error: function (error) {
+	        ErrorActions.receiveError(error);
+	      }
 	    });
 	  },
 
@@ -24256,7 +24270,9 @@
 	      success: function (term) {
 	        ApiActions.updateTerm(term);
 	      },
-	      error: function () {}
+	      error: function (error) {
+	        ErrorActions.receiveError(error);
+	      }
 	    });
 	  }
 	};
@@ -32063,6 +32079,8 @@
 	      success: function (currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        success && success();
+	      }, error: function (error) {
+	        ErrorActions.receiveError(error);
 	      }
 	    });
 	  },
@@ -32075,6 +32093,8 @@
 	      success: function () {
 	        CurrentUserActions.logoutCurrentUser();
 	        success && success();
+	      }, error: function (error) {
+	        ErrorActions.receiveError(error);
 	      }
 	    });
 	  },
@@ -32087,6 +32107,8 @@
 	      success: function (currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        cb && cb(currentUser);
+	      }, error: function (error) {
+	        ErrorActions.receiveError(error);
 	      }
 	    });
 	  }
@@ -32610,7 +32632,9 @@
 	      success: function (data) {
 	        UserActions.receiveUsers(data);
 	      },
-	      error: function () {}
+	      error: function (error) {
+	        ErrorActions.receiveError(error);
+	      }
 	    });
 	  },
 
@@ -32622,7 +32646,9 @@
 	      success: function (data) {
 	        UserActions.receiveUser(data);
 	      },
-	      error: function () {}
+	      error: function (error) {
+	        ErrorActions.receiveError(error);
+	      }
 	    });
 	  }
 
@@ -32911,7 +32937,9 @@
 	      success: function (data) {
 	        SearchActions.receiveResults(data);
 	      },
-	      error: function () {}
+	      error: function (error) {
+	        ErrorActions.receiveError(error);
+	      }
 	    });
 	  }
 	};
@@ -32968,6 +32996,48 @@
 	});
 
 	module.exports = Spinner;
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var ErrorComponent = React.createClass({
+	  displayName: "ErrorComponent",
+
+	  getInitialState: function () {
+	    return { errors: [] };
+	  },
+
+	  componentDidMount: function () {
+	    var errorListener = ErrorStore.addListener(this._onChange);
+	  },
+
+	  componentWillUnmount: function () {
+	    errorListener.remove();
+	  },
+
+	  _onChange: function () {
+	    this.setState({ errors: ErrorStore.errors() });
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "errors" },
+	      this.state.errors.map(function (error) {
+	        return React.createElement(
+	          "div",
+	          { className: "error" },
+	          "error"
+	        );
+	      })
+	    );
+	  }
+	});
+
+	moudle.exports = ErrorComponent;
 
 /***/ }
 /******/ ]);

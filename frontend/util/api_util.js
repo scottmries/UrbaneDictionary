@@ -12,7 +12,8 @@ ApiUtil = {
         CurrentUserActions.receiveCurrentUser(currentUser);
         cb();
       },
-      error: function () {
+      error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   },
@@ -25,7 +26,8 @@ ApiUtil = {
       success: function (terms) {
         ApiActions.receiveAllTerms(terms.reverse());
       },
-      error: function () {
+      error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   },
@@ -38,7 +40,8 @@ ApiUtil = {
       success: function (term) {
         ApiActions.receiveSingleTerm(term);
       },
-      error: function () {
+      error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   },
@@ -52,8 +55,8 @@ ApiUtil = {
       success: function (term) {
         ApiUtil.fetchTerms();
       },
-      error: function () {
-
+      error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   },
@@ -67,8 +70,8 @@ ApiUtil = {
       success: function (term) {
         ApiActions.receiveSingleTerm(term);
       },
-      error: function () {
-
+      error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   },
@@ -84,8 +87,8 @@ ApiUtil = {
       success: function (term) {
         ApiActions.receiveSingleTerm(term);
       },
-      error: function () {
-
+      error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   },
@@ -99,8 +102,8 @@ ApiUtil = {
       success: function (term) {
         ApiActions.updateTerm(term);
       },
-      error: function () {
-
+      error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   }

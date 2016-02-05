@@ -15,6 +15,7 @@ var TermStore = require('./../stores/term');
 var SessionsApiUtil = require('./../util/sessions_api_util');
 var Spinner = require('./spinner');
 var History = require('react-router').History;
+var ErrorComponent = require('./error');
 
 var App = React.createClass({
 
@@ -119,6 +120,7 @@ var App = React.createClass({
       <div id="content">
         {fetchingModal}
         {newTermModal}
+        <ErrorComponent />
 
         <Header openNewTermModal={this.openNewTermModal}
           openSignInModal={this.openSignInModal} />

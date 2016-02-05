@@ -12,7 +12,8 @@ var SearchApiUtil = {
       success: function (data) {
         SearchActions.receiveResults(data);
       },
-      error: function () {
+      error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   }

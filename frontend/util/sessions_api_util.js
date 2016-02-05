@@ -9,6 +9,8 @@ var SessionsApiUtil = {
       success: function (currentUser) {
         CurrentUserActions.receiveCurrentUser(currentUser);
         success && success();
+      }, error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   },
@@ -21,6 +23,8 @@ var SessionsApiUtil = {
       success: function () {
         CurrentUserActions.logoutCurrentUser();
         success && success();
+      }, error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   },
@@ -33,6 +37,8 @@ var SessionsApiUtil = {
       success: function (currentUser) {
         CurrentUserActions.receiveCurrentUser(currentUser);
         cb && cb(currentUser);
+      }, error: function (error) {
+        ErrorActions.receiveError(error);
       }
     });
   }
