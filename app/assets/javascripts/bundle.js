@@ -33002,42 +33002,84 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var ErrorStore = __webpack_require__(270);
 
 	var ErrorComponent = React.createClass({
-	  displayName: "ErrorComponent",
+	  displayName: 'ErrorComponent',
 
 	  getInitialState: function () {
-	    return { errors: [] };
+	    return { errors: ErrorStore.all() };
 	  },
 
 	  componentDidMount: function () {
-	    var errorListener = ErrorStore.addListener(this._onChange);
+	    this.errorListener = ErrorStore.addListener(this._onChange);
 	  },
 
 	  componentWillUnmount: function () {
-	    errorListener.remove();
+	    this.errorListener.remove();
 	  },
 
 	  _onChange: function () {
-	    this.setState({ errors: ErrorStore.errors() });
+	    this.setState({ errors: ErrorStore.all() });
 	  },
 
 	  render: function () {
 	    return React.createElement(
-	      "div",
-	      { className: "errors" },
+	      'div',
+	      { className: 'errors' },
 	      this.state.errors.map(function (error) {
 	        return React.createElement(
-	          "div",
-	          { className: "error" },
-	          "error"
+	          'div',
+	          { className: 'error' },
+	          error
 	        );
 	      })
 	    );
 	  }
 	});
 
-	moudle.exports = ErrorComponent;
+	module.exports = ErrorComponent;
+
+/***/ },
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(214).Store;
+	var AppDispatcher = __webpack_require__(208);
+	var ErrorConstants = __webpack_require__(271);
+
+	var _errors = [];
+
+	var ErrorStore = new Store(AppDispatcher);
+
+	ErrorStore.all = function () {
+	  return _errors.slice(0);
+	};
+
+	var reset = function (errors) {
+	  _errors = errors;
+	};
+
+	ErrorStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case ErrorConstants.RECEIVE_ERRORS:
+	      reset(payload.errors);
+	      ErrorStore.__emitChange();
+	      break;
+	  }
+	};
+
+	module.exports = ErrorStore;
+
+/***/ },
+/* 271 */
+/***/ function(module, exports) {
+
+	ErrorConstants = {
+	  RECEIVE_ERRORS: "RECEIVE_ERRORS"
+	};
+
+	module.exports = ErrorConstants;
 
 /***/ }
 /******/ ]);

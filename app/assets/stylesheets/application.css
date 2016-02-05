@@ -339,3 +339,12 @@ main {
 .opinion button.like {
   border-radius: 0 50% 50% 0 / 0 20px 20px 0;
 }
+
+.errors {
+  position: absolute;
+  background: white;
+}
+
+.error {
+  color: red;
+}

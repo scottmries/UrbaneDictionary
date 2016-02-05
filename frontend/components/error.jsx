@@ -1,21 +1,22 @@
 var React = require('react');
+var ErrorStore = require('../stores/error_store');
 
 var ErrorComponent = React.createClass({
 
   getInitialState: function () {
-    return { errors: [] };
+    return { errors: ErrorStore.all() };
   },
 
   componentDidMount: function () {
-    var errorListener = ErrorStore.addListener(this._onChange);
+    this.errorListener = ErrorStore.addListener(this._onChange);
   },
 
   componentWillUnmount: function () {
-    errorListener.remove();
+    this.errorListener.remove();
   },
 
   _onChange: function () {
-    this.setState({ errors: ErrorStore.errors() });
+    this.setState({ errors: ErrorStore.all() });
   },
 
 
@@ -23,7 +24,7 @@ var ErrorComponent = React.createClass({
     return (<div className="errors">
       {this.state.errors.map (function (error){
         return (
-          <div className="error">error</div>
+          <div className="error">{error}</div>
         );
       })
     }
@@ -32,4 +33,4 @@ var ErrorComponent = React.createClass({
   }
 });
 
-moudle.exports = ErrorComponent;
+module.exports = ErrorComponent;

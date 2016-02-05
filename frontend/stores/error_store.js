@@ -20,6 +20,7 @@ ErrorStore.__onDispatch = function (payload) {
       reset(payload.errors);
       ErrorStore.__emitChange();
       break;
+    }
 };
 
 module.exports = ErrorStore;
