@@ -24087,7 +24087,7 @@
 	    return {
 	      signInModalIsOpen: false,
 	      newTermModalIsOpen: false,
-	      fetchingModalIsOpen: true
+	      fetchingModalIsOpen: false
 	    };
 	  },
 	  // refactor: move modal logic to a store
