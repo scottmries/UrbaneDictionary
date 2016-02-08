@@ -17,7 +17,8 @@ var TermListItem = require('./components/term_list_item');
 
 var routes = (
   <Route path="/" component={App} >
-    <IndexRoute component={Terms} onEnter={_ensureLoggedIn} />
+    <IndexRoute component={Terms} />
+    // <IndexRoute component={Terms} onEnter={_ensureLoggedIn} />
     <Route path="login" component={SignInForm} />
     <Route path="users/new" component={SignUpForm} />
     <Route path="terms/:id" component={SingleTerm} />
