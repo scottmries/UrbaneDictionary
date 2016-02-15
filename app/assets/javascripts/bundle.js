@@ -64,9 +64,6 @@
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: Terms }),
-	  '// ',
-	  React.createElement(IndexRoute, { component: Terms, onEnter: _ensureLoggedIn }),
-	  React.createElement(Route, { path: 'login', component: SignInForm }),
 	  React.createElement(Route, { path: 'users/new', component: SignUpForm }),
 	  React.createElement(Route, { path: 'terms/:id', component: SingleTerm }),
 	  React.createElement(Route, { path: 'users/:id', component: Author })
@@ -24055,6 +24052,7 @@
 	var App = React.createClass({
 	  displayName: 'App',
 
+
 	  mixins: [History],
 
 	  componentDidMount: function () {
@@ -24073,7 +24071,7 @@
 	    if (CurrentUserStore.isLoggedIn()) {
 	      this.setState({ fetchingModalIsOpen: false });
 	    } else {
-	      this.history.replace("/login");
+	      // this.history.replace("/login");
 	    }
 	  },
 
@@ -31199,6 +31197,7 @@
 	var TermListItem = React.createClass({
 	  displayName: 'TermListItem',
 
+
 	  mixins: [History],
 
 	  show: function (e) {
@@ -31436,6 +31435,7 @@
 	var ImageUploadForm = React.createClass({
 	  displayName: "ImageUploadForm",
 
+
 	  getInitialState: function () {
 	    return {
 	      imageFile: null,
@@ -31581,6 +31581,7 @@
 	var Modal = React.createClass({
 	  displayName: "Modal",
 
+
 	  render: function () {
 	    var closeButton = React.createElement("div", null);
 	    if (this.props.closeButton === "show") {
@@ -31640,6 +31641,7 @@
 	var FacebookLike = React.createClass({
 	  displayName: "FacebookLike",
 
+
 	  render: function () {
 	    var termUrl = "/terms/" + this.props.termId;
 	    return React.createElement(
@@ -31682,6 +31684,7 @@
 
 	var Opinion = React.createClass({
 	  displayName: 'Opinion',
+
 
 	  mixins: [History],
 
@@ -31908,6 +31911,7 @@
 	var SignUpForm = __webpack_require__(254);
 	var SignInForm = React.createClass({
 	  displayName: 'SignInForm',
+
 
 	  mixins: [History],
 
@@ -32237,6 +32241,7 @@
 	var SignUpForm = React.createClass({
 	  displayName: 'SignUpForm',
 
+
 	  mixins: [History],
 
 	  getInitialState: function () {
@@ -32327,6 +32332,7 @@
 
 	var NewTermForm = React.createClass({
 	  displayName: 'NewTermForm',
+
 
 	  getInitialState: function () {
 	    return {
@@ -32421,6 +32427,7 @@
 
 	var SingleTerm = React.createClass({
 	  displayName: 'SingleTerm',
+
 
 	  getInitialState: function () {
 	    return { term: TermStore.findById(this.getId()) };
@@ -32537,6 +32544,7 @@
 
 	var Author = React.createClass({
 	  displayName: 'Author',
+
 
 	  getInitialState: function () {
 	    var id = this.props.params.id;
@@ -32735,6 +32743,7 @@
 	var Header = React.createClass({
 	  displayName: 'Header',
 
+
 	  getInitialState: function () {
 	    return {
 	      currentUser: { user: {} }
@@ -32820,6 +32829,7 @@
 	var Logo = React.createClass({
 	  displayName: 'Logo',
 
+
 	  mixins: [History],
 
 	  clickHandler: function (e) {
@@ -32856,6 +32866,7 @@
 
 	var SearchBar = React.createClass({
 	  displayName: 'SearchBar',
+
 
 	  getInitialState: function () {
 	    return { page: 1, query: "" };
@@ -32970,6 +32981,7 @@
 
 	var ErrorComponent = React.createClass({
 	  displayName: 'ErrorComponent',
+
 
 	  getInitialState: function () {
 	    return { errors: ErrorStore.all() };
