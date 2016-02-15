@@ -24128,6 +24128,14 @@
 	    });
 	  },
 
+	  animateGif: function () {
+	    console.log("start gif");
+	  },
+
+	  stopGif: function () {
+	    console.log("stop gif");
+	  },
+
 	  render: function () {
 	    var signInModal;
 	    var newTermModal;
@@ -24166,8 +24174,9 @@
 	        this.props.children,
 	        React.createElement(
 	          Sidebar,
-	          null,
-	          React.createElement(NewTermButton, { clickCallback: this.openNewTermModal, text: 'Add a term' })
+	          { onmouseover: this.animateGif, onmouseout: this.stopGif },
+	          React.createElement(NewTermButton, { clickCallback: this.openNewTermModal, text: 'Add a term' }),
+	          React.createElement('img', { src: this.state.gifUrl })
 	        )
 	      )
 	    );
@@ -32713,10 +32722,20 @@
 	var Sidebar = React.createClass({
 	  displayName: 'Sidebar',
 
+
+	  onmouseover: function () {
+	    console.log("moused over");
+	  },
+
+	  onmouseout: function () {
+	    console.log("moused out");
+	  },
+
 	  render: function () {
+	    console.log(this.props);
 	    return React.createElement(
 	      'section',
-	      { className: 'sidebar' },
+	      { className: 'sidebar', onmouseover: this.onmouseover, onmouseout: this.onmouseout },
 	      React.createElement(
 	        'h2',
 	        null,
@@ -32842,15 +32861,7 @@
 	    return React.createElement(
 	      'a',
 	      { href: '/', onClick: this.clickHandler },
-	      React.createElement(
-	        'div',
-	        { className: 'logo' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Urbane Dictionary'
-	        )
-	      )
+	      React.createElement('div', { className: 'logo' })
 	    );
 	  }
 	});

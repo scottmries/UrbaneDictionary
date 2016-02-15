@@ -353,3 +353,14 @@ main {
 .error {
   color: red;
 }
+
+.logo {
+  height: 50px;
+  width: 145px;
+  overflow: hidden;
+  background: no-repeat url("https://s3.amazonaws.com/urbane-dictionary-production/terms/logo.png") 0px 0px;
+}
+
+.logo:hover {
+  background-position: 0px -50px;
+}

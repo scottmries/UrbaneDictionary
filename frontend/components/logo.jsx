@@ -14,7 +14,6 @@ var Logo = React.createClass({
     return (
       <a href="/" onClick={this.clickHandler}>
         <div className="logo">
-          <h1>Urbane Dictionary</h1>
         </div>
       </a>
     );

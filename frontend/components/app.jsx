@@ -93,6 +93,14 @@ var App = React.createClass({
     });
   },
 
+  animateGif: function (){
+    console.log("start gif");
+  },
+
+  stopGif: function (){
+    console.log("stop gif");
+  },
+
   render: function () {
     var signInModal;
     var newTermModal;
@@ -127,8 +135,9 @@ var App = React.createClass({
         <main className="group">
           {this.props.children}
 
-          <Sidebar>
+          <Sidebar onmouseover={this.animateGif} onmouseout={this.stopGif}>
             <NewTermButton clickCallback={this.openNewTermModal} text="Add a term" />
+            <img src={this.state.gifUrl} />
           </Sidebar>
         </main>
       </div>
