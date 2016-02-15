@@ -14,7 +14,7 @@ class Api::TermsController < ApplicationController
   end
 
   def index
-    @terms = Term.include(:image_url).include(:opinions).include(:opinioned_users)
+    @terms = Term.eager_load(:opinions)
     render :index
   end
 
