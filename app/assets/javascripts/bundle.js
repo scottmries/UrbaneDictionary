@@ -64,6 +64,7 @@
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: Terms }),
+	  React.createElement(Route, { path: 'login', component: SignInForm }),
 	  React.createElement(Route, { path: 'users/new', component: SignUpForm }),
 	  React.createElement(Route, { path: 'terms/:id', component: SingleTerm }),
 	  React.createElement(Route, { path: 'users/:id', component: Author })
