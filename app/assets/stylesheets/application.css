@@ -77,6 +77,11 @@ header .subnav button:hover,
   padding: 15px 0;
 }
 
+.header-inner h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
 main {
   width: 940px;
   margin: auto;
@@ -125,6 +130,11 @@ main {
 
 .newTerm .plus {
   float: left;
+}
+
+header .subnav button.signIn {
+  padding: 1px 0 0 16px;
+  font-size: 24px;
 }
 
 .modal {
@@ -238,6 +248,10 @@ main {
 
 .yt-video {
   margin-top: 10px;
+}
+
+.logo {
+  margin-bottom: 20px;
 }
 
 .logo h1 {
@@ -363,4 +377,31 @@ main {
 
 .logo:hover {
   background-position: 0px -50px;
+}
+
+.search-results-list {
+  position: absolute;
+  z-index: 1;
+  background: white;
+  box-shadow: 1px 1px 1px #aaa;
+}
+
+.search-results-list ul {
+  list-style: none;
+  width: 750px;
+}
+
+.search-results-list li {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  color: #1769AC;
+  padding: 5px 15px;
+  font-weight: normal;
+  list-style: none;
+  width: 750px;
+
+}
+
+.search-results-list li:hover {
+  font-weight: bold;
+  background: #05ff56;
 }

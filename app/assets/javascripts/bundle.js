@@ -31140,30 +31140,11 @@
 
 	  componentDidMount: function () {
 	    this.term_listener = TermStore.addListener(this._onChange);
-	    this.search_listener = SearchResultsStore.addListener(this._onSearch);
 	    ApiUtil.fetchTerms();
 	  },
 
 	  componentWillUnmount: function () {
 	    this.term_listener.remove();
-	    this.search_listener.remove();
-	  },
-
-	  _onSearch: function () {
-	    var searchResults = SearchResultsStore.all();
-	    if (searchResults.length !== 0) {
-	      this.setState({
-	        terms: searchResults,
-	        searchText: "Search results:"
-	      });
-	      searchResultFound = true;
-	    } else {
-	      if (!searchResultFound) {
-	        this.setState({ searchText: "No results. Be sure to type whole words." });
-	      }
-	      //if search bar is focused, say there are no results
-	      //otherwise remove the searchText and maybe hide the div
-	    }
 	  },
 
 	  _onChange: function () {
@@ -31174,11 +31155,6 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'term-list' },
-	      React.createElement(
-	        'div',
-	        { className: 'search-text' },
-	        this.state.searchText
-	      ),
 	      this.state.terms.map(function (term) {
 	        return React.createElement(TermListItem, {
 	          term: term,
@@ -32756,6 +32732,8 @@
 	var SignInButton = __webpack_require__(247);
 	var NewTermButton = __webpack_require__(255);
 	var CurrentUserStore = __webpack_require__(243);
+	var SearchResultsStore = __webpack_require__(245);
+	var SearchResultsList = __webpack_require__(272);
 	var SessionsApiUtil = __webpack_require__(249);
 	var Logo = __webpack_require__(265);
 	var SearchBar = __webpack_require__(266);
@@ -32766,12 +32744,15 @@
 
 	  getInitialState: function () {
 	    return {
-	      currentUser: { user: {} }
+	      currentUser: { user: {} },
+	      searchResults: [],
+	      searching: false
 	    };
 	  },
 
 	  componentDidMount: function () {
 	    this.currentUserListener = CurrentUserStore.addListener(this._onChange);
+	    this.searchResultListener = SearchResultsStore.addListener(this._onSearch);
 	  },
 
 	  componentWillUnmount: function () {
@@ -32780,6 +32761,20 @@
 
 	  _onChange: function () {
 	    this.setState({ currentUser: { user: CurrentUserStore.currentUser() } });
+	  },
+
+	  _onSearch: function () {
+	    this.setState({ searchResults: SearchResultsStore.all() });
+	  },
+
+	  searching: function () {
+	    this.setState({ searching: true });
+	    console.log("searching");
+	  },
+
+	  notSearching: function () {
+	    this.setState({ searching: false });
+	    console.log("not searching");
 	  },
 
 	  logout: function () {
@@ -32813,6 +32808,10 @@
 	        )
 	      );
 	    }
+	    var searchResultsList = "";
+	    if (this.state.searching) {
+	      searchResultsList = React.createElement(SearchResultsList, { results: this.state.searchResults });
+	    }
 	    return React.createElement(
 	      'header',
 	      { className: 'group' },
@@ -32825,12 +32824,13 @@
 	          null,
 	          'Colloquialisms for the City-Dwelling Sophisticate'
 	        ),
-	        logInStatus,
 	        React.createElement(
 	          'nav',
 	          { className: 'subnav' },
+	          React.createElement(SignInButton, { clickCallback: this.props.openSignInModal, text: '' }),
 	          React.createElement(NewTermButton, { clickCallback: this.props.openNewTermModal, text: '' }),
-	          React.createElement(SearchBar, null)
+	          React.createElement(SearchBar, { focusCallback: this.searching, blurCallback: this.notSearching }),
+	          searchResultsList
 	        )
 	      )
 	    );
@@ -32899,7 +32899,7 @@
 	  },
 
 	  render: function () {
-	    return React.createElement('input', { type: 'text', onKeyUp: this.search, placeholder: 'Type whole words here...' });
+	    return React.createElement('input', { type: 'text', onKeyUp: this.search, onFocus: this.props.focusCallback, onBlur: this.props.blurCallback, placeholder: 'Type whole words here...' });
 	  }
 	});
 
@@ -32943,6 +32943,7 @@
 
 	SearchApiUtil = {
 	  receiveResults: function (data) {
+	    console.log(data);
 	    AppDispatcher.dispatch({
 	      actionType: SearchConstants.RECEIVE_RESULTS,
 	      searchResults: data.results,
@@ -33058,6 +33059,45 @@
 	};
 
 	module.exports = ErrorStore;
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var SearchResultsList = React.createClass({
+	  displayName: "SearchResultsList",
+
+	  render: function () {
+	    var resultsContent = React.createElement(
+	      "li",
+	      null,
+	      "No results"
+	    );
+	    if (this.props.results.length > 0) {
+	      resultsContent = this.props.results.map(function (result) {
+	        var termUrl = "/terms/" + result.id;
+	        return React.createElement(
+	          "a",
+	          { href: termUrl },
+	          React.createElement(
+	            "li",
+	            null,
+	            result.term
+	          )
+	        );
+	      });
+	    }
+	    return React.createElement(
+	      "div",
+	      { className: "search-results-list" },
+	      resultsContent
+	    );
+	  }
+	});
+
+	module.exports = SearchResultsList;
 
 /***/ }
 /******/ ]);

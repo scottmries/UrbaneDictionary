@@ -7,7 +7,10 @@ class Term < ActiveRecord::Base
   has_many :opinions
   has_many :opinioned_users, through: :opinions, source: :user
 
-  multisearchable :against => [:term]
+  multisearchable :against => [:term],
+                  :using => {
+                    :tsearch => {:prefix => true}
+                  }
 
   has_attached_file :image, :default_url => 'missing.png'
   has_attached_file :audio

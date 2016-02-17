@@ -23,7 +23,7 @@ var SearchBar = React.createClass ({
   },
 
   render: function () {
-    return <input type="text" onKeyUp={this.search}  placeholder="Type whole words here..."></input>;
+    return <input type="text" onKeyUp={this.search}  onFocus={this.props.focusCallback} onBlur={this.props.blurCallback} placeholder="Type whole words here..."></input>;
   }
 });
 
