@@ -24,6 +24,8 @@ module UrbaneDictionary
     # PayPal::SDK::Core::Config.load('spec/config/paypal.yml',  ENV['RACK_ENV'] || 'development')
     config.active_record.raise_in_transactional_callbacks = true
 
+    config.assets.initialize_on_precompile = false
+
     config.paperclip_defaults = {
       :storage => :s3,
       :s3_credentials => {
