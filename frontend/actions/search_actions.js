@@ -4,7 +4,6 @@ var AppDispatcher = require('./../dispatcher/dispatcher');
 
 SearchApiUtil = {
   receiveResults: function(data) {
-    console.log(data);
     AppDispatcher.dispatch({
       actionType: SearchConstants.RECEIVE_RESULTS,
       searchResults: data.results,

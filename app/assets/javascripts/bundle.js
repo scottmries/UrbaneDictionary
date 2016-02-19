@@ -59,6 +59,7 @@
 	var CurrentUserStore = __webpack_require__(243);
 	var SessionsApiUtil = __webpack_require__(249);
 	var TermListItem = __webpack_require__(233);
+	var NewTermForm = __webpack_require__(256);
 
 	var routes = React.createElement(
 	  Route,
@@ -24046,9 +24047,9 @@
 	var CurrentUserStore = __webpack_require__(243);
 	var TermStore = __webpack_require__(216);
 	var SessionsApiUtil = __webpack_require__(249);
-	var Spinner = __webpack_require__(269);
+	var Spinner = __webpack_require__(270);
 	var History = __webpack_require__(159).History;
-	var ErrorComponent = __webpack_require__(270);
+	var ErrorComponent = __webpack_require__(271);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -24117,6 +24118,7 @@
 	  },
 
 	  openNewTermModal: function () {
+	    // this.history.pushState({}, 'terms/new');
 	    this.setState({
 	      newTermModalIsOpen: true
 	    });
@@ -24128,19 +24130,17 @@
 	    });
 	  },
 
-	  animateGif: function () {
-	    console.log("start gif");
-	  },
+	  animateGif: function () {},
 
-	  stopGif: function () {
-	    console.log("stop gif");
-	  },
+	  stopGif: function () {},
 
 	  render: function () {
-	    var signInModal;
+	    var signInModal = "";
+	    if (this.state.signInModalIsOpen) {
+	      signInModal = React.createElement(SignInForm, { closeHandler: this.closeSignInModal });
+	    }
 	    var newTermModal;
 	    var fetchingModal;
-	    console.log(this.state);
 	    if (this.state.fetchingModalIsOpen) {
 	      fetchingModal = React.createElement(
 	        Modal,
@@ -24165,6 +24165,7 @@
 	      { id: 'content' },
 	      fetchingModal,
 	      newTermModal,
+	      signInModal,
 	      React.createElement(ErrorComponent, null),
 	      React.createElement(Header, { openNewTermModal: this.openNewTermModal,
 	        openSignInModal: this.openSignInModal }),
@@ -24201,6 +24202,7 @@
 	      url: 'api/users',
 	      data: { user: user },
 	      success: function (currentUser) {
+	        console.log("ApiUtil newUser success data", currentUser);
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        cb();
 	      },
@@ -24216,7 +24218,6 @@
 	      dataType: 'json',
 	      url: 'api/terms',
 	      success: function (terms) {
-	        console.log(terms);
 	        ApiActions.receiveAllTerms(terms.reverse());
 	      },
 	      error: function (error) {
@@ -24231,7 +24232,6 @@
 	      dataType: 'json',
 	      url: 'api/terms/' + id,
 	      success: function (term) {
-	        console.log(term);
 	        ApiActions.receiveSingleTerm(term);
 	      },
 	      error: function (error) {
@@ -24247,6 +24247,7 @@
 	      url: 'api/terms',
 	      data: { term: term },
 	      success: function (term) {
+	        console.log("new term success data", data);
 	        ApiUtil.fetchTerms();
 	      },
 	      error: function (error) {
@@ -31770,14 +31771,7 @@
 	};
 
 	CurrentUserStore.isLoggedIn = function () {
-	  var loginstatus;
-	  if (_currentUser && typeof _currentUser.user !== "undefined") {
-
-	    return !!_currentUser.user.id;
-	  } else {
-
-	    return false;
-	  }
+	  return !!_currentUser.user.id;
 	};
 
 	CurrentUserStore.hasBeenFetched = function () {
@@ -31788,7 +31782,8 @@
 	  switch (payload.actionType) {
 	    case CurrentUserConstants.RECEIVE_CURRENT_USER:
 	      _currentUserHasBeenFetched = true;
-	      _currentUser = payload.currentUser;
+	      _currentUser = { user: payload.currentUser };
+	      console.log("CurrentUserStore _currentUser", _currentUser);
 	      CurrentUserStore.__emitChange();
 	      break;
 	    case CurrentUserConstants.LOGOUT_CURRENT_USER:
@@ -31895,6 +31890,8 @@
 	var FacebookSignIn = __webpack_require__(252);
 	var TwitterSignIn = __webpack_require__(253);
 	var SignUpForm = __webpack_require__(254);
+	var CurrentUserStore = __webpack_require__(243);
+
 	var SignInForm = React.createClass({
 	  displayName: 'SignInForm',
 
@@ -31924,36 +31921,49 @@
 	  signin: function (e) {
 	    e.preventDefault();
 	    var credentials = $(e.currentTarget).serializeJSON().user;
-	    SessionsApiUtil.login(credentials, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
+	    if (typeof this.history.state.term !== "undefined") {
+	      term = this.history.state.term;
+	      term.user_id = CurrentUserStore.currentUser().id;
+	      console.log(term);
+	      ApiUtil.createTerm(term);
+	    } else {
+	      SessionsApiUtil.login(credentials, function () {
+	        this.history.pushState({}, "/");
+	      }.bind(this));
+	    }
 	  },
 
 	  signup: function (e) {
 	    e.preventDefault();
+
 	    var user = $(e.currentTarget).serializeJSON().user;
-	    // SessionsApiUtil.login(credentials, function () {
-	    //   this.history.pushState({}, "/");
-	    // }.bind(this));
-	    ApiUtil.newUser(user, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
+	    console.log(this.history);
+	    debugger;
+	    if (typeof this.history.state.term !== "undefined") {
+	      term = this.history.state.term;
+	      term.user_id = CurrentUserStore.currentUser().id;
+	      console.log(term);
+	      ApiUtil.createTerm(term);
+	    } else {
+	      ApiUtil.newUser(user, function () {
+	        this.history.pushState({}, "/");
+	      }.bind(this));
+	    }
 	  },
 
 	  render: function () {
-
 	    return React.createElement(
 	      'section',
 	      { className: 'sign-in-modal' },
 	      React.createElement(
 	        Modal,
-	        null,
+	        { closeButton: 'show', closeHandler: this.props.closeHandler },
 	        React.createElement(
 	          'h2',
 	          null,
 	          'Say, Jim, fancy a sign in?'
 	        ),
-	        React.createElement(GuestSignIn, null),
+	        React.createElement(GuestSignIn, { submit: this.signup }),
 	        React.createElement(FacebookSignIn, null),
 	        React.createElement(TwitterSignIn, null),
 	        React.createElement(
@@ -32112,7 +32122,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'form',
-	      { onSubmit: this.submit },
+	      { onSubmit: this.props.submit },
 	      React.createElement('input', { type: 'hidden', name: 'user[username]', value: 'guest' }),
 	      React.createElement('input', { type: 'hidden', name: 'user[password]', value: '' }),
 	      React.createElement('input', { type: 'submit', value: 'Guest Sign In' })
@@ -32315,20 +32325,39 @@
 	var React = __webpack_require__(1);
 	var CurrentUserStore = __webpack_require__(243);
 	var ApiUtil = __webpack_require__(207);
+	var SessionsApiUtil = __webpack_require__(249);
+	var History = __webpack_require__(159).History;
 
 	var NewTermForm = React.createClass({
 	  displayName: 'NewTermForm',
 
 
+	  mixins: [History],
+
 	  getInitialState: function () {
 	    return {
 	      term: "",
 	      definition: "",
-	      usage: ""
+	      usage: "",
+	      currentUser: CurrentUserStore.currentUser()
 	    };
 	  },
 
-	  handleClick: function () {},
+	  componentDidMount: function () {
+	    // this.userlistener = CurrentUserStore.addListener(this._onChange);
+	    // SessionsApiUtil.fetchCurrentUser();
+	  },
+
+	  componentWillUnmount: function () {
+	    // this.userlistener.remove();
+	  },
+
+	  _onChange: function () {
+	    if (CurrentUserStore.isLoggedIn()) {
+	      this.setState({ currentUser: CurrentUserStore.currentUser() });
+	    }
+	    console.log(CurrentUserStore.isLoggedIn());
+	  },
 
 	  handleDefinitionChange: function (e) {
 	    this.setState({ definition: e.currentTarget.value });
@@ -32347,10 +32376,16 @@
 	  },
 
 	  submit: function (e) {
+	    console.log("submitted new term user", this.state.currentUser);
 	    e.preventDefault();
 	    var term = $(e.currentTarget).serializeJSON();
-	    term.user_id = this.currentUser().user.id;
-	    ApiUtil.createTerm(term);
+	    if (!this.state.currentUser.id) {
+	      this.history.pushState({ term }, "/login");
+	    } else {
+	      term.user_id = this.state.currentUser.id;
+	      console.log("new term submission term", term);
+	      ApiUtil.createTerm(term);
+	    }
 	  },
 
 	  render: function () {
@@ -32555,7 +32590,7 @@
 	  },
 
 	  render: function () {
-	    console.log(this.state);
+	    console.log("author render state", this.state);
 	    return React.createElement(
 	      'div',
 	      { className: 'author-terms group' },
@@ -32699,16 +32734,11 @@
 	  displayName: 'Sidebar',
 
 
-	  onmouseover: function () {
-	    console.log("moused over");
-	  },
+	  onmouseover: function () {},
 
-	  onmouseout: function () {
-	    console.log("moused out");
-	  },
+	  onmouseout: function () {},
 
 	  render: function () {
-	    console.log(this.props);
 	    return React.createElement(
 	      'section',
 	      { className: 'sidebar', onmouseover: this.onmouseover, onmouseout: this.onmouseout },
@@ -32733,10 +32763,10 @@
 	var NewTermButton = __webpack_require__(255);
 	var CurrentUserStore = __webpack_require__(243);
 	var SearchResultsStore = __webpack_require__(245);
-	var SearchResultsList = __webpack_require__(272);
+	var SearchResultsList = __webpack_require__(265);
 	var SessionsApiUtil = __webpack_require__(249);
-	var Logo = __webpack_require__(265);
-	var SearchBar = __webpack_require__(266);
+	var Logo = __webpack_require__(266);
+	var SearchBar = __webpack_require__(267);
 
 	var Header = React.createClass({
 	  displayName: 'Header',
@@ -32769,60 +32799,104 @@
 
 	  searching: function () {
 	    this.setState({ searching: true });
-	    console.log("searching");
 	  },
 
 	  notSearching: function () {
 	    this.setState({ searching: false });
-	    console.log("not searching");
 	  },
 
 	  logout: function () {
 	    SessionsApiUtil.logout();
 	  },
 
+	  newTerms: function () {
+	    //show the terms from the last week
+	  },
+
 	  render: function () {
-	    var logInStatus;
-	    if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) {
-	      // if we're logged in....
-	      logInStatus = React.createElement(
-	        'div',
-	        { className: 'logInStatus' },
-	        'Logged in as ',
-	        this.state.currentUser.user.user.username,
-	        React.createElement('br', null),
-	        React.createElement(
-	          'button',
-	          { onClick: this.logout },
-	          'LOG OUT'
-	        )
-	      );
-	    } else {
-	      logInStatus = React.createElement(
-	        'div',
-	        { className: 'logInStatus' },
-	        React.createElement(
-	          'a',
-	          { href: '#/login' },
-	          'Login'
-	        )
-	      );
-	    }
+	    // var logInStatus;
+	    // if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) { // if we're logged in....
+	    //   logInStatus =  (
+	    //     <div className="logInStatus">
+	    //       Logged in as { this.state.currentUser.user.user.username }<br />
+	    //       <button onClick={ this.logout }>LOG OUT</button>
+	    //     </div>
+	    //   );
+	    // } else {
+	    //   logInStatus = (
+	    //     <div className="logInStatus">
+	    //       <a href="#/login">Login</a>
+	    //     </div>
+	    //   );
+	    // }
 	    var searchResultsList = "";
 	    if (this.state.searching) {
 	      searchResultsList = React.createElement(SearchResultsList, { results: this.state.searchResults });
 	    }
+	    var alphabet = "abcdefghijklmnopqrstuvwxyz#".split("");
+	    alphabet.concat(["new"]);
+	    var alphabetMenu = alphabet.map(function (letter) {
+	      return React.createElement(
+	        'li',
+	        { 'data-letter': letter, key: letter },
+	        letter
+	      );
+	    });
+
 	    return React.createElement(
 	      'header',
 	      { className: 'group' },
 	      React.createElement(
 	        'div',
 	        { className: 'header-inner' },
-	        React.createElement(Logo, null),
 	        React.createElement(
-	          'h2',
-	          null,
-	          'Colloquialisms for the City-Dwelling Sophisticate'
+	          'div',
+	          { className: 'header-top group' },
+	          React.createElement(Logo, null),
+	          React.createElement(
+	            'nav',
+	            { className: 'nav' },
+	            React.createElement(
+	              'ul',
+	              { className: 'menu' },
+	              React.createElement(
+	                'a',
+	                { className: 'browse' },
+	                React.createElement(
+	                  'li',
+	                  null,
+	                  'Browse'
+	                ),
+	                React.createElement(
+	                  'nav',
+	                  { className: 'alphabetMenu group' },
+	                  React.createElement(
+	                    'ul',
+	                    null,
+	                    alphabetMenu
+	                  )
+	                )
+	              ),
+	              React.createElement(
+	                'a',
+	                { className: 'vote' },
+	                React.createElement(
+	                  'li',
+	                  null,
+	                  'Vote'
+	                )
+	              ),
+	              React.createElement(
+	                'a',
+	                { className: 'favorites' },
+	                React.createElement(
+	                  'li',
+	                  null,
+	                  'Favorites'
+	                )
+	              )
+	            )
+	          )
 	        ),
 	        React.createElement(
 	          'nav',
@@ -32841,6 +32915,51 @@
 
 /***/ },
 /* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var SearchResultsList = React.createClass({
+	  displayName: "SearchResultsList",
+
+
+	  onClick: function (e) {
+	    console.log("clicked a search result");
+	    e.preventDefault();
+	  },
+
+	  render: function () {
+	    var resultsContent = React.createElement(
+	      "li",
+	      null,
+	      "No results"
+	    );
+	    if (this.props.results.length > 0) {
+	      resultsContent = this.props.results.map(function (result) {
+	        var termUrl = "/terms/" + result.id;
+	        return React.createElement(
+	          "a",
+	          { href: termUrl, onClick: this.onClick, key: "result.term.id" },
+	          React.createElement(
+	            "li",
+	            null,
+	            result.term
+	          )
+	        );
+	      });
+	    }
+	    return React.createElement(
+	      "div",
+	      { className: "search-results-list" },
+	      resultsContent
+	    );
+	  }
+	});
+
+	module.exports = SearchResultsList;
+
+/***/ },
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32869,11 +32988,11 @@
 	module.exports = Logo;
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SearchApiUtil = __webpack_require__(267);
+	var SearchApiUtil = __webpack_require__(268);
 	var SearchResultsStore = __webpack_require__(245);
 
 	var SearchBar = React.createClass({
@@ -32906,11 +33025,11 @@
 	module.exports = SearchBar;
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ErrorActions = __webpack_require__(214);
-	var SearchActions = __webpack_require__(268);
+	var SearchActions = __webpack_require__(269);
 
 	var SearchApiUtil = {
 
@@ -32934,7 +33053,7 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32943,7 +33062,6 @@
 
 	SearchApiUtil = {
 	  receiveResults: function (data) {
-	    console.log(data);
 	    AppDispatcher.dispatch({
 	      actionType: SearchConstants.RECEIVE_RESULTS,
 	      searchResults: data.results,
@@ -32955,11 +33073,11 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
-/* 269 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var Logo = __webpack_require__(265);
+	var Logo = __webpack_require__(266);
 
 	var Spinner = React.createClass({
 	  displayName: 'Spinner',
@@ -32986,11 +33104,11 @@
 	module.exports = Spinner;
 
 /***/ },
-/* 270 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ErrorStore = __webpack_require__(271);
+	var ErrorStore = __webpack_require__(272);
 
 	var ErrorComponent = React.createClass({
 	  displayName: 'ErrorComponent',
@@ -33010,6 +33128,7 @@
 
 	  _onChange: function () {
 	    this.setState({ errors: ErrorStore.all() });
+	    console.log(ErrorStore.all());
 	  },
 
 	  render: function () {
@@ -33030,7 +33149,7 @@
 	module.exports = ErrorComponent;
 
 /***/ },
-/* 271 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(217).Store;
@@ -33059,45 +33178,6 @@
 	};
 
 	module.exports = ErrorStore;
-
-/***/ },
-/* 272 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-
-	var SearchResultsList = React.createClass({
-	  displayName: "SearchResultsList",
-
-	  render: function () {
-	    var resultsContent = React.createElement(
-	      "li",
-	      null,
-	      "No results"
-	    );
-	    if (this.props.results.length > 0) {
-	      resultsContent = this.props.results.map(function (result) {
-	        var termUrl = "/terms/" + result.id;
-	        return React.createElement(
-	          "a",
-	          { href: termUrl },
-	          React.createElement(
-	            "li",
-	            null,
-	            result.term
-	          )
-	        );
-	      });
-	    }
-	    return React.createElement(
-	      "div",
-	      { className: "search-results-list" },
-	      resultsContent
-	    );
-	  }
-	});
-
-	module.exports = SearchResultsList;
 
 /***/ }
 /******/ ]);

@@ -30,7 +30,7 @@ var Author = React.createClass({
     },
 
     render: function () {
-      console.log(this.state);
+      console.log("author render state", this.state);
       return (<div className="author-terms group">
 
           {this.state.terms.map (function (term){

@@ -6,6 +6,8 @@ var GuestSignIn = require('./guest_sign_in');
 var FacebookSignIn = require('./facebook_sign_in');
 var TwitterSignIn = require('./twitter_sign_in');
 var SignUpForm = require('./sign_up_form');
+var CurrentUserStore = require('./../stores/current_user_store');
+
 var SignInForm = React.createClass({
 
   mixins: [History],
@@ -33,30 +35,43 @@ var SignInForm = React.createClass({
   signin: function (e) {
     e.preventDefault();
     var credentials = $(e.currentTarget).serializeJSON().user;
-    SessionsApiUtil.login(credentials, function () {
-      this.history.pushState({}, "/");
-    }.bind(this));
+    if(typeof this.history.state.term !== "undefined"){
+      term = this.history.state.term;
+      term.user_id = CurrentUserStore.currentUser().id;
+      console.log(term);
+      ApiUtil.createTerm(term);
+    } else{
+      SessionsApiUtil.login(credentials, function () {
+        this.history.pushState({}, "/");
+      }.bind(this));
+    }
 
   },
 
   signup: function (e) {
     e.preventDefault();
+
     var user = $(e.currentTarget).serializeJSON().user;
-    // SessionsApiUtil.login(credentials, function () {
-    //   this.history.pushState({}, "/");
-    // }.bind(this));
-    ApiUtil.newUser(user, function () {
-      this.history.pushState({}, "/");
-    }.bind(this));
+    console.log(this.history);
+    debugger
+    if(typeof this.history.state.term !== "undefined"){
+      term = this.history.state.term;
+      term.user_id = CurrentUserStore.currentUser().id;
+      console.log(term);
+      ApiUtil.createTerm(term);
+    } else {
+      ApiUtil.newUser(user, function () {
+        this.history.pushState({}, "/");
+      }.bind(this));
+    }
   },
 
   render: function () {
-
     return (
       <section className="sign-in-modal">
-      <Modal>
+      <Modal closeButton="show" closeHandler={this.props.closeHandler}>
         <h2>Say, Jim, fancy a sign in?</h2>
-        <GuestSignIn />
+        <GuestSignIn submit={this.signup}/>
         <FacebookSignIn />
         <TwitterSignIn />
           <form onSubmit={this.signin} className="sign-in">

@@ -10,6 +10,7 @@ ApiUtil = {
       url: 'api/users',
       data: {user: user},
       success: function (currentUser) {
+        console.log("ApiUtil newUser success data",currentUser);
         CurrentUserActions.receiveCurrentUser(currentUser);
         cb();
       },
@@ -25,7 +26,6 @@ ApiUtil = {
       dataType: 'json',
       url: 'api/terms',
       success: function (terms) {
-        console.log(terms);
         ApiActions.receiveAllTerms(terms.reverse());
       },
       error: function (error) {
@@ -40,7 +40,6 @@ ApiUtil = {
       dataType: 'json',
       url: 'api/terms/' + id,
       success: function (term) {
-        console.log(term);
         ApiActions.receiveSingleTerm(term);
       },
       error: function (error) {
@@ -56,6 +55,7 @@ ApiUtil = {
       url: 'api/terms',
       data: {term: term},
       success: function (term) {
+        console.log("new term success data", data);
         ApiUtil.fetchTerms();
       },
       error: function (error) {

@@ -17,6 +17,7 @@ var ErrorComponent = React.createClass({
 
   _onChange: function () {
     this.setState({ errors: ErrorStore.all() });
+    console.log(ErrorStore.all());
   },
 
 

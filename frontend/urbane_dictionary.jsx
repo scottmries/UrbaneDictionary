@@ -13,6 +13,7 @@ var Header = require('./components/header');
 var CurrentUserStore = require('./stores/current_user_store');
 var SessionsApiUtil = require('./util/sessions_api_util');
 var TermListItem = require('./components/term_list_item');
+var NewTermForm = require('./components/new_term_form');
 
 
 var routes = (

@@ -37,44 +37,64 @@ var Header = React.createClass({
 
   searching: function () {
     this.setState({searching: true});
-    console.log("searching");
   },
 
   notSearching: function () {
     this.setState({searching: false});
-    console.log("not searching");
   },
 
   logout: function () {
     SessionsApiUtil.logout();
   },
 
+  newTerms: function () {
+    //show the terms from the last week
+  },
+
   render: function () {
-    var logInStatus;
-    if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) { // if we're logged in....
-      logInStatus =  (
-        <div className="logInStatus">
-          Logged in as { this.state.currentUser.user.user.username }<br />
-          <button onClick={ this.logout }>LOG OUT</button>
-        </div>
-      );
-    } else {
-      logInStatus = (
-        <div className="logInStatus">
-          <a href="#/login">Login</a>
-        </div>
-      );
-    }
+    // var logInStatus;
+    // if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) { // if we're logged in....
+    //   logInStatus =  (
+    //     <div className="logInStatus">
+    //       Logged in as { this.state.currentUser.user.user.username }<br />
+    //       <button onClick={ this.logout }>LOG OUT</button>
+    //     </div>
+    //   );
+    // } else {
+    //   logInStatus = (
+    //     <div className="logInStatus">
+    //       <a href="#/login">Login</a>
+    //     </div>
+    //   );
+    // }
     var searchResultsList = "";
     if(this.state.searching){
       searchResultsList = <SearchResultsList results={this.state.searchResults} />;
     }
+    var alphabet = "abcdefghijklmnopqrstuvwxyz#".split("");
+    alphabet.concat(["new"]);
+    var alphabetMenu = alphabet.map( function (letter){
+      return <li data-letter={letter} key={letter}>{letter}</li>;
+    });
+
     return (
 
       <header className="group">
         <div className="header-inner">
-          <Logo />
-          <h2>Colloquialisms for the City-Dwelling Sophisticate</h2>
+          <div className="header-top group">
+            <Logo />
+            <nav className="nav">
+              <ul className="menu">
+                <a className="browse">
+                  <li>Browse</li>
+                  <nav className="alphabetMenu group"><ul>{alphabetMenu}</ul></nav>
+                </a>
+                <a className="vote"><li>Vote</li></a>
+                <a className="favorites"><li>Favorites</li></a>
+              </ul>
+            </nav>
+          </div>
+
           <nav className="subnav">
             <SignInButton clickCallback={this.props.openSignInModal} text="" />
             <NewTermButton clickCallback={this.props.openNewTermModal} text="" />

@@ -9,8 +9,8 @@
 
     if @user.save
       sign_in!(@user)
-      @user_with_terms = {user: @user, terms: @user.terms, opinions: @user.opinions, opinioned_terms: @user.opinioned_terms}
-      render "api/users/show"
+      # @user_with_terms = {user: @user, terms: @user.terms, opinions: @user.opinions, opinioned_terms: @user.opinioned_terms}
+      render "api/users/current_user"
     else
       render json: @user.errors.full_messages, status: 422
     end

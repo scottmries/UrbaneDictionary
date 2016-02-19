@@ -15,7 +15,7 @@ var GuestSignIn = React.createClass({
 
   render: function () {
     return (
-      <form onSubmit={this.submit} >
+      <form onSubmit={this.props.submit} >
         <input type="hidden" name="user[username]" value="guest" />
         <input type="hidden" name="user[password]" value="" />
         <input type="submit" value="Guest Sign In" />

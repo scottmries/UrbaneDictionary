@@ -82,6 +82,7 @@ var App = React.createClass({
   },
 
   openNewTermModal: function () {
+    // this.history.pushState({}, 'terms/new');
     this.setState({
       newTermModalIsOpen: true
     });
@@ -94,18 +95,18 @@ var App = React.createClass({
   },
 
   animateGif: function (){
-    console.log("start gif");
   },
 
   stopGif: function (){
-    console.log("stop gif");
   },
 
   render: function () {
-    var signInModal;
+    var signInModal = "";
+    if (this.state.signInModalIsOpen){
+      signInModal = <SignInForm closeHandler={this.closeSignInModal} />;
+    }
     var newTermModal;
     var fetchingModal;
-    console.log(this.state);
     if (this.state.fetchingModalIsOpen) {
       fetchingModal = (
         <Modal closeHandler={this.closeFetchingModal} >
@@ -128,6 +129,7 @@ var App = React.createClass({
       <div id="content">
         {fetchingModal}
         {newTermModal}
+        {signInModal}
         <ErrorComponent />
 
         <Header openNewTermModal={this.openNewTermModal}

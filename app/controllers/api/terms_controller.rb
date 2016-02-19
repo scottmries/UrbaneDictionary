@@ -20,7 +20,6 @@ class Api::TermsController < ApplicationController
 
   def show
     @term = Term.find(params[:id])
-    byebug
     render :show
   end
 

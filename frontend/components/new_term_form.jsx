@@ -1,19 +1,36 @@
 var React = require('react');
 var CurrentUserStore = require('./../stores/current_user_store');
 var ApiUtil = require('./../util/api_util');
+var SessionsApiUtil = require('./../util/sessions_api_util');
+var History = require('react-router').History;
 
 var NewTermForm = React.createClass({
+
+  mixins: [History],
 
   getInitialState: function () {
     return ( {
     term: "",
     definition: "",
-    usage: ""
+    usage: "",
+    currentUser: CurrentUserStore.currentUser()
   } );
   },
 
-  handleClick: function () {
+  componentDidMount: function () {
+    // this.userlistener = CurrentUserStore.addListener(this._onChange);
+    // SessionsApiUtil.fetchCurrentUser();
+  },
 
+  componentWillUnmount: function () {
+    // this.userlistener.remove();
+  },
+
+  _onChange: function () {
+    if (CurrentUserStore.isLoggedIn()){
+      this.setState( { currentUser: CurrentUserStore.currentUser() } );
+    }
+    console.log(CurrentUserStore.isLoggedIn());
   },
 
   handleDefinitionChange: function (e) {
@@ -33,10 +50,16 @@ var NewTermForm = React.createClass({
   },
 
   submit: function (e) {
+    console.log("submitted new term user", this.state.currentUser);
     e.preventDefault();
     var term = $(e.currentTarget).serializeJSON();
-    term.user_id = this.currentUser().user.id;
-    ApiUtil.createTerm(term);
+    if (!this.state.currentUser.id){
+      this.history.pushState({term}, "/login");
+    } else {
+      term.user_id = this.state.currentUser.id;
+      console.log("new term submission term", term);
+      ApiUtil.createTerm(term);
+    }
   },
 
   render: function () {

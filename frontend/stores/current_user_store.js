@@ -11,14 +11,7 @@ CurrentUserStore.currentUser = function () {
 };
 
 CurrentUserStore.isLoggedIn = function () {
-  var loginstatus;
-  if (_currentUser && typeof _currentUser.user !== "undefined"){
-
-    return !!_currentUser.user.id;
-  } else {
-
-    return false;
-  }
+  return !!_currentUser.user.id;
 };
 
 CurrentUserStore.hasBeenFetched = function () {
@@ -29,7 +22,8 @@ CurrentUserStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case CurrentUserConstants.RECEIVE_CURRENT_USER:
       _currentUserHasBeenFetched = true;
-      _currentUser = payload.currentUser;
+      _currentUser = {user: payload.currentUser};
+      console.log("CurrentUserStore _currentUser", _currentUser);
       CurrentUserStore.__emitChange();
       break;
     case CurrentUserConstants.LOGOUT_CURRENT_USER:

@@ -252,6 +252,7 @@ header .subnav button.signIn {
 
 .logo {
   margin-bottom: 20px;
+  float:left;
 }
 
 .logo h1 {
@@ -404,4 +405,75 @@ header .subnav button.signIn {
 .search-results-list li:hover {
   font-weight: bold;
   background: #05ff56;
+}
+
+.alphabetMenu {
+  display: none;
+  position: absolute;
+  width: 300px;
+  background: white;
+  border: solid 1px black;
+  box-shadow: 0px 2px black;
+  border-radius: 3px;
+  top: 40px;
+  left: 185px;
+}
+
+.alphabetMenu ul {
+  list-style: none;
+}
+
+.alphabetMenu li {
+  float: left;
+  z-index: 1;
+  border-radius: 50%;
+  background: #aaa;
+  color: #134FE6;
+  width: 40px;
+  height: 40px;
+  margin: 9px;
+  padding: 15px 0 0 16px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.alphabetMenu li:hover {
+  color: white;
+  background: #134FE6;
+  cursor: pointer;
+}
+
+.alphabetMenu::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+}
+
+nav.nav {
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  position:relative;
+}
+
+nav.nav .browse:hover .alphabetMenu {
+  display: block;
+}
+
+nav.nav ul{
+  list-style: none;
+}
+
+nav.nav ul li {
+  display: inline;
+}
+
+nav.nav > ul > a > li {
+  display: block;
+  float:left;
+  font-weight: bold;
+  padding:20px 0 0 40px;
+  font-size: 12px;
+}
+
+nav.nav > ul > a > li:hover {
+  color: #EFFF00;
 }
