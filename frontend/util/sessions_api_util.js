@@ -9,6 +9,7 @@ var SessionsApiUtil = {
       data: credentials, // {email: "scott", password: "password"}
       success: function (currentUser) {
         CurrentUserActions.receiveCurrentUser(currentUser);
+        console.log("currentUser at sessions login", currentUser);
         success && success();
       }, error: function (error) {
         ErrorActions.receiveErrors(error);

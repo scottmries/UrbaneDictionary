@@ -24202,7 +24202,6 @@
 	      url: 'api/users',
 	      data: { user: user },
 	      success: function (currentUser) {
-	        console.log("ApiUtil newUser success data", currentUser);
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        cb();
 	      },
@@ -24247,7 +24246,7 @@
 	      url: 'api/terms',
 	      data: { term: term },
 	      success: function (term) {
-	        console.log("new term success data", data);
+	        console.log("new term success data", term);
 	        ApiUtil.fetchTerms();
 	      },
 	      error: function (error) {
@@ -31498,7 +31497,7 @@
 	    var match = video_url.match(regExp);
 
 	    if (match && match[2].length >= 10) {
-	      return "http://youtube.com/embed/" + match[2];
+	      return "http://youtube.com/v/" + match[2];
 	    } else {
 	      return 'error';
 	    }
@@ -31933,21 +31932,28 @@
 	    }
 	  },
 
-	  signup: function (e) {
-	    e.preventDefault();
-
-	    var user = $(e.currentTarget).serializeJSON().user;
-	    console.log(this.history);
-	    debugger;
-	    if (typeof this.history.state.term !== "undefined") {
+	  handleSubmittedTerm: function (user) {
+	    if (typeof this.history.state !== "undefined" && typeof this.history.state.term !== "undefined") {
 	      term = this.history.state.term;
 	      term.user_id = CurrentUserStore.currentUser().id;
-	      console.log(term);
+	      console.log("term", term);
 	      ApiUtil.createTerm(term);
 	    } else {
 	      ApiUtil.newUser(user, function () {
 	        this.history.pushState({}, "/");
 	      }.bind(this));
+	    }
+	  },
+
+	  signup: function (e) {
+	    e.preventDefault();
+
+	    var user = $(e.currentTarget).serializeJSON().user;
+	    debugger;
+	    if (CurrentUserStore.hasBeenFetched()) {
+	      this.handleSubmittedTerm(user);
+	    } else {
+	      SessionsApiUtil.fetchCurrentUser(this.handleSubmittedTerm(user));
 	    }
 	  },
 
@@ -32036,6 +32042,7 @@
 	      data: credentials, // {email: "scott", password: "password"}
 	      success: function (currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        console.log("currentUser at sessions login", currentUser);
 	        success && success();
 	      }, error: function (error) {
 	        ErrorActions.receiveErrors(error);
@@ -32110,6 +32117,14 @@
 	  displayName: 'GuestSignIn',
 
 	  mixins: [History],
+
+	  componentDidMount: function () {
+	    window.addEventListener('popstate', function (event) {
+	      console.log("history state event", event);
+
+	      // updateContent(event.state);
+	    });
+	  },
 
 	  submit: function (e) {
 	    e.preventDefault();
@@ -32344,19 +32359,19 @@
 	  },
 
 	  componentDidMount: function () {
-	    // this.userlistener = CurrentUserStore.addListener(this._onChange);
+	    this.userlistener = CurrentUserStore.addListener(this._onChange);
 	    // SessionsApiUtil.fetchCurrentUser();
 	  },
 
 	  componentWillUnmount: function () {
-	    // this.userlistener.remove();
+	    this.userlistener.remove();
 	  },
 
 	  _onChange: function () {
 	    if (CurrentUserStore.isLoggedIn()) {
 	      this.setState({ currentUser: CurrentUserStore.currentUser() });
 	    }
-	    console.log(CurrentUserStore.isLoggedIn());
+	    console.log("state after new term change", this.state);
 	  },
 
 	  handleDefinitionChange: function (e) {
@@ -32379,12 +32394,13 @@
 	    console.log("submitted new term user", this.state.currentUser);
 	    e.preventDefault();
 	    var term = $(e.currentTarget).serializeJSON();
-	    if (!this.state.currentUser.id) {
-	      this.history.pushState({ term }, "/login");
-	    } else {
-	      term.user_id = this.state.currentUser.id;
+	    console.log("Submitted term", term);
+	    if (!!this.state.currentUser.user.id) {
+	      term.user_id = this.state.currentUser.user.id;
 	      console.log("new term submission term", term);
 	      ApiUtil.createTerm(term);
+	    } else {
+	      this.history.pushState(term, "/login");
 	    }
 	  },
 

@@ -14,7 +14,7 @@ var VideoUploadForm = React.createClass({
     var match = video_url.match(regExp);
 
     if (match && match[2].length >= 10) {
-        return "http://youtube.com/embed/" + match[2];
+        return "http://youtube.com/v/" + match[2];
     } else {
         return 'error';
     }

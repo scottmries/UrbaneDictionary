@@ -10,7 +10,6 @@ ApiUtil = {
       url: 'api/users',
       data: {user: user},
       success: function (currentUser) {
-        console.log("ApiUtil newUser success data",currentUser);
         CurrentUserActions.receiveCurrentUser(currentUser);
         cb();
       },
@@ -55,7 +54,7 @@ ApiUtil = {
       url: 'api/terms',
       data: {term: term},
       success: function (term) {
-        console.log("new term success data", data);
+        console.log("new term success data", term);
         ApiUtil.fetchTerms();
       },
       error: function (error) {

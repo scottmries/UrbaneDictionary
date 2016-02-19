@@ -48,22 +48,30 @@ var SignInForm = React.createClass({
 
   },
 
-  signup: function (e) {
-    e.preventDefault();
-
-    var user = $(e.currentTarget).serializeJSON().user;
-    console.log(this.history);
-    debugger
-    if(typeof this.history.state.term !== "undefined"){
+  handleSubmittedTerm: function (user) {
+    if(typeof this.history.state !== "undefined" && typeof this.history.state.term !== "undefined"){
       term = this.history.state.term;
       term.user_id = CurrentUserStore.currentUser().id;
-      console.log(term);
+      console.log("term", term);
       ApiUtil.createTerm(term);
     } else {
       ApiUtil.newUser(user, function () {
         this.history.pushState({}, "/");
       }.bind(this));
     }
+  },
+
+  signup: function (e) {
+    e.preventDefault();
+
+    var user = $(e.currentTarget).serializeJSON().user;
+    debugger
+    if (CurrentUserStore.hasBeenFetched()){
+      this.handleSubmittedTerm(user);
+    } else {
+      SessionsApiUtil.fetchCurrentUser(this.handleSubmittedTerm(user));
+    }
+
   },
 
   render: function () {

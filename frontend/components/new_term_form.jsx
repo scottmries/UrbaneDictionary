@@ -18,19 +18,19 @@ var NewTermForm = React.createClass({
   },
 
   componentDidMount: function () {
-    // this.userlistener = CurrentUserStore.addListener(this._onChange);
+    this.userlistener = CurrentUserStore.addListener(this._onChange);
     // SessionsApiUtil.fetchCurrentUser();
   },
 
   componentWillUnmount: function () {
-    // this.userlistener.remove();
+    this.userlistener.remove();
   },
 
   _onChange: function () {
     if (CurrentUserStore.isLoggedIn()){
       this.setState( { currentUser: CurrentUserStore.currentUser() } );
     }
-    console.log(CurrentUserStore.isLoggedIn());
+    console.log("state after new term change", this.state);
   },
 
   handleDefinitionChange: function (e) {
@@ -53,12 +53,13 @@ var NewTermForm = React.createClass({
     console.log("submitted new term user", this.state.currentUser);
     e.preventDefault();
     var term = $(e.currentTarget).serializeJSON();
-    if (!this.state.currentUser.id){
-      this.history.pushState({term}, "/login");
-    } else {
-      term.user_id = this.state.currentUser.id;
+    console.log("Submitted term", term);
+    if (!!this.state.currentUser.user.id){
+      term.user_id = this.state.currentUser.user.id;
       console.log("new term submission term", term);
       ApiUtil.createTerm(term);
+    } else {
+      this.history.pushState(term, "/login");
     }
   },
 

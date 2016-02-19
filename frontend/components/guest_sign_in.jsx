@@ -5,6 +5,14 @@ var History = require('react-router').History;
 var GuestSignIn = React.createClass({
   mixins: [History],
 
+  componentDidMount: function () {
+    window.addEventListener('popstate', function(event) {
+      console.log("history state event", event);
+
+      // updateContent(event.state);
+    });
+  },
+
   submit: function (e) {
     e.preventDefault();
     var newUser = $(e.currentTarget).serializeJSON().user;
