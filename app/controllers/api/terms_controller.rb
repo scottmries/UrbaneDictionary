@@ -6,6 +6,7 @@ class Api::TermsController < ApplicationController
 
   def create
     @term = Term.create(term_params)
+    byebug
     if @term.save
       render :show
     else
@@ -14,8 +15,10 @@ class Api::TermsController < ApplicationController
   end
 
   def index
-    @terms = Term.eager_load(:opinions)
-    byebug
+    @terms = Term.includes(:opinions, :user)
+    # @terms.map do |term|
+    #   term[:username] = term.user.username
+    # end
     render :index
   end
 
