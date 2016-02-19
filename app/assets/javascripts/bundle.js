@@ -31228,6 +31228,7 @@
 	      if (this.props.term.image_url.slice(0, 4) === "http") {
 	        React.createElement('img', { className: 'termImg', src: this.props.term.image_url });
 	      }
+	      console.log(this.props);
 	      author = React.createElement(
 	        'a',
 	        { href: '#', onClick: this.showUserTerms },
@@ -32070,6 +32071,7 @@
 	      type: 'GET',
 	      dataType: 'json',
 	      success: function (currentUser) {
+	        console.log("fetched user", currentUser);
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        cb && cb(currentUser);
 	      }, error: function (error) {

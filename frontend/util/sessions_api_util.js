@@ -37,6 +37,7 @@ var SessionsApiUtil = {
       type: 'GET',
       dataType: 'json',
       success: function (currentUser) {
+        console.log("fetched user", currentUser);
         CurrentUserActions.receiveCurrentUser(currentUser);
         cb && cb(currentUser);
       }, error: function (error) {

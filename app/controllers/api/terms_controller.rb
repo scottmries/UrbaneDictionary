@@ -15,6 +15,7 @@ class Api::TermsController < ApplicationController
 
   def index
     @terms = Term.eager_load(:opinions)
+    byebug
     render :index
   end
 
