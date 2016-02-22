@@ -15,7 +15,6 @@ var TermListItem = React.createClass({
   },
 
   componentWillReceiveProps: function () {
-    // console.log(this.props);
   },
 
   showTerm: function (e) {
@@ -49,7 +48,7 @@ var TermListItem = React.createClass({
       if (this.props.term.image_url.slice(0,4) === "http"){
         <img className="termImg" src={this.props.term.image_url} />;
       }
-      console.log(this.props);
+
       author = <a href="#" onClick={this.showUserTerms}>  {this.props.user.username} </a>;
       term = this.props.term.term;
       definition = this.props.term.definition;

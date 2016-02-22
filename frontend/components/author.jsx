@@ -15,8 +15,12 @@ var Author = React.createClass({
 
     componentDidMount: function () {
       var id = parseInt(this.props.params.id);
-      this.user_listener = UserStore.addListener(this._onChange);
-      UserApiUtil.fetchUser(id);
+      // this.user_listener = UserStore.addListener(this._onChange);
+      this.term_listener = TermStore.addListener(this._onChange);
+      if (TermStore.all().length === 0){
+        ApiUtil.fetchTerms();
+      }
+      this.setState({terms: TermStore.findByAuthorId(id)});
     },
 
     componentWillUnmount: function () {
@@ -25,12 +29,10 @@ var Author = React.createClass({
 
     _onChange: function () {
       var id = parseInt(this.props.params.id);
-      var userTerms = UserStore.getAuthorTerms();
-      this.setState({ user: userTerms.user, terms: userTerms.terms });
+      this.setState({terms: TermStore.findByAuthorId(id)});
     },
 
     render: function () {
-      console.log("author render state", this.state);
       return (<div className="author-terms group">
 
           {this.state.terms.map (function (term){

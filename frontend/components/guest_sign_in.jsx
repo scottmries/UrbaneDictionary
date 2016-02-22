@@ -7,9 +7,6 @@ var GuestSignIn = React.createClass({
 
   componentDidMount: function () {
     window.addEventListener('popstate', function(event) {
-      console.log("history state event", event);
-
-      // updateContent(event.state);
     });
   },
 

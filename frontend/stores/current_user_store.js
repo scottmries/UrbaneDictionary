@@ -23,7 +23,6 @@ CurrentUserStore.__onDispatch = function (payload) {
     case CurrentUserConstants.RECEIVE_CURRENT_USER:
       _currentUserHasBeenFetched = true;
       _currentUser = {user: payload.currentUser};
-      console.log("CurrentUserStore _currentUser", _currentUser);
       CurrentUserStore.__emitChange();
       break;
     case CurrentUserConstants.LOGOUT_CURRENT_USER:

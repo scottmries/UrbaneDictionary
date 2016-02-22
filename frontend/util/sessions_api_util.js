@@ -9,7 +9,6 @@ var SessionsApiUtil = {
       data: credentials, // {email: "scott", password: "password"}
       success: function (currentUser) {
         CurrentUserActions.receiveCurrentUser(currentUser);
-        console.log("currentUser at sessions login", currentUser);
         success && success();
       }, error: function (error) {
         ErrorActions.receiveErrors(error);
@@ -37,7 +36,6 @@ var SessionsApiUtil = {
       type: 'GET',
       dataType: 'json',
       success: function (currentUser) {
-        console.log("fetched user", currentUser);
         CurrentUserActions.receiveCurrentUser(currentUser);
         cb && cb(currentUser);
       }, error: function (error) {

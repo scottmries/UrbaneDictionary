@@ -16,9 +16,6 @@ class Api::TermsController < ApplicationController
 
   def index
     @terms = Term.includes(:opinions, :user)
-    # @terms.map do |term|
-    #   term[:username] = term.user.username
-    # end
     render :index
   end
 

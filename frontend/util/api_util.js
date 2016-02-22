@@ -47,6 +47,14 @@ ApiUtil = {
     });
   },
 
+  fetchTermsByAuthor: function( user_id) {
+    $.ajax({
+      type: 'get',
+      dataType: 'json',
+      url: 'api/',
+    })
+  },
+
   createTerm: function (term) {
     $.ajax({
       type: 'post',
@@ -54,7 +62,6 @@ ApiUtil = {
       url: 'api/terms',
       data: {term: term},
       success: function (term) {
-        console.log("new term success data", term);
         ApiUtil.fetchTerms();
       },
       error: function (error) {

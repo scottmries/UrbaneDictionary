@@ -38,7 +38,6 @@ var SignInForm = React.createClass({
     if(typeof this.history.state.term !== "undefined"){
       term = this.history.state.term;
       term.user_id = CurrentUserStore.currentUser().id;
-      console.log(term);
       ApiUtil.createTerm(term);
     } else{
       SessionsApiUtil.login(credentials, function () {
@@ -52,7 +51,6 @@ var SignInForm = React.createClass({
     if(typeof this.history.state !== "undefined" && typeof this.history.state.term !== "undefined"){
       term = this.history.state.term;
       term.user_id = CurrentUserStore.currentUser().id;
-      console.log("term", term);
       ApiUtil.createTerm(term);
     } else {
       ApiUtil.newUser(user, function () {

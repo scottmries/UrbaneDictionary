@@ -24239,6 +24239,14 @@
 	    });
 	  },
 
+	  fetchTermsByAuthor: function (user_id) {
+	    $.ajax({
+	      type: 'get',
+	      dataType: 'json',
+	      url: 'api/'
+	    });
+	  },
+
 	  createTerm: function (term) {
 	    $.ajax({
 	      type: 'post',
@@ -24246,7 +24254,6 @@
 	      url: 'api/terms',
 	      data: { term: term },
 	      success: function (term) {
-	        console.log("new term success data", term);
 	        ApiUtil.fetchTerms();
 	      },
 	      error: function (error) {
@@ -24321,7 +24328,6 @@
 	  },
 
 	  receiveSingleTerm: function (term) {
-	    console.log("receiveSingleTerm", term);
 	    AppDispatcher.dispatch({
 	      actionType: TermConstants.TERM_RECEIVED,
 	      term: term
@@ -31190,9 +31196,7 @@
 	    e.preventDefault();
 	  },
 
-	  componentWillReceiveProps: function () {
-	    // console.log(this.props);
-	  },
+	  componentWillReceiveProps: function () {},
 
 	  showTerm: function (e) {
 	    e.preventDefault();
@@ -31228,7 +31232,7 @@
 	      if (this.props.term.image_url.slice(0, 4) === "http") {
 	        React.createElement('img', { className: 'termImg', src: this.props.term.image_url });
 	      }
-	      console.log(this.props);
+
 	      author = React.createElement(
 	        'a',
 	        { href: '#', onClick: this.showUserTerms },
@@ -31783,7 +31787,6 @@
 	    case CurrentUserConstants.RECEIVE_CURRENT_USER:
 	      _currentUserHasBeenFetched = true;
 	      _currentUser = { user: payload.currentUser };
-	      console.log("CurrentUserStore _currentUser", _currentUser);
 	      CurrentUserStore.__emitChange();
 	      break;
 	    case CurrentUserConstants.LOGOUT_CURRENT_USER:
@@ -31924,7 +31927,6 @@
 	    if (typeof this.history.state.term !== "undefined") {
 	      term = this.history.state.term;
 	      term.user_id = CurrentUserStore.currentUser().id;
-	      console.log(term);
 	      ApiUtil.createTerm(term);
 	    } else {
 	      SessionsApiUtil.login(credentials, function () {
@@ -31937,7 +31939,6 @@
 	    if (typeof this.history.state !== "undefined" && typeof this.history.state.term !== "undefined") {
 	      term = this.history.state.term;
 	      term.user_id = CurrentUserStore.currentUser().id;
-	      console.log("term", term);
 	      ApiUtil.createTerm(term);
 	    } else {
 	      ApiUtil.newUser(user, function () {
@@ -32043,7 +32044,6 @@
 	      data: credentials, // {email: "scott", password: "password"}
 	      success: function (currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
-	        console.log("currentUser at sessions login", currentUser);
 	        success && success();
 	      }, error: function (error) {
 	        ErrorActions.receiveErrors(error);
@@ -32071,7 +32071,6 @@
 	      type: 'GET',
 	      dataType: 'json',
 	      success: function (currentUser) {
-	        console.log("fetched user", currentUser);
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        cb && cb(currentUser);
 	      }, error: function (error) {
@@ -32121,11 +32120,7 @@
 	  mixins: [History],
 
 	  componentDidMount: function () {
-	    window.addEventListener('popstate', function (event) {
-	      console.log("history state event", event);
-
-	      // updateContent(event.state);
-	    });
+	    window.addEventListener('popstate', function (event) {});
 	  },
 
 	  submit: function (e) {
@@ -32373,7 +32368,6 @@
 	    if (CurrentUserStore.isLoggedIn()) {
 	      this.setState({ currentUser: CurrentUserStore.currentUser() });
 	    }
-	    console.log("state after new term change", this.state);
 	  },
 
 	  handleDefinitionChange: function (e) {
@@ -32393,13 +32387,11 @@
 	  },
 
 	  submit: function (e) {
-	    console.log("submitted new term user", this.state.currentUser);
 	    e.preventDefault();
 	    var term = $(e.currentTarget).serializeJSON();
-	    console.log("Submitted term", term);
 	    if (!!this.state.currentUser.user.id) {
 	      term.user_id = this.state.currentUser.user.id;
-	      console.log("new term submission term", term);
+
 	      ApiUtil.createTerm(term);
 	    } else {
 	      this.history.pushState(term, "/login");
@@ -32593,8 +32585,12 @@
 
 	  componentDidMount: function () {
 	    var id = parseInt(this.props.params.id);
-	    this.user_listener = UserStore.addListener(this._onChange);
-	    UserApiUtil.fetchUser(id);
+	    // this.user_listener = UserStore.addListener(this._onChange);
+	    this.term_listener = TermStore.addListener(this._onChange);
+	    if (TermStore.all().length === 0) {
+	      ApiUtil.fetchTerms();
+	    }
+	    this.setState({ terms: TermStore.findByAuthorId(id) });
 	  },
 
 	  componentWillUnmount: function () {
@@ -32603,12 +32599,10 @@
 
 	  _onChange: function () {
 	    var id = parseInt(this.props.params.id);
-	    var userTerms = UserStore.getAuthorTerms();
-	    this.setState({ user: userTerms.user, terms: userTerms.terms });
+	    this.setState({ terms: TermStore.findByAuthorId(id) });
 	  },
 
 	  render: function () {
-	    console.log("author render state", this.state);
 	    return React.createElement(
 	      'div',
 	      { className: 'author-terms group' },
@@ -33146,7 +33140,6 @@
 
 	  _onChange: function () {
 	    this.setState({ errors: ErrorStore.all() });
-	    console.log(ErrorStore.all());
 	  },
 
 	  render: function () {
