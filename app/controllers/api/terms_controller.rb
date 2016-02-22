@@ -6,7 +6,6 @@ class Api::TermsController < ApplicationController
 
   def create
     @term = Term.create(term_params)
-    byebug
     if @term.save
       render :show
     else

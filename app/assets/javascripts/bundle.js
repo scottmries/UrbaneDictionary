@@ -32826,21 +32826,22 @@
 	  },
 
 	  render: function () {
-	    // var logInStatus;
-	    // if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) { // if we're logged in....
-	    //   logInStatus =  (
-	    //     <div className="logInStatus">
-	    //       Logged in as { this.state.currentUser.user.user.username }<br />
-	    //       <button onClick={ this.logout }>LOG OUT</button>
-	    //     </div>
-	    //   );
-	    // } else {
-	    //   logInStatus = (
-	    //     <div className="logInStatus">
-	    //       <a href="#/login">Login</a>
-	    //     </div>
-	    //   );
-	    // }
+	    var logInStatus = "";
+	    if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) {
+	      // if we're logged in....
+	      logInStatus = React.createElement(
+	        'div',
+	        { className: 'logInStatus' },
+	        'Logged in as ',
+	        this.state.currentUser.user.user.username,
+	        React.createElement('br', null),
+	        React.createElement(
+	          'button',
+	          { onClick: this.logout },
+	          'LOG OUT'
+	        )
+	      );
+	    }
 	    var searchResultsList = "";
 	    if (this.state.searching) {
 	      searchResultsList = React.createElement(SearchResultsList, { results: this.state.searchResults });

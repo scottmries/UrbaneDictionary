@@ -52,21 +52,15 @@ var Header = React.createClass({
   },
 
   render: function () {
-    // var logInStatus;
-    // if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) { // if we're logged in....
-    //   logInStatus =  (
-    //     <div className="logInStatus">
-    //       Logged in as { this.state.currentUser.user.user.username }<br />
-    //       <button onClick={ this.logout }>LOG OUT</button>
-    //     </div>
-    //   );
-    // } else {
-    //   logInStatus = (
-    //     <div className="logInStatus">
-    //       <a href="#/login">Login</a>
-    //     </div>
-    //   );
-    // }
+    var logInStatus = "";
+    if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) { // if we're logged in....
+      logInStatus =  (
+        <div className="logInStatus">
+          Logged in as { this.state.currentUser.user.user.username }<br />
+          <button onClick={ this.logout }>LOG OUT</button>
+        </div>
+      );
+    }
     var searchResultsList = "";
     if(this.state.searching){
       searchResultsList = <SearchResultsList results={this.state.searchResults} />;
