@@ -31964,63 +31964,71 @@
 	      'section',
 	      { className: 'sign-in-modal' },
 	      React.createElement(
-	        Modal,
-	        { closeButton: 'show', closeHandler: this.props.closeHandler },
+	        'div',
+	        { className: 'form-inner' },
 	        React.createElement(
-	          'h2',
-	          null,
-	          'Say, Jim, fancy a sign in?'
-	        ),
-	        React.createElement(GuestSignIn, { submit: this.signup }),
-	        React.createElement(FacebookSignIn, null),
-	        React.createElement(TwitterSignIn, null),
-	        React.createElement(
-	          'form',
-	          { onSubmit: this.signin, className: 'sign-in' },
+	          Modal,
+	          { closeButton: 'show', closeHandler: this.props.closeHandler },
+	          React.createElement(
+	            'h2',
+	            null,
+	            'Say, Jim, fancy a sign in?'
+	          ),
 	          React.createElement(
 	            'div',
-	            { className: 'form-inner' },
-	            React.createElement(
-	              'label',
-	              null,
-	              'Username:',
-	              React.createElement('br', null),
-	              React.createElement('input', { type: 'text', name: 'user[username]', onChange: this.handleSignInUsernameChange, value: this.state.username })
-	            ),
-	            React.createElement('br', null),
-	            React.createElement(
-	              'label',
-	              null,
-	              'Password:',
-	              React.createElement('br', null),
-	              React.createElement('input', { type: 'password', name: 'user[password]', onChange: this.handleSignInPasswordChange, value: this.state.password })
-	            )
+	            { className: 'single-click-logins' },
+	            React.createElement(GuestSignIn, { submit: this.signup }),
+	            React.createElement(FacebookSignIn, null),
+	            React.createElement(TwitterSignIn, null)
 	          ),
-	          React.createElement('input', { type: 'submit', value: 'Sign In', className: 'sign-in-button' })
-	        ),
-	        React.createElement(
-	          'form',
-	          { onSubmit: this.signup, className: 'sign-up' },
 	          React.createElement(
-	            'div',
-	            { className: 'form-inner' },
+	            'form',
+	            { onSubmit: this.signin, className: 'sign-in' },
 	            React.createElement(
-	              'label',
-	              null,
-	              'Username:',
+	              'div',
+	              { className: 'form-inner' },
+	              React.createElement(
+	                'label',
+	                null,
+	                'Username:',
+	                React.createElement('br', null),
+	                React.createElement('input', { type: 'text', name: 'user[username]', onChange: this.handleSignInUsernameChange, value: this.state.username })
+	              ),
 	              React.createElement('br', null),
-	              React.createElement('input', { type: 'text', name: 'user[username]', onChange: this.handleSignUpUsernameChange, value: this.state.username })
+	              React.createElement(
+	                'label',
+	                null,
+	                'Password:',
+	                React.createElement('br', null),
+	                React.createElement('input', { type: 'password', name: 'user[password]', onChange: this.handleSignInPasswordChange, value: this.state.password })
+	              )
 	            ),
-	            React.createElement('br', null),
-	            React.createElement(
-	              'label',
-	              null,
-	              'Password:',
-	              React.createElement('br', null),
-	              React.createElement('input', { type: 'password', name: 'user[password]', onChange: this.handleSignUpPasswordChange, value: this.state.password })
-	            )
+	            React.createElement('input', { type: 'submit', value: 'Sign In', className: 'sign-in-button' })
 	          ),
-	          React.createElement('input', { type: 'submit', value: 'Sign Up', className: 'sign-up-button' })
+	          React.createElement(
+	            'form',
+	            { onSubmit: this.signup, className: 'sign-up' },
+	            React.createElement(
+	              'div',
+	              { className: 'form-inner' },
+	              React.createElement(
+	                'label',
+	                null,
+	                'Username:',
+	                React.createElement('br', null),
+	                React.createElement('input', { type: 'text', name: 'user[username]', onChange: this.handleSignUpUsernameChange, value: this.state.username })
+	              ),
+	              React.createElement('br', null),
+	              React.createElement(
+	                'label',
+	                null,
+	                'Password:',
+	                React.createElement('br', null),
+	                React.createElement('input', { type: 'password', name: 'user[password]', onChange: this.handleSignUpPasswordChange, value: this.state.password })
+	              )
+	            ),
+	            React.createElement('input', { type: 'submit', value: 'Sign Up', className: 'sign-up-button' })
+	          )
 	        )
 	      )
 	    );
@@ -32403,16 +32411,16 @@
 	      'section',
 	      { className: 'newTermForm' },
 	      React.createElement(
-	        'h2',
-	        null,
-	        'New Term'
-	      ),
-	      React.createElement(
 	        'form',
 	        { onSubmit: this.submit },
 	        React.createElement(
 	          'div',
 	          { className: 'form-inner' },
+	          React.createElement(
+	            'h2',
+	            null,
+	            'New Term'
+	          ),
 	          React.createElement(
 	            'label',
 	            null,
@@ -32746,9 +32754,13 @@
 	  displayName: 'Sidebar',
 
 
-	  onmouseover: function () {},
-
-	  onmouseout: function () {},
+	  getInitialState: function () {
+	    var gifClasses = ["cat", "bowie", "glider", "typing", "kermit"];
+	    // var gifClasses = ["cat"];
+	    return {
+	      gifClass: "gif " + gifClasses[Math.floor(Math.random() * gifClasses.length)]
+	    };
+	  },
 
 	  render: function () {
 	    return React.createElement(
@@ -32757,7 +32769,34 @@
 	      React.createElement(
 	        'h2',
 	        null,
-	        'Ye wright Urbane Dictionary.'
+	        React.createElement(
+	          'span',
+	          null,
+	          'Ye'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'span',
+	          null,
+	          'wright'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'span',
+	          null,
+	          'Urbane'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'span',
+	          null,
+	          'Dictionary.'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'gif' },
+	        React.createElement('div', { className: this.state.gifClass })
 	      ),
 	      this.props.children
 	    );
@@ -32827,7 +32866,7 @@
 
 	  render: function () {
 	    var logInStatus = "";
-	    if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) {
+	    if (CurrentUserStore.isLoggedIn()) {
 	      // if we're logged in....
 	      logInStatus = React.createElement(
 	        'div',
@@ -32909,7 +32948,8 @@
 	                )
 	              )
 	            )
-	          )
+	          ),
+	          logInStatus
 	        ),
 	        React.createElement(
 	          'nav',

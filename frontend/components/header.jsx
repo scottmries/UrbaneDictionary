@@ -53,7 +53,7 @@ var Header = React.createClass({
 
   render: function () {
     var logInStatus = "";
-    if (this.state.currentUser.user.user && CurrentUserStore.isLoggedIn()) { // if we're logged in....
+    if (CurrentUserStore.isLoggedIn()) { // if we're logged in....
       logInStatus =  (
         <div className="logInStatus">
           Logged in as { this.state.currentUser.user.user.username }<br />
@@ -87,6 +87,7 @@ var Header = React.createClass({
                 <a className="favorites"><li>Favorites</li></a>
               </ul>
             </nav>
+            {logInStatus}
           </div>
 
           <nav className="subnav">

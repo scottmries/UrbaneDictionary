@@ -46,6 +46,10 @@ body {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 header {
   background-color: #1D2439;
 }
@@ -67,6 +71,7 @@ header .subnav button {
 header .subnav button:hover,
 .sidebar .newTerm:hover {
   color: #05ff56;
+  cursor: pointer;
 }
 
 .header-inner {
@@ -100,9 +105,15 @@ main {
   padding: 30px;
   margin-bottom: 20px;
   box-shadow: 1px 1px 1px #aaa;
+  position: relative;
 }
 
 .sidebar h2 {
+  position: absolute;
+  z-index: 2;
+}
+
+.sidebar h2 span{
   text-transform: uppercase;
   background-color: #EFFF00;
   font-weight: bold;
@@ -110,7 +121,7 @@ main {
 }
 
 .sidebar .newTerm {
-  margin-top: 20px;
+  margin-top: 120px;
   background: #134FE6;
   width: 240px;
   height: 70px;
@@ -122,6 +133,56 @@ main {
   border: 1px solid black;
   box-shadow: 0px 2px 0px #000;
   font-size: 20px;
+}
+
+.gif {
+  border-radius: 50%;
+  height: 130px;
+  width: 130px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+.gif.cat {
+  background: center center no-repeat url("http://media1.giphy.com/media/uSXTDFYDWpelW/200_s.gif");
+}
+
+.gif.cat:hover {
+  background: center center no-repeat url("http://media1.giphy.com/media/uSXTDFYDWpelW/200.gif");
+}
+
+.gif.bowie {
+  background: center center no-repeat url("http://media3.giphy.com/media/yoJC2wQqhXpm97vdeg/200_s.gif");
+}
+
+.gif.bowie:hover {
+  background: center center no-repeat url("http://media3.giphy.com/media/yoJC2wQqhXpm97vdeg/200.gif");
+}
+
+.gif.glider {
+  background: center center no-repeat url("http://media1.giphy.com/media/E5OAxWp0bKVj2/200_s.gif");
+}
+
+.gif.glider:hover {
+  background: center center no-repeat url("http://media1.giphy.com/media/E5OAxWp0bKVj2/200.gif");
+}
+
+.gif.kermit {
+  background: center center no-repeat url("http://media0.giphy.com/media/DYH297XiCS2Ck/200_s.gif");
+}
+
+.gif.kermit:hover {
+  background: center center no-repeat url("http://media0.giphy.com/media/DYH297XiCS2Ck/200.gif");
+}
+
+.gif.typing {
+  background: center center no-repeat url("http://media0.giphy.com/media/JIX9t2j0ZTN9S/200_s.gif");
+}
+
+.gif.typing:hover {
+  background: center center no-repeat url("http://media0.giphy.com/media/JIX9t2j0ZTN9S/200.gif");
 }
 
 .newTerm span {
@@ -145,14 +206,13 @@ header .subnav button.signIn {
   height: 100vh;
   background-color: rgba(19, 79, 230, 0.5);
   padding-top: 30px;
-  z-index: 1;
+  z-index: 4;
 }
 
 .modal h2 {
   text-transform: uppercase;
   color: white;
   font-weight: bold;
-  border-bottom: 2px solid yellow;
   margin: auto;
   text-align: center;
   text-shadow: 2px 2px 2px black;
@@ -190,7 +250,7 @@ header .subnav button.signIn {
   color: white;
 }
 
-.modal form button, .modal form input[type="submit"] {
+/*.modal form button, .modal form input[type="submit"] {
   background: yellow;
   color: black;
   width: 100%;
@@ -201,10 +261,10 @@ header .subnav button.signIn {
   border-radius: 3px;
   border: 1px solid black;
   box-shadow: 0px 2px 0px #000;
-}
+}*/
 
 .modal form button:hover, .modal form input[type="submit"]:hover {
-  background: #134FE6;
+  background: ##1D2439;
   color: white;
 }
 
@@ -232,14 +292,24 @@ header .subnav button.signIn {
   font-size: 14px;
 }
 
+.file-uploads button:hover {
+  cursor: pointer;
+}
+
+.logInStatus {
+  float: right;
+  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-size: 12px;
+}
+
 .logInStatus button {
   background: #134FE6;
-  font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   font-weight: bold;
   padding: 5px;
   border-radius: 3px;
-  margin: 5px;
+  margin-top: 5px;
   color: white;
+  float: right
 }
 
 .logInStatus button:hover {
@@ -268,53 +338,55 @@ header .subnav button.signIn {
 }
 
 .sign-in {
-  width: 390px;
+  width: 260px;
   float: left;
 }
 
 .sign-in .form-inner, .sign-up .form-inner {
-  width: 390px;
+  width: 260px;
   margin-top: 0px;
 }
 
 .sign-up{
-  width: 390px;
+  width: 260px;
   float: right;
 }
 
-.modal form input[type="submit"].sign-in-button {
-  width: 390px;
+.single-click-logins {
+  width: 260px;
   float: left;
-  clear: left;
+  margin-right: 10px;
 }
 
-.modal form input[type="submit"].sign-up-button {
-  width: 390px;
-  float: right;
-  float: right;
+.single-click-logins form {
+  margin-bottom: 15px;
 }
 
-.third-party-login {
+.single-click-logins > form > input[type="submit"] {
+  margin: auto;
+}
+
+.single-click-logins > form > input[type="submit"]:hover {
+  background: #1D2439;
+}
+
+.single-click-logins > div {
+  margin-bottom: 15px;
+}
+
+.third-party-login, .single-click-logins input[type="submit"] {
   text-align: center;
   font-size: 24px;
   margin:15px auto;
   padding: 10px;
-  width: 390px;
-  background: #aaa;
+  width: 260px;
+  background: #134FE6;
   border-radius: 3px;
   box-shadow: 1px 1px 1px #000;
-}
-
-.facebook-login {
-  float:left;
-}
-
-.twitter-login {
-  float: right;
+  color: #1D2439;
 }
 
 .third-party-login a button,  i.fa.fa-facebook-official, i.fa.fa-twitter  {
-  color: #1D2439;
   font-size: 24px;
 }
 
@@ -325,9 +397,9 @@ header .subnav button.signIn {
 
 .third-party-login:hover a button,
 .third-party-login:hover i.fa.fa-facebook-official,
-.third-party-login:hover i.fa.fa-twitter {
+.third-party-login:hover i.fa.fa-twitter,
+.single-click-logins input[type="submit"] {
   color: white;
-
 }
 
 .facebook-like {
@@ -342,6 +414,7 @@ header .subnav button.signIn {
   text-align: center;
   font-size: 14px;
   font-weight: bold;
+
 }
 
 .opinion button .fa {
@@ -350,6 +423,7 @@ header .subnav button.signIn {
 
 .opinion button:hover {
   background: #05ff56;
+  cursor: pointer;
 }
 
 .opinion button.dislike {
@@ -476,4 +550,5 @@ nav.nav > ul > a > li {
 
 nav.nav > ul > a > li:hover {
   color: #EFFF00;
+  cursor: pointer;
 }

@@ -75,35 +75,40 @@ var SignInForm = React.createClass({
   render: function () {
     return (
       <section className="sign-in-modal">
-      <Modal closeButton="show" closeHandler={this.props.closeHandler}>
-        <h2>Say, Jim, fancy a sign in?</h2>
-        <GuestSignIn submit={this.signup}/>
-        <FacebookSignIn />
-        <TwitterSignIn />
-          <form onSubmit={this.signin} className="sign-in">
-            <div className="form-inner">
-                <label>Username:<br />
-                <input type="text" name="user[username]" onChange={this.handleSignInUsernameChange} value={this.state.username} />
-              </label><br />
-              <label>Password:<br />
-                <input type="password" name="user[password]" onChange={this.handleSignInPasswordChange} value={this.state.password} />
-              </label>
-            </div>
-            <input type="submit" value="Sign In" className="sign-in-button"/>
-          </form>
-          <form onSubmit={this.signup} className="sign-up">
-            <div className="form-inner">
-                <label>Username:<br />
-                <input type="text" name="user[username]" onChange={this.handleSignUpUsernameChange} value={this.state.username} />
-              </label>
-              <br />
-              <label>Password:<br />
-                <input type="password" name="user[password]" onChange={this.handleSignUpPasswordChange} value={this.state.password} />
-              </label>
-            </div>
-            <input type="submit" value="Sign Up" className="sign-up-button"/>
-          </form>
+        <div className="form-inner">
+
+                  <Modal closeButton="show" closeHandler={this.props.closeHandler}>
+                    <h2>Say, Jim, fancy a sign in?</h2>
+                    <div className="single-click-logins">
+                      <GuestSignIn submit={this.signup}/>
+                      <FacebookSignIn />
+                      <TwitterSignIn />
+                    </div>
+                    <form onSubmit={this.signin} className="sign-in">
+                      <div className="form-inner">
+                        <label>Username:<br />
+                        <input type="text" name="user[username]" onChange={this.handleSignInUsernameChange} value={this.state.username} />
+                      </label><br />
+                      <label>Password:<br />
+                      <input type="password" name="user[password]" onChange={this.handleSignInPasswordChange} value={this.state.password} />
+                    </label>
+                  </div>
+                  <input type="submit" value="Sign In" className="sign-in-button"/>
+                </form>
+                <form onSubmit={this.signup} className="sign-up">
+                  <div className="form-inner">
+                    <label>Username:<br />
+                    <input type="text" name="user[username]" onChange={this.handleSignUpUsernameChange} value={this.state.username} />
+                  </label>
+                  <br />
+                  <label>Password:<br />
+                  <input type="password" name="user[password]" onChange={this.handleSignUpPasswordChange} value={this.state.password} />
+                </label>
+              </div>
+              <input type="submit" value="Sign Up" className="sign-up-button"/>
+            </form>
           </Modal>
+        </div>
       </section>
     );
   }

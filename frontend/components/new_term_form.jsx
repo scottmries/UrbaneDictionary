@@ -62,9 +62,9 @@ var NewTermForm = React.createClass({
 
   render: function () {
     return (<section className="newTermForm">
-      <h2>New Term</h2>
       <form onSubmit={this.submit}>
         <div className="form-inner">
+          <h2>New Term</h2>
             <label>Term
             <input type="text" onChange={this.handleTermChange} name="term"></input>
           </label>
