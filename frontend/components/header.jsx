@@ -70,6 +70,24 @@ var Header = React.createClass({
     var alphabetMenu = alphabet.map( function (letter){
       return <li data-letter={letter} key={letter}>{letter}</li>;
     });
+    var navbar = "";
+    if (false){
+      navbar = function (){
+        return (
+
+          <nav className="nav">
+            <ul className="menu">
+              <a className="browse">
+                <li>Browse</li>
+                <nav className="alphabetMenu group"><ul>{alphabetMenu}</ul></nav>
+              </a>
+              <a className="vote"><li>Vote</li></a>
+              <a className="favorites"><li>Favorites</li></a>
+            </ul>
+          </nav>
+        );
+      }();
+    }
 
     return (
 
@@ -77,16 +95,7 @@ var Header = React.createClass({
         <div className="header-inner">
           <div className="header-top group">
             <Logo />
-            <nav className="nav">
-              <ul className="menu">
-                <a className="browse">
-                  <li>Browse</li>
-                  <nav className="alphabetMenu group"><ul>{alphabetMenu}</ul></nav>
-                </a>
-                <a className="vote"><li>Vote</li></a>
-                <a className="favorites"><li>Favorites</li></a>
-              </ul>
-            </nav>
+            {navbar}
             {logInStatus}
           </div>
 

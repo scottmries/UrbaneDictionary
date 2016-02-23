@@ -32894,6 +32894,55 @@
 	        letter
 	      );
 	    });
+	    var navbar = "";
+	    if (false) {
+	      navbar = function () {
+	        return React.createElement(
+	          'nav',
+	          { className: 'nav' },
+	          React.createElement(
+	            'ul',
+	            { className: 'menu' },
+	            React.createElement(
+	              'a',
+	              { className: 'browse' },
+	              React.createElement(
+	                'li',
+	                null,
+	                'Browse'
+	              ),
+	              React.createElement(
+	                'nav',
+	                { className: 'alphabetMenu group' },
+	                React.createElement(
+	                  'ul',
+	                  null,
+	                  alphabetMenu
+	                )
+	              )
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'vote' },
+	              React.createElement(
+	                'li',
+	                null,
+	                'Vote'
+	              )
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'favorites' },
+	              React.createElement(
+	                'li',
+	                null,
+	                'Favorites'
+	              )
+	            )
+	          )
+	        );
+	      }();
+	    }
 
 	    return React.createElement(
 	      'header',
@@ -32905,50 +32954,7 @@
 	          'div',
 	          { className: 'header-top group' },
 	          React.createElement(Logo, null),
-	          React.createElement(
-	            'nav',
-	            { className: 'nav' },
-	            React.createElement(
-	              'ul',
-	              { className: 'menu' },
-	              React.createElement(
-	                'a',
-	                { className: 'browse' },
-	                React.createElement(
-	                  'li',
-	                  null,
-	                  'Browse'
-	                ),
-	                React.createElement(
-	                  'nav',
-	                  { className: 'alphabetMenu group' },
-	                  React.createElement(
-	                    'ul',
-	                    null,
-	                    alphabetMenu
-	                  )
-	                )
-	              ),
-	              React.createElement(
-	                'a',
-	                { className: 'vote' },
-	                React.createElement(
-	                  'li',
-	                  null,
-	                  'Vote'
-	                )
-	              ),
-	              React.createElement(
-	                'a',
-	                { className: 'favorites' },
-	                React.createElement(
-	                  'li',
-	                  null,
-	                  'Favorites'
-	                )
-	              )
-	            )
-	          ),
+	          navbar,
 	          logInStatus
 	        ),
 	        React.createElement(
