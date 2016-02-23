@@ -264,7 +264,7 @@ header .subnav button.signIn {
 }*/
 
 .modal form button:hover, .modal form input[type="submit"]:hover {
-  background: ##1D2439;
+  background: #1D2439;
   color: white;
 }
 
@@ -373,6 +373,7 @@ header .subnav button.signIn {
 .single-click-logins > div {
   margin-bottom: 15px;
 }
+
 
 .third-party-login, .single-click-logins input[type="submit"] {
   text-align: center;
