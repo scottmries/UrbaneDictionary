@@ -32845,7 +32845,6 @@
 	  },
 
 	  _onSearch: function () {
-	    console.log(SearchResultsStore.all());
 	    this.setState({ searchResults: SearchResultsStore.all() });
 	  },
 
@@ -32972,39 +32971,43 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var History = __webpack_require__(159).History;
 
 	var SearchResultsList = React.createClass({
-	  displayName: "SearchResultsList",
+	  displayName: 'SearchResultsList',
 
+
+	  mixins: [History],
 
 	  onClick: function (e) {
-	    console.log("clicked a search result");
-	    e.preventDefault();
+	    console.log(e);
+	    // this.history.pushState({}, 'terms/new');
+	    // e.preventDefault();
 	  },
 
 	  render: function () {
 	    var resultsContent = React.createElement(
-	      "li",
+	      'li',
 	      null,
-	      "No results"
+	      'No results'
 	    );
 	    if (this.props.results.length > 0) {
 	      resultsContent = this.props.results.map(function (result) {
 	        var termUrl = "/terms/" + result.searchable_id;
 	        return React.createElement(
-	          "a",
-	          { href: termUrl, onClick: this.onClick, key: result.searchable_id },
+	          'a',
+	          { href: termUrl, onclick: this.onClick(result.searchable_id), key: result.searchable_id },
 	          React.createElement(
-	            "li",
+	            'li',
 	            null,
 	            result.content
 	          )
 	        );
-	      });
+	      }.bind(this));
 	    }
 	    return React.createElement(
-	      "div",
-	      { className: "search-results-list" },
+	      'div',
+	      { className: 'search-results-list' },
 	      resultsContent
 	    );
 	  }

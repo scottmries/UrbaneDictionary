@@ -1,10 +1,14 @@
 var React = require('react');
+var History = require('react-router').History;
 
 var SearchResultsList = React.createClass ( {
 
+  mixins: [History],
+
   onClick: function (e) {
-    console.log("clicked a search result");
-    e.preventDefault();
+    console.log(e);
+    // this.history.pushState({}, 'terms/new');
+    // e.preventDefault();
   },
 
   render: function () {
@@ -13,9 +17,9 @@ var SearchResultsList = React.createClass ( {
       resultsContent = this.props.results.map (function (result){
         var termUrl = "/terms/" + result.searchable_id;
         return (
-          <a href={termUrl} onClick={this.onClick} key={result.searchable_id}><li>{result.content}</li></a>
+          <a href={termUrl} onclick={this.onClick(result.searchable_id)} key={result.searchable_id}><li>{result.content}</li></a>
         );
-      });
+      }.bind(this));
     }
     return (
       <div className="search-results-list">

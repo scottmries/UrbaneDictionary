@@ -32,7 +32,6 @@ var Header = React.createClass({
   },
 
   _onSearch: function () {
-    console.log(SearchResultsStore.all());
     this.setState({searchResults: SearchResultsStore.all()});
   },
 
