@@ -32845,6 +32845,7 @@
 	  },
 
 	  _onSearch: function () {
+	    console.log(SearchResultsStore.all());
 	    this.setState({ searchResults: SearchResultsStore.all() });
 	  },
 
@@ -32989,14 +32990,14 @@
 	    );
 	    if (this.props.results.length > 0) {
 	      resultsContent = this.props.results.map(function (result) {
-	        var termUrl = "/terms/" + result.id;
+	        var termUrl = "/terms/" + result.searchable_id;
 	        return React.createElement(
 	          "a",
-	          { href: termUrl, onClick: this.onClick, key: "result.term.id" },
+	          { href: termUrl, onClick: this.onClick, key: result.searchable_id },
 	          React.createElement(
 	            "li",
 	            null,
-	            result.term
+	            result.content
 	          )
 	        );
 	      });
