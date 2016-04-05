@@ -24996,16 +24996,16 @@
 	    });
 	  },
 
-	  deleteTerm: function (id, currentUserId) {
+	  deleteTerm: function (id) {
 	    $.ajax({
-	      type: 'destroy',
+	      type: 'delete',
 	      dataType: 'json',
 	      url: 'api/terms/' + id,
-	      data: { currentUserId: currentUserId },
 	      success: function (term) {
 	        ApiUtil.fetchTerms();
 	      },
 	      error: function (error) {
+	        console.log(error);
 	        ErrorActions.receiveErrors(error);
 	      }
 	    });
@@ -31934,6 +31934,8 @@
 	var TermHeader = __webpack_require__(249);
 	var YoutubeVideo = __webpack_require__(251);
 	var Opinion = __webpack_require__(252);
+	var CurrentUserStore = __webpack_require__(253);
+	var DeleteButton = __webpack_require__(283);
 
 	var TermListItem = React.createClass({
 	  displayName: 'TermListItem',
@@ -31945,7 +31947,23 @@
 	    e.preventDefault();
 	  },
 
+	  componentWillMount: function () {
+	    this.setState({});
+	  },
+
 	  componentWillReceiveProps: function () {},
+
+	  getCurrentUser: function () {
+	    this.setState({ currentUser: { user: CurrentUserStore.currentUser() } });
+	  },
+
+	  componentDidMount: function () {
+	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
+	  },
+
+	  componentWillUnmount: function () {
+	    this.currentUserListener.remove();
+	  },
 
 	  showTerm: function (e) {
 	    e.preventDefault();
@@ -32028,7 +32046,8 @@
 	      React.createElement(FileUploads, { term: this.props.term }),
 	      image,
 	      youtubeVideo,
-	      React.createElement(Opinion, { term: this.props.term })
+	      React.createElement(Opinion, { term: this.props.term }),
+	      React.createElement(DeleteButton, { term: this.props.term, currentUser: this.state.currentUser })
 	    );
 	  }
 	});
@@ -32673,7 +32692,7 @@
 	  signin: function (e) {
 	    e.preventDefault();
 	    var credentials = $(e.currentTarget).serializeJSON().user;
-	    if (typeof this.history.state.term !== "undefined") {
+	    if (typeof this.history.state !== "undefined" && typeof this.history.state.term !== "undefined") {
 	      term = this.history.state.term;
 	      term.user_id = CurrentUserStore.currentUser().id;
 	      ApiUtil.createTerm(term);
@@ -33213,6 +33232,7 @@
 	var FileUploads = __webpack_require__(244);
 	var Opinion = __webpack_require__(252);
 	var YoutubeVideo = __webpack_require__(251);
+	var DeleteButton = __webpack_require__(283);
 
 	var SingleTerm = React.createClass({
 	  displayName: 'SingleTerm',
@@ -33235,6 +33255,7 @@
 	  componentWillMount: function () {
 	    ApiUtil.fetchSingleTerm(this.getId());
 	    TermStore.addListener(this._onChange);
+	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
 	  },
 
 	  componentDidMount: function () {
@@ -33292,7 +33313,7 @@
 	      term = this.state.term.term;
 	      definition = this.state.term.definition;
 	    }
-	    if (this.currentUser.user.id === this.state.term.user.id) {
+	    if (typeof this.state.currentUser !== 'undefined' && typeof this.state.term !== "undefined" && this.state.currentUser.user.id === this.state.term.user.id) {
 	      deleteButton = React.createElement(
 	        'a',
 	        { href: '#', onClick: this.deleteTerm },
@@ -33335,7 +33356,8 @@
 	      React.createElement(FileUploads, { term: this.state.term }),
 	      image,
 	      youtubeVideo,
-	      React.createElement(Opinion, { term: this.state.term })
+	      React.createElement(Opinion, { term: this.state.term }),
+	      React.createElement(DeleteButton, { term: this.props, currentUser: this.state.currentUser.user.id })
 	    );
 	  }
 	});
@@ -34012,6 +34034,41 @@
 	};
 
 	module.exports = ErrorStore;
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(217);
+
+	var DeleteButton = React.createClass({
+	  displayName: 'DeleteButton',
+
+
+	  deleteTerm: function () {
+	    ApiUtil.deleteTerm(this.props.term.id, this.props.currentUser.user.user.id);
+	  },
+
+	  render: function () {
+	    var deleteButton = "";
+	    if (typeof this.props.currentUser !== 'undefined' && this.props.currentUser.user.user.id === this.props.term.user.id) {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'a',
+	          { className: 'delete_button', onClick: this.deleteTerm },
+	          'Delete this term.'
+	        )
+	      );
+	    } else {
+	      return React.createElement('div', null);
+	    }
+	  }
+	});
+
+	module.exports = DeleteButton;
 
 /***/ }
 /******/ ]);

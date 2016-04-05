@@ -70,16 +70,16 @@ ApiUtil = {
     });
   },
 
-  deleteTerm: function (id, currentUserId) {
+  deleteTerm: function (id) {
     $.ajax({
-      type: 'destroy',
+      type: 'delete',
       dataType: 'json',
       url: 'api/terms/' + id,
-      data: {currentUserId: currentUserId},
       success: function (term) {
         ApiUtil.fetchTerms();
       },
       error: function (error) {
+        console.log(error);
          ErrorActions.receiveErrors(error);
       }
     });

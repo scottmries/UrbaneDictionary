@@ -6,6 +6,7 @@ var TermHeader = require('./term_header');
 var FileUploads = require('./file_uploads');
 var Opinion = require('./opinion');
 var YoutubeVideo = require('./youtube_video');
+var DeleteButton = require('./delete_button');
 
 var SingleTerm = React.createClass({
 
@@ -26,7 +27,7 @@ var SingleTerm = React.createClass({
   componentWillMount: function () {
     ApiUtil.fetchSingleTerm(this.getId());
     TermStore.addListener(this._onChange);
-
+    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
   },
 
   componentDidMount: function () {
@@ -75,7 +76,7 @@ var SingleTerm = React.createClass({
       term = this.state.term.term;
       definition = this.state.term.definition;
     }
-    if (this.currentUser.user.id === this.state.term.user.id){
+    if (typeof this.state.currentUser !== 'undefined' && typeof this.state.term !== "undefined" && this.state.currentUser.user.id === this.state.term.user.id){
       deleteButton = <a href="#" onClick={this.deleteTerm}>Delete this term.</a>
     }
     var shortMonth = months[date.getMonth()].slice(0,3);
@@ -97,6 +98,7 @@ var SingleTerm = React.createClass({
         {image}
         {youtubeVideo}
         <Opinion term={this.state.term}/>
+        <DeleteButton term={this.props} currentUser={this.state.currentUser.user.id} />
       </article>
     );
   }

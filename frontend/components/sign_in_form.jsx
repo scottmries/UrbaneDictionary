@@ -35,7 +35,8 @@ var SignInForm = React.createClass({
   signin: function (e) {
     e.preventDefault();
     var credentials = $(e.currentTarget).serializeJSON().user;
-    if(typeof this.history.state.term !== "undefined"){
+    if(typeof this.history.state !== "undefined" &&
+      typeof this.history.state.term !== "undefined"){
       term = this.history.state.term;
       term.user_id = CurrentUserStore.currentUser().id;
       ApiUtil.createTerm(term);
@@ -48,7 +49,8 @@ var SignInForm = React.createClass({
   },
 
   handleSubmittedTerm: function (user) {
-    if(typeof this.history.state !== "undefined" && typeof this.history.state.term !== "undefined"){
+    if(typeof this.history.state !== "undefined" &&
+      typeof this.history.state.term !== "undefined"){
       term = this.history.state.term;
       term.user_id = CurrentUserStore.currentUser().id;
       ApiUtil.createTerm(term);

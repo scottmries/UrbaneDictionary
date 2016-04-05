@@ -5,6 +5,8 @@ var FileUploads = require('./file_uploads');
 var TermHeader = require('./term_header');
 var YoutubeVideo = require('./youtube_video');
 var Opinion = require('./opinion');
+var CurrentUserStore = require('../stores/current_user_store');
+var DeleteButton = require('./delete_button');
 
 var TermListItem = React.createClass({
 
@@ -14,7 +16,23 @@ var TermListItem = React.createClass({
     e.preventDefault();
   },
 
+  componentWillMount: function () {
+    this.setState({});
+  },
+
   componentWillReceiveProps: function () {
+  },
+
+  getCurrentUser: function () {
+    this.setState({currentUser: {user: CurrentUserStore.currentUser()}});
+  },
+
+  componentDidMount: function () {
+    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
+  },
+
+  componentWillUnmount: function () {
+    this.currentUserListener.remove();
   },
 
   showTerm: function (e) {
@@ -72,6 +90,7 @@ var TermListItem = React.createClass({
         {image}
         {youtubeVideo}
         <Opinion term={this.props.term}/>
+        <DeleteButton term={this.props.term} currentUser={this.state.currentUser} />
       </article>
     );
   }

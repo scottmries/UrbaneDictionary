@@ -1,4 +1,7 @@
 class Api::TermsController < ApplicationController
+
+  before_action :current_user_has_term, only: :destroy
+
   def new
     @term = Term.new
     render new
@@ -33,17 +36,19 @@ class Api::TermsController < ApplicationController
   end
 
   def destroy
-    @term = Term.find(term_params[:id])
-    byebug
-    # destroy it if the currentUser is the term's user:
+    @term = Term.find(params[:id])
     @term.destroy
-    render :show
+    render :index
   end
 
   private
 
   def term_params
     params.require(:term).permit(:term, :definition, :usage, :user_id, :image, :video_url, :image_url)
+  end
+
+  def current_user_has_term
+    redirect_to :root unless current_user.id == Term.find(params[:id]).user.id
   end
 
 end
