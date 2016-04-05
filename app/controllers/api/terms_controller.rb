@@ -34,6 +34,8 @@ class Api::TermsController < ApplicationController
 
   def destroy
     @term = Term.find(term_params[:id])
+    byebug
+    # destroy it if the currentUser is the term's user:
     @term.destroy
     render :show
   end

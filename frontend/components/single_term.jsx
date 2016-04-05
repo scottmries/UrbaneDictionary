@@ -1,5 +1,6 @@
 var React = require('react');
 var TermStore = require('../stores/term');
+var CurrentUserStore = require('../stores/current_user_store');
 var History = require('react-router').History;
 var TermHeader = require('./term_header');
 var FileUploads = require('./file_uploads');
@@ -18,20 +19,34 @@ var SingleTerm = React.createClass({
     return id;
   },
 
+  getCurrentUser: function () {
+    this.setState({currentUser: {user: CurrentUserStore.currentUser()}});
+  },
+
   componentWillMount: function () {
     ApiUtil.fetchSingleTerm(this.getId());
     TermStore.addListener(this._onChange);
+
   },
 
   componentDidMount: function () {
     var id = this.getId();
+    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
     // ApiUtil.fetchSingleTerm(id);
   },
 
+  componentWillUnmount: function () {
+    this.currentUserListener.remove();
+  },
 
   _onChange: function () {
     var id = this.getId();
     this.setState({ term: TermStore.findById(id) });
+  },
+
+  deleteTerm: function (e) {
+    e.preventDefault();
+    ApiUtil.deleteTerm(this.getId());
   },
 
   render: function () {
@@ -44,6 +59,7 @@ var SingleTerm = React.createClass({
     var image = <div></div>;
     var term = "";
     var definition = "";
+    var deleteButton = "";
     if (typeof this.state.term !== "undefined"){
       date = new Date(this.state.term.created_at);
       if (typeof this.state.term.video_url === "string" && this.state.term.video_url.length > 7){
@@ -58,6 +74,9 @@ var SingleTerm = React.createClass({
       author = <a href="#" onClick={this.showUserTerms}>  {this.state.term.user.username} </a>;
       term = this.state.term.term;
       definition = this.state.term.definition;
+    }
+    if (this.currentUser.user.id === this.state.term.user.id){
+      deleteButton = <a href="#" onClick={this.deleteTerm}>Delete this term.</a>
     }
     var shortMonth = months[date.getMonth()].slice(0,3);
     var dateString = shortMonth + " " + date.getDate();

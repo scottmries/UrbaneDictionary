@@ -70,6 +70,21 @@ ApiUtil = {
     });
   },
 
+  deleteTerm: function (id, currentUserId) {
+    $.ajax({
+      type: 'destroy',
+      dataType: 'json',
+      url: 'api/terms/' + id,
+      data: {currentUserId: currentUserId},
+      success: function (term) {
+        ApiUtil.fetchTerms();
+      },
+      error: function (error) {
+         ErrorActions.receiveErrors(error);
+      }
+    });
+  },
+
   addVideoURL: function (term, video_url, cb) {
     $.ajax({
       type: 'put',
