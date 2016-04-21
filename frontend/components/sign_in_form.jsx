@@ -1,16 +1,14 @@
 var React = require('react');
 var SessionsApiUtil = require('./../util/sessions_api_util');
-var History = require('react-router').History;
 var Modal = require('./modal');
 var GuestSignIn = require('./guest_sign_in');
 var FacebookSignIn = require('./facebook_sign_in');
 var TwitterSignIn = require('./twitter_sign_in');
 var SignUpForm = require('./sign_up_form');
 var CurrentUserStore = require('./../stores/current_user_store');
+import { browserHistory } from "react-router";
 
 var SignInForm = React.createClass({
-
-  mixins: [History],
 
   getInitialState: function () {
     return { signInUsername: "", signUpUsername: "", signInPassword: "", signUpPassword: "" };
@@ -35,28 +33,28 @@ var SignInForm = React.createClass({
   signin: function (e) {
     e.preventDefault();
     var credentials = $(e.currentTarget).serializeJSON().user;
-    if(typeof this.history.state !== "undefined" &&
-      typeof this.history.state.term !== "undefined"){
-      term = this.history.state.term;
+    if(typeof browserHistory.state !== "undefined" &&
+      typeof browserHistory.state.term !== "undefined"){
+      term = browserHistory.state.term;
       term.user_id = CurrentUserStore.currentUser().id;
       ApiUtil.createTerm(term);
     } else{
       SessionsApiUtil.login(credentials, function () {
-        this.history.push({}, "/");
+        browserHistory.push({}, "/");
       }.bind(this));
     }
 
   },
 
   handleSubmittedTerm: function (user) {
-    if(typeof this.history.state !== "undefined" &&
-      typeof this.history.state.term !== "undefined"){
-      term = this.history.state.term;
+    if(typeof browserHistory.state !== "undefined" &&
+      typeof browserHistory.state.term !== "undefined"){
+      term = browserHistory.state.term;
       term.user_id = CurrentUserStore.currentUser().id;
       ApiUtil.createTerm(term);
     } else {
       ApiUtil.newUser(user, function () {
-        this.history.push({}, "/");
+        browserHistory.push({}, "/");
       }.bind(this));
     }
   },

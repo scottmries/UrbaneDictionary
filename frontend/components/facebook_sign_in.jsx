@@ -1,9 +1,7 @@
 var React = require('react');
 var ApiUtil = require('./../util/api_util.js');
-var History = require('react-router').History;
 
 var FacebookSignIn = React.createClass({
-  mixins: [History],
 
   submit: function (e) {
     e.preventDefault();

@@ -1,13 +1,11 @@
 var React = require('react');
-var History = require('react-router').History;
+import { browserHistory } from "react-router";
 
 var Logo = React.createClass({
 
-  mixins: [History],
-
   clickHandler: function (e) {
     e.preventDefault();
-    this.history.push({}, "/");
+    browserHistory.push({}, "/");
   },
 
   render: function () {

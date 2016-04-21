@@ -8,10 +8,9 @@ var YoutubeVideo = require('./youtube_video');
 var Opinion = require('./opinion');
 var CurrentUserStore = require('../stores/current_user_store');
 var DeleteButton = require('./delete_button');
+import { browserHistory } from "react-router";
 
 var TermListItem = React.createClass({
-
-  // mixins: [History],
 
   // contextTypes: {
   //   router: Router.PropTypes.router.isRequired
@@ -46,12 +45,12 @@ var TermListItem = React.createClass({
 
   showTerm: function (e) {
     e.preventDefault();
-    this.history.push(this.state, "/terms/" + this.props.term.id);
+    browserHistory.push(this.state, "/terms/" + this.props.term.id);
   },
 
   showUserTerms: function (e) {
     e.preventDefault();
-    this.history.push(this.state, "/users/" + this.props.term.user_id);
+    browserHistory.push(this.state, "/users/" + this.props.term.user_id);
   },
 
   render: function () {

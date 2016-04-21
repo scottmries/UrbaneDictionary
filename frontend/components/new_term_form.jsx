@@ -2,11 +2,9 @@ var React = require('react');
 var CurrentUserStore = require('./../stores/current_user_store');
 var ApiUtil = require('./../util/api_util');
 var SessionsApiUtil = require('./../util/sessions_api_util');
-var History = require('react-router').History;
+import { browserHistory } from "react-router";
 
-var NewTermForm = React.createClass({
-
-  mixins: [History],
+const NewTermForm = React.createClass({
 
   getInitialState: function () {
     return ( {
@@ -56,7 +54,7 @@ var NewTermForm = React.createClass({
 
       ApiUtil.createTerm(term);
     } else {
-      this.history.push(term, "/login");
+      browserHistory.push(term, "/login");
     }
   },
 

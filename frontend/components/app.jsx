@@ -14,12 +14,14 @@ var CurrentUserStore = require('./../stores/current_user_store');
 var TermStore = require('./../stores/term');
 var SessionsApiUtil = require('./../util/sessions_api_util');
 var Spinner = require('./spinner');
-var History = require('react-router').History;
+// var History = require('react-router').History;
 var ErrorComponent = require('./error');
 
-var App = React.createClass({
+// import { browserHistory } from "react-router";
 
-  mixins: [History],
+const App = React.createClass({
+
+  // mixins: [History],
 
   componentDidMount: function () {
     // CurrentUserStore.addListener(this.forceUpdate.bind(this));

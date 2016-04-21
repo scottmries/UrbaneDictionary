@@ -1,9 +1,8 @@
 var React = require('react');
 var ApiUtil = require('./../util/api_util.js');
-var History = require('react-router').History;
+import { browserHistory } from "react-router";
 
 var GuestSignIn = React.createClass({
-  mixins: [History],
 
   componentDidMount: function () {
     window.addEventListener('popstate', function(event) {
@@ -14,7 +13,7 @@ var GuestSignIn = React.createClass({
     e.preventDefault();
     var newUser = $(e.currentTarget).serializeJSON().user;
     ApiUtil.newUser(newUser, function () {
-      this.history.push({}, "/");
+      browserHistory.push({}, "/");
     }.bind(this));
   },
 

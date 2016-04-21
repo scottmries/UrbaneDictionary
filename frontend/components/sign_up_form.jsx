@@ -2,11 +2,9 @@ var React = require('react');
 var Modal = require('./modal');
 var ApiUtil = require('./../util/api_util');
 var SessionsApiUtil = require('./../util/sessions_api_util');
-var History = require('react-router').History;
+import { browserHistory } from "react-router";
 
 var SignUpForm = React.createClass({
-
-  mixins: [History],
 
   getInitialState: function () {
     return { username: "", password: "" };
@@ -24,10 +22,10 @@ var SignUpForm = React.createClass({
     e.preventDefault();
     var user = $(e.currentTarget).serializeJSON().user;
     // SessionsApiUtil.login(credentials, function () {
-    //   this.history.push({}, "/");
+    //   browserHistory.push({}, "/");
     // }.bind(this));
     ApiUtil.newUser(user, function () {
-      this.history.push({}, "/");
+      browserHistory.push({}, "/");
     }.bind(this));
   },
 

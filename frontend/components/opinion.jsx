@@ -1,11 +1,9 @@
 var React = require('react');
 var TermStore = require('./../stores/term');
 var CurrentUserStore = require('./../stores/current_user_store');
-var History = require('react-router').History;
+import { browserHistory } from "react-router";
 
-var Opinion = React.createClass({
-
-  mixins: [History],
+const Opinion = React.createClass({
 
   getInitialState: function () {
     return {
@@ -50,14 +48,14 @@ var Opinion = React.createClass({
     e.preventDefault();
     this.setState({ currentUserOpined: false });
     ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, false);
-    this.history.push({}, "/");
+    browserHistory.push({}, "/");
   },
 
   handleLike: function (e) {
     e.preventDefault();
     this.setState({ currentUserOpined: true });
     ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, true);
-    this.history.push({}, "/");
+    browserHistory.push({}, "/");
   },
 
   render: function() {

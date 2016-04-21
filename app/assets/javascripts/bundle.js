@@ -24789,14 +24789,16 @@
 	var TermStore = __webpack_require__(226);
 	var SessionsApiUtil = __webpack_require__(260);
 	var Spinner = __webpack_require__(281);
-	var History = __webpack_require__(1).History;
+	// var History = require('react-router').History;
 	var ErrorComponent = __webpack_require__(282);
+
+	// import { browserHistory } from "react-router";
 
 	var App = React.createClass({
 	  displayName: 'App',
 
 
-	  mixins: [History],
+	  // mixins: [History],
 
 	  componentDidMount: function componentDidMount() {
 	    // CurrentUserStore.addListener(this.forceUpdate.bind(this));
@@ -31959,6 +31961,8 @@
 
 	'use strict';
 
+	var _reactRouter = __webpack_require__(1);
+
 	var React = __webpack_require__(24);
 	var Router = __webpack_require__(1);
 	var TermStore = __webpack_require__(226);
@@ -31970,11 +31974,10 @@
 	var CurrentUserStore = __webpack_require__(253);
 	var DeleteButton = __webpack_require__(255);
 
+
 	var TermListItem = React.createClass({
 	  displayName: 'TermListItem',
 
-
-	  // mixins: [History],
 
 	  // contextTypes: {
 	  //   router: Router.PropTypes.router.isRequired
@@ -32008,12 +32011,12 @@
 
 	  showTerm: function showTerm(e) {
 	    e.preventDefault();
-	    this.history.push(this.state, "/terms/" + this.props.term.id);
+	    _reactRouter.browserHistory.push(this.state, "/terms/" + this.props.term.id);
 	  },
 
 	  showUserTerms: function showUserTerms(e) {
 	    e.preventDefault();
-	    this.history.push(this.state, "/users/" + this.props.term.user_id);
+	    _reactRouter.browserHistory.push(this.state, "/users/" + this.props.term.user_id);
 	  },
 
 	  render: function render() {
@@ -32495,16 +32498,16 @@
 
 	'use strict';
 
+	var _reactRouter = __webpack_require__(1);
+
 	var React = __webpack_require__(24);
 	var TermStore = __webpack_require__(226);
 	var CurrentUserStore = __webpack_require__(253);
-	var History = __webpack_require__(1).History;
+
 
 	var Opinion = React.createClass({
 	  displayName: 'Opinion',
 
-
-	  mixins: [History],
 
 	  getInitialState: function getInitialState() {
 	    return {
@@ -32549,14 +32552,14 @@
 	    e.preventDefault();
 	    this.setState({ currentUserOpined: false });
 	    ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, false);
-	    this.history.push({}, "/");
+	    _reactRouter.browserHistory.push({}, "/");
 	  },
 
 	  handleLike: function handleLike(e) {
 	    e.preventDefault();
 	    this.setState({ currentUserOpined: true });
 	    ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, true);
-	    this.history.push({}, "/");
+	    _reactRouter.browserHistory.push({}, "/");
 	  },
 
 	  render: function render() {
@@ -32761,9 +32764,10 @@
 
 	'use strict';
 
+	var _reactRouter = __webpack_require__(1);
+
 	var React = __webpack_require__(24);
 	var SessionsApiUtil = __webpack_require__(260);
-	var History = __webpack_require__(1).History;
 	var Modal = __webpack_require__(248);
 	var GuestSignIn = __webpack_require__(262);
 	var FacebookSignIn = __webpack_require__(263);
@@ -32771,11 +32775,10 @@
 	var SignUpForm = __webpack_require__(265);
 	var CurrentUserStore = __webpack_require__(253);
 
+
 	var SignInForm = React.createClass({
 	  displayName: 'SignInForm',
 
-
-	  mixins: [History],
 
 	  getInitialState: function getInitialState() {
 	    return { signInUsername: "", signUpUsername: "", signInPassword: "", signUpPassword: "" };
@@ -32800,25 +32803,25 @@
 	  signin: function signin(e) {
 	    e.preventDefault();
 	    var credentials = $(e.currentTarget).serializeJSON().user;
-	    if (typeof this.history.state !== "undefined" && typeof this.history.state.term !== "undefined") {
-	      term = this.history.state.term;
+	    if (typeof _reactRouter.browserHistory.state !== "undefined" && typeof _reactRouter.browserHistory.state.term !== "undefined") {
+	      term = _reactRouter.browserHistory.state.term;
 	      term.user_id = CurrentUserStore.currentUser().id;
 	      ApiUtil.createTerm(term);
 	    } else {
 	      SessionsApiUtil.login(credentials, function () {
-	        this.history.push({}, "/");
+	        _reactRouter.browserHistory.push({}, "/");
 	      }.bind(this));
 	    }
 	  },
 
 	  handleSubmittedTerm: function handleSubmittedTerm(user) {
-	    if (typeof this.history.state !== "undefined" && typeof this.history.state.term !== "undefined") {
-	      term = this.history.state.term;
+	    if (typeof _reactRouter.browserHistory.state !== "undefined" && typeof _reactRouter.browserHistory.state.term !== "undefined") {
+	      term = _reactRouter.browserHistory.state.term;
 	      term.user_id = CurrentUserStore.currentUser().id;
 	      ApiUtil.createTerm(term);
 	    } else {
 	      ApiUtil.newUser(user, function () {
-	        this.history.push({}, "/");
+	        _reactRouter.browserHistory.push({}, "/");
 	      }.bind(this));
 	    }
 	  },
@@ -33000,14 +33003,15 @@
 
 	'use strict';
 
+	var _reactRouter = __webpack_require__(1);
+
 	var React = __webpack_require__(24);
 	var ApiUtil = __webpack_require__(217);
-	var History = __webpack_require__(1).History;
+
 
 	var GuestSignIn = React.createClass({
 	  displayName: 'GuestSignIn',
 
-	  mixins: [History],
 
 	  componentDidMount: function componentDidMount() {
 	    window.addEventListener('popstate', function (event) {});
@@ -33017,7 +33021,7 @@
 	    e.preventDefault();
 	    var newUser = $(e.currentTarget).serializeJSON().user;
 	    ApiUtil.newUser(newUser, function () {
-	      this.history.push({}, "/");
+	      _reactRouter.browserHistory.push({}, "/");
 	    }.bind(this));
 	  },
 
@@ -33042,12 +33046,10 @@
 
 	var React = __webpack_require__(24);
 	var ApiUtil = __webpack_require__(217);
-	var History = __webpack_require__(1).History;
 
 	var FacebookSignIn = React.createClass({
 	  displayName: 'FacebookSignIn',
 
-	  mixins: [History],
 
 	  submit: function submit(e) {
 	    e.preventDefault();
@@ -33088,14 +33090,15 @@
 
 	'use strict';
 
+	var _reactRouter = __webpack_require__(1);
+
 	var React = __webpack_require__(24);
 	var ApiUtil = __webpack_require__(217);
-	var History = __webpack_require__(1).History;
+
 
 	var TwitterSignIn = React.createClass({
 	  displayName: 'TwitterSignIn',
 
-	  mixins: [History],
 
 	  submit: function submit(e) {
 	    e.preventDefault();
@@ -33136,17 +33139,17 @@
 
 	'use strict';
 
+	var _reactRouter = __webpack_require__(1);
+
 	var React = __webpack_require__(24);
 	var Modal = __webpack_require__(248);
 	var ApiUtil = __webpack_require__(217);
 	var SessionsApiUtil = __webpack_require__(260);
-	var History = __webpack_require__(1).History;
+
 
 	var SignUpForm = React.createClass({
 	  displayName: 'SignUpForm',
 
-
-	  mixins: [History],
 
 	  getInitialState: function getInitialState() {
 	    return { username: "", password: "" };
@@ -33164,10 +33167,10 @@
 	    e.preventDefault();
 	    var user = $(e.currentTarget).serializeJSON().user;
 	    // SessionsApiUtil.login(credentials, function () {
-	    //   this.history.push({}, "/");
+	    //   browserHistory.push({}, "/");
 	    // }.bind(this));
 	    ApiUtil.newUser(user, function () {
-	      this.history.push({}, "/");
+	      _reactRouter.browserHistory.push({}, "/");
 	    }.bind(this));
 	  },
 
@@ -33234,17 +33237,17 @@
 
 	'use strict';
 
+	var _reactRouter = __webpack_require__(1);
+
 	var React = __webpack_require__(24);
 	var CurrentUserStore = __webpack_require__(253);
 	var ApiUtil = __webpack_require__(217);
 	var SessionsApiUtil = __webpack_require__(260);
-	var History = __webpack_require__(1).History;
+
 
 	var NewTermForm = React.createClass({
 	  displayName: 'NewTermForm',
 
-
-	  mixins: [History],
 
 	  getInitialState: function getInitialState() {
 	    return {
@@ -33294,7 +33297,7 @@
 
 	      ApiUtil.createTerm(term);
 	    } else {
-	      this.history.push(term, "/login");
+	      _reactRouter.browserHistory.push(term, "/login");
 	    }
 	  },
 
@@ -33910,16 +33913,16 @@
 /* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
+
+	var _reactRouter = __webpack_require__(1);
 
 	var React = __webpack_require__(24);
-	var History = __webpack_require__(1).History;
+
 
 	var SearchResultsList = React.createClass({
-	  displayName: 'SearchResultsList',
+	  displayName: "SearchResultsList",
 
-
-	  mixins: [History],
 
 	  onClick: function onClick(e) {
 	    console.log(e);
@@ -33929,18 +33932,18 @@
 
 	  render: function render() {
 	    var resultsContent = React.createElement(
-	      'li',
+	      "li",
 	      null,
-	      'No results'
+	      "No results"
 	    );
 	    if (this.props.results.length > 0) {
 	      resultsContent = this.props.results.map(function (result) {
 	        var termUrl = "/terms/" + result.searchable_id;
 	        return React.createElement(
-	          'a',
+	          "a",
 	          { href: termUrl, onclick: this.onClick(result.searchable_id), key: result.searchable_id },
 	          React.createElement(
-	            'li',
+	            "li",
 	            null,
 	            result.content
 	          )
@@ -33948,8 +33951,8 @@
 	      }.bind(this));
 	    }
 	    return React.createElement(
-	      'div',
-	      { className: 'search-results-list' },
+	      "div",
+	      { className: "search-results-list" },
 	      resultsContent
 	    );
 	  }
@@ -33961,27 +33964,27 @@
 /* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
+
+	var _reactRouter = __webpack_require__(1);
 
 	var React = __webpack_require__(24);
-	var History = __webpack_require__(1).History;
+
 
 	var Logo = React.createClass({
-	  displayName: 'Logo',
+	  displayName: "Logo",
 
-
-	  mixins: [History],
 
 	  clickHandler: function clickHandler(e) {
 	    e.preventDefault();
-	    this.history.push({}, "/");
+	    _reactRouter.browserHistory.push({}, "/");
 	  },
 
 	  render: function render() {
 	    return React.createElement(
-	      'a',
-	      { href: '/', onClick: this.clickHandler },
-	      React.createElement('div', { className: 'logo' })
+	      "a",
+	      { href: "/", onClick: this.clickHandler },
+	      React.createElement("div", { className: "logo" })
 	    );
 	  }
 	});

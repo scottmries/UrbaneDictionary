@@ -1,9 +1,8 @@
 var React = require('react');
 var ApiUtil = require('./../util/api_util.js');
-var History = require('react-router').History;
+import { browserHistory } from "react-router";
 
 var TwitterSignIn = React.createClass({
-  mixins: [History],
 
   submit: function (e) {
     e.preventDefault();

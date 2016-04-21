@@ -1,9 +1,7 @@
 var React = require('react');
-var History = require('react-router').History;
+import { browserHistory } from "react-router";
 
-var SearchResultsList = React.createClass ( {
-
-  mixins: [History],
+const SearchResultsList = React.createClass ( {
 
   onClick: function (e) {
     console.log(e);
