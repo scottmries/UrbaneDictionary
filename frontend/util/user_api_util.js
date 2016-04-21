@@ -1,7 +1,7 @@
 var UserActions = require('../actions/user_actions');
 var ErrorActions = require('../actions/error_actions.js');
 
-var UserApiUtil = {
+const UserApiUtil = {
 
   fetchUsers: function () {
     $.ajax({

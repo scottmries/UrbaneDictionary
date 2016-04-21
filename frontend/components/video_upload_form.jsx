@@ -26,7 +26,7 @@ var VideoUploadForm = React.createClass({
     var video_url = {video_url: this.parseEmbedCode(this.state.video_url)};
     // var credentials = $(e.currentTarget).serializeJSON().user;
       ApiUtil.addVideoURL(this.props.term, video_url, function () {
-        // this.history.pushState({}, "/terms/" + this.props.term.id);
+        // this.history.push({}, "/terms/" + this.props.term.id);
     }.bind(this));
   },
 

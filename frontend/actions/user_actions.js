@@ -2,7 +2,7 @@ var React = require('react');
 var UserConstants = require('./../constants/user_constants');
 var AppDispatcher = require('./../dispatcher/dispatcher');
 
-UserApiUtil = {
+const UserApiUtil = {
   receiveUsers: function(users) {
     AppDispatcher.dispatch({
       actionType: UserConstants.USERS_RECEIVED,

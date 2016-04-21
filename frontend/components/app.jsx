@@ -82,7 +82,7 @@ var App = React.createClass({
   },
 
   openNewTermModal: function () {
-    // this.history.pushState({}, 'terms/new');
+    // this.history.push({}, 'terms/new');
     this.setState({
       newTermModalIsOpen: true
     });

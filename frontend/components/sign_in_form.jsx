@@ -42,7 +42,7 @@ var SignInForm = React.createClass({
       ApiUtil.createTerm(term);
     } else{
       SessionsApiUtil.login(credentials, function () {
-        this.history.pushState({}, "/");
+        this.history.push({}, "/");
       }.bind(this));
     }
 
@@ -56,7 +56,7 @@ var SignInForm = React.createClass({
       ApiUtil.createTerm(term);
     } else {
       ApiUtil.newUser(user, function () {
-        this.history.pushState({}, "/");
+        this.history.push({}, "/");
       }.bind(this));
     }
   },

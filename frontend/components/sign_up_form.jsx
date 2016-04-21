@@ -24,10 +24,10 @@ var SignUpForm = React.createClass({
     e.preventDefault();
     var user = $(e.currentTarget).serializeJSON().user;
     // SessionsApiUtil.login(credentials, function () {
-    //   this.history.pushState({}, "/");
+    //   this.history.push({}, "/");
     // }.bind(this));
     ApiUtil.newUser(user, function () {
-      this.history.pushState({}, "/");
+      this.history.push({}, "/");
     }.bind(this));
   },
 

@@ -2,7 +2,7 @@ var React = require('react');
 var SearchConstants = require('./../constants/search_constants');
 var AppDispatcher = require('./../dispatcher/dispatcher');
 
-SearchApiUtil = {
+const SearchApiUtil = {
   receiveResults: function(data) {
     AppDispatcher.dispatch({
       actionType: SearchConstants.RECEIVE_RESULTS,

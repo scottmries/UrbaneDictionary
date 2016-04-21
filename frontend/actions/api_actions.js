@@ -1,7 +1,7 @@
 var AppDispatcher = require('../dispatcher/dispatcher');
 var TermConstants = require('../constants/term_constants');
 
-ApiActions = {
+const ApiActions = {
   receiveAllTerms: function(terms) {
     AppDispatcher.dispatch({
       actionType: TermConstants.TERMS_RECEIVED,

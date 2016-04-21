@@ -7,7 +7,7 @@ var Logo = React.createClass({
 
   clickHandler: function (e) {
     e.preventDefault();
-    this.history.pushState({}, "/");
+    this.history.push({}, "/");
   },
 
   render: function () {

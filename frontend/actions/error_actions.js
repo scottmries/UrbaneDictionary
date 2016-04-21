@@ -2,7 +2,7 @@ var React = require('react');
 var ErrorConstants = require('./../constants/error_constants');
 var AppDispatcher = require('./../dispatcher/dispatcher');
 
-ErrorApiUtil = {
+const ErrorApiUtil = {
   receiveErrors: function(data) {
     AppDispatcher.dispatch({
       actionType: ErrorConstants.RECEIVE_ERRORS,

@@ -2,6 +2,7 @@ var React = require('react');
 var TermStore = require('../stores/term');
 var TermListItem = require('./term_list_item');
 var SearchResultsStore = require('../stores/search_results_store');
+import ApiUtil from '../util/api_util'
 
 var searchResultFound = false;
 

@@ -7,7 +7,7 @@ var SearchResultsList = React.createClass ( {
 
   onClick: function (e) {
     console.log(e);
-    // this.history.pushState({}, 'terms/new');
+    // this.history.push({}, 'terms/new');
     // e.preventDefault();
   },
 

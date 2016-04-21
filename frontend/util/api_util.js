@@ -2,7 +2,7 @@ var ApiActions = require('../actions/api_actions.js');
 var ErrorActions = require('../actions/error_actions.js');
 var TermsStore = require('../stores/term');
 
-ApiUtil = {
+const ApiUtil = {
   newUser: function (user, cb) {
     $.ajax({
       type: 'post',

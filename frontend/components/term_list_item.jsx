@@ -1,4 +1,5 @@
 var React = require('react');
+var Router = require('react-router');
 var TermStore = require('../stores/term');
 var History = require('react-router').History;
 var FileUploads = require('./file_uploads');
@@ -10,7 +11,15 @@ var DeleteButton = require('./delete_button');
 
 var TermListItem = React.createClass({
 
-  mixins: [History],
+  // mixins: [History],
+
+  // contextTypes: {
+  //   router: Router.PropTypes.router.isRequired
+  // },
+
+  // someHandler() {
+  //   this.context.router.push(...)
+  // }
 
   show: function (e) {
     e.preventDefault();
@@ -37,12 +46,12 @@ var TermListItem = React.createClass({
 
   showTerm: function (e) {
     e.preventDefault();
-    this.history.pushState(this.state, "/terms/" + this.props.term.id);
+    this.history.push(this.state, "/terms/" + this.props.term.id);
   },
 
   showUserTerms: function (e) {
     e.preventDefault();
-    this.history.pushState(this.state, "/users/" + this.props.term.user_id);
+    this.history.push(this.state, "/users/" + this.props.term.user_id);
   },
 
   render: function () {

@@ -1,8 +1,10 @@
+import { hashHistory } from 'react-router';
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
+// var browserHistory = Router.browserHistory;
 var App = require('./components/app');
 var Terms = require('./components/term_list');
 var SignInForm = require('./components/sign_in_form');
@@ -14,6 +16,7 @@ var CurrentUserStore = require('./stores/current_user_store');
 var SessionsApiUtil = require('./util/sessions_api_util');
 var TermListItem = require('./components/term_list_item');
 var NewTermForm = require('./components/new_term_form');
+
 
 
 var routes = (
@@ -42,7 +45,7 @@ function _ensureLoggedIn(nextState, replace, callback) {
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-  ReactDOM.render(<Router>{routes}</Router>,
+  ReactDOM.render(<Router history={hashHistory}>{routes}</Router>,
     document.getElementById("root")
   );
 });

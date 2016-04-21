@@ -50,14 +50,14 @@ var Opinion = React.createClass({
     e.preventDefault();
     this.setState({ currentUserOpined: false });
     ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, false);
-    this.history.pushState({}, "/");
+    this.history.push({}, "/");
   },
 
   handleLike: function (e) {
     e.preventDefault();
     this.setState({ currentUserOpined: true });
     ApiUtil.setLike(this.props.term.id, CurrentUserStore.currentUser().user.id, true);
-    this.history.pushState({}, "/");
+    this.history.push({}, "/");
   },
 
   render: function() {

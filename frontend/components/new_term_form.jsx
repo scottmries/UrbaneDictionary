@@ -56,7 +56,7 @@ var NewTermForm = React.createClass({
 
       ApiUtil.createTerm(term);
     } else {
-      this.history.pushState(term, "/login");
+      this.history.push(term, "/login");
     }
   },
 
