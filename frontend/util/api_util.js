@@ -1,5 +1,6 @@
 var ApiActions = require('../actions/api_actions.js');
 var ErrorActions = require('../actions/error_actions.js');
+var CurrentUserActions = require('../actions/current_user_actions.js');
 var TermsStore = require('../stores/term');
 
 const ApiUtil = {

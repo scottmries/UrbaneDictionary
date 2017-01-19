@@ -4,7 +4,7 @@ var ReactDOM = require('react-dom');
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
-// var browserHistory = Router.browserHistory;
+var browserHistory = Router.browserHistory;
 var App = require('./components/app');
 var Terms = require('./components/term_list');
 var SignInForm = require('./components/sign_in_form');
@@ -20,7 +20,7 @@ var NewTermForm = require('./components/new_term_form');
 
 
 var routes = (
-  <Route path="/" component={App} >
+  <Route path="/" component={App} history={browserHistory}>
     <IndexRoute component={Terms} />
     <Route path="login" component={SignInForm} />
     <Route path="users/new" component={SignUpForm} />

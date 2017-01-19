@@ -21,7 +21,8 @@
   end
 
   def index
-    @users = User.include(:terms).include(:opinions).include(:opinioned_terms)
+    @users = User.includes(:terms).includes(:opinions).includes(:opinioned_terms)
+    byebug
     @users_with_terms = []
     @users.each do |user|
 

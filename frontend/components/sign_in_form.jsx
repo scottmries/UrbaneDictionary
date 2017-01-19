@@ -1,5 +1,6 @@
 var React = require('react');
 var SessionsApiUtil = require('./../util/sessions_api_util');
+var ApiUtil = require('./../util/api_util');
 var Modal = require('./modal');
 var GuestSignIn = require('./guest_sign_in');
 var FacebookSignIn = require('./facebook_sign_in');
@@ -63,7 +64,6 @@ var SignInForm = React.createClass({
     e.preventDefault();
 
     var user = $(e.currentTarget).serializeJSON().user;
-    debugger
     if (CurrentUserStore.hasBeenFetched()){
       this.handleSubmittedTerm(user);
     } else {

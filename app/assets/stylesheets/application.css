@@ -571,3 +571,6 @@ input.sign-in-button, input.sign-up-button {
   padding-top: 10px;
   float:left;
 }
+ input[type="submit"] {
+     cursor: pointer;
+ }
