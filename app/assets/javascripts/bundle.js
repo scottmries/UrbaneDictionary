@@ -24989,7 +24989,8 @@
 
 	  closeSignInModal: function closeSignInModal() {
 	    this.setState({
-	      signInModalIsOpen: false
+	      signInModalIsOpen: false,
+	      unSubmittedTerm: null
 	    });
 	  },
 
@@ -32980,48 +32981,38 @@
 	  },
 
 	  hasUnsubmittedTerm: function hasUnsubmittedTerm(term) {
-	    return term === null;
+	    return this.props.unSubmittedTerm !== null;
 	  },
 
 	  signin: function signin(e) {
 	    e.preventDefault();
 	    var credentials = $(e.currentTarget).serializeJSON().user;
-	    debugger;
-	    if (this.browserHistoryHasTerm()) {
-	      var term = this.props.unSubmittedTerm;
-	      term.user_id = CurrentUserStore.currentUser().id;
-	      ApiUtil.createTerm(term);
-	    } else {
-	      SessionsApiUtil.login(credentials, function () {
-	        _reactRouter.browserHistory.push({}, "/");
-	      }.bind(this));
-	    }
+	    SessionsApiUtil.login(credentials, function () {
+	      this.handleSubmittedTerm();
+	    }.bind(this));
 	  },
 
 	  handleSubmittedTerm: function handleSubmittedTerm(user) {
-	    if (this.browserHistoryHasTerm()) {
+	    if (this.hasUnsubmittedTerm()) {
 	      var term = this.props.unSubmittedTerm;
-	      term.user_id = CurrentUserStore.currentUser().id;
-	      ApiUtil.createTerm(term);
-	    } else {
-	      ApiUtil.newUser(user, function () {
-	        _reactRouter.browserHistory.push({}, "/");
-	      }.bind(this));
+	      term.user_id = CurrentUserStore.currentUser().user.id;
+	      ApiUtil.createTerm(this.props.unSubmittedTerm);
 	    }
+	    this.props.closeHandler();
+	    _reactRouter.browserHistory.push({}, "/");
 	  },
 
 	  signup: function signup(e) {
 	    e.preventDefault();
 	    var user = $(e.currentTarget).serializeJSON().user;
-	    if (CurrentUserStore.hasBeenFetched()) {
-	      this.handleSubmittedTerm(user);
-	    } else {
-	      SessionsApiUtil.fetchCurrentUser(this.handleSubmittedTerm(user));
-	    }
+	    ApiUtil.newUser(user, function () {
+	      this.handleSubmittedTerm();
+	    }.bind(this));
 	  },
 
 	  render: function render() {
-	    var signinAdverb = this.hasUnsubmittedTerm(this.props.unSubmittedTerm) ? " first" : "";
+	    var unSubmittedTerm = this.props.unSubmittedTerm;
+	    var signinAdverb = this.hasUnsubmittedTerm() ? " first" : "";
 	    return React.createElement(
 	      'section',
 	      { className: 'sign-in-modal' },

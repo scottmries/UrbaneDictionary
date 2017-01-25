@@ -32,48 +32,38 @@ var SignInForm = React.createClass({
   },
 
   hasUnsubmittedTerm: function(term){
-     return (term === null);
+     return (this.props.unSubmittedTerm !== null);
   },
 
   signin: function (e) {
     e.preventDefault();
     var credentials = $(e.currentTarget).serializeJSON().user;
-    debugger;
-    if(this.browserHistoryHasTerm()){
-      var term = this.props.unSubmittedTerm;
-      term.user_id = CurrentUserStore.currentUser().id;
-      ApiUtil.createTerm(term);
-    } else{
-      SessionsApiUtil.login(credentials, function () {
-        browserHistory.push({}, "/");
-      }.bind(this));
-    }
+    SessionsApiUtil.login(credentials, function () {
+        this.handleSubmittedTerm();
+    }.bind(this));
   },
 
   handleSubmittedTerm: function (user) {
-    if(this.browserHistoryHasTerm()){
-      var term = this.props.unSubmittedTerm;
-      term.user_id = CurrentUserStore.currentUser().id;
-      ApiUtil.createTerm(term);
-    } else {
-      ApiUtil.newUser(user, function () {
-        browserHistory.push({}, "/");
-      }.bind(this));
+    if(this.hasUnsubmittedTerm()){
+        var term = this.props.unSubmittedTerm;
+        term.user_id = CurrentUserStore.currentUser().user.id;
+        ApiUtil.createTerm(this.props.unSubmittedTerm);
     }
+    this.props.closeHandler();
+    browserHistory.push({}, "/");
   },
 
   signup: function (e) {
     e.preventDefault();
     var user = $(e.currentTarget).serializeJSON().user;
-    if (CurrentUserStore.hasBeenFetched()){
-      this.handleSubmittedTerm(user);
-    } else {
-      SessionsApiUtil.fetchCurrentUser(this.handleSubmittedTerm(user));
-    }
+    ApiUtil.newUser(user, function () {
+        this.handleSubmittedTerm();
+    }.bind(this));
   },
 
   render: function () {
-      let signinAdverb = this.hasUnsubmittedTerm(this.props.unSubmittedTerm) ? " first" : "";
+      let unSubmittedTerm = this.props.unSubmittedTerm;
+      let signinAdverb = this.hasUnsubmittedTerm() ? " first" : "";
     return (
       <section className="sign-in-modal">
         <div className="form-inner">

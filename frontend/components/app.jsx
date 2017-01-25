@@ -78,7 +78,8 @@ const App = React.createClass({
 
   closeSignInModal: function () {
     this.setState({
-      signInModalIsOpen: false
+      signInModalIsOpen: false,
+      unSubmittedTerm: null
     });
   },
 
