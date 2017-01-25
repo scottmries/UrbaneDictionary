@@ -4,7 +4,6 @@ import { browserHistory } from "react-router";
 const SearchResultsList = React.createClass ( {
 
   onClick: function (e) {
-    console.log(e);
     // this.history.push({}, 'terms/new');
     // e.preventDefault();
   },

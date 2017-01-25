@@ -33701,7 +33701,6 @@
 
 
 	  onClick: function onClick(e) {
-	    console.log(e);
 	    // this.history.push({}, 'terms/new');
 	    // e.preventDefault();
 	  },
