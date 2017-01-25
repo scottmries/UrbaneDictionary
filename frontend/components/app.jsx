@@ -15,6 +15,7 @@ var TermStore = require('./../stores/term');
 var SessionsApiUtil = require('./../util/sessions_api_util');
 var Spinner = require('./spinner');
 var ErrorComponent = require('./error');
+var Waypoint = require('react-waypoint');
 import { browserHistory } from "react-router";
 
 const App = React.createClass({
@@ -22,7 +23,6 @@ const App = React.createClass({
   // mixins: [History],
 
   componentDidMount: function () {
-    // CurrentUserStore.addListener(this.forceUpdate.bind(this));
     this.userlistener = CurrentUserStore.addListener(this._onChange);
     this.termlistener = TermStore.addListener(this._newTerms);
     SessionsApiUtil.fetchCurrentUser();
@@ -37,7 +37,6 @@ const App = React.createClass({
     if (CurrentUserStore.isLoggedIn()){
       this.setState( { fetchingModalIsOpen: false } );
     } else {
-      // this.history.replace("/login");
     }
   },
 
@@ -55,7 +54,7 @@ const App = React.createClass({
       unSubmittedTerm: null
     });
   },
-  // refactor: move modal logic to a store
+
   openFetchingModal: function () {
     this.setState({
       fetchingModalIsOpen: true,
@@ -84,7 +83,6 @@ const App = React.createClass({
   },
 
   openNewTermModal: function () {
-    // this.history.push({}, 'terms/new');
     this.setState({
       newTermModalIsOpen: true
     });
@@ -100,13 +98,6 @@ const App = React.createClass({
       this.setState({
           unSubmittedTerm: term
       });
-    //   browserHistory.push({term: term});
-  },
-
-  animateGif: function (){
-  },
-
-  stopGif: function (){
   },
 
   render: function () {
