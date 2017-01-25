@@ -55,15 +55,15 @@
 	var IndexRoute = __webpack_require__(1).IndexRoute;
 	var browserHistory = Router.browserHistory;
 	var App = __webpack_require__(216);
-	var Terms = __webpack_require__(242);
-	var SignInForm = __webpack_require__(259);
+	var Terms = __webpack_require__(244);
+	var SignInForm = __webpack_require__(260);
 	var SignUpForm = __webpack_require__(265);
-	var SingleTerm = __webpack_require__(268);
-	var Author = __webpack_require__(269);
-	var Header = __webpack_require__(275);
-	var CurrentUserStore = __webpack_require__(253);
-	var SessionsApiUtil = __webpack_require__(260);
-	var TermListItem = __webpack_require__(243);
+	var SingleTerm = __webpack_require__(274);
+	var Author = __webpack_require__(275);
+	var Header = __webpack_require__(268);
+	var CurrentUserStore = __webpack_require__(255);
+	var SessionsApiUtil = __webpack_require__(261);
+	var TermListItem = __webpack_require__(245);
 	var NewTermForm = __webpack_require__(267);
 
 	var routes = React.createElement(
@@ -24905,26 +24905,26 @@
 
 	'use strict';
 
+	var _reactRouter = __webpack_require__(1);
+
 	var React = __webpack_require__(3);
 	var ApiUtil = __webpack_require__(217);
-	var Terms = __webpack_require__(242);
-	var SignInButton = __webpack_require__(258);
-	var SignInForm = __webpack_require__(259);
+	var Terms = __webpack_require__(244);
+	var SignInButton = __webpack_require__(259);
+	var SignInForm = __webpack_require__(260);
 	var NewTermButton = __webpack_require__(266);
 	var NewTermForm = __webpack_require__(267);
-	var Modal = __webpack_require__(248);
-	var SingleTerm = __webpack_require__(268);
-	var Author = __webpack_require__(269);
-	var Sidebar = __webpack_require__(274);
-	var Header = __webpack_require__(275);
-	var CurrentUserStore = __webpack_require__(253);
-	var TermStore = __webpack_require__(226);
-	var SessionsApiUtil = __webpack_require__(260);
+	var Modal = __webpack_require__(250);
+	var SingleTerm = __webpack_require__(274);
+	var Author = __webpack_require__(275);
+	var Sidebar = __webpack_require__(280);
+	var Header = __webpack_require__(268);
+	var CurrentUserStore = __webpack_require__(255);
+	var TermStore = __webpack_require__(228);
+	var SessionsApiUtil = __webpack_require__(261);
 	var Spinner = __webpack_require__(281);
-	// var History = require('react-router').History;
 	var ErrorComponent = __webpack_require__(282);
 
-	// import { browserHistory } from "react-router";
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -24962,7 +24962,8 @@
 	    return {
 	      signInModalIsOpen: false,
 	      newTermModalIsOpen: false,
-	      fetchingModalIsOpen: false
+	      fetchingModalIsOpen: false,
+	      unSubmittedTerm: null
 	    };
 	  },
 	  // refactor: move modal logic to a store
@@ -25005,6 +25006,13 @@
 	    });
 	  },
 
+	  setUnsubmittedTerm: function setUnsubmittedTerm(term) {
+	    this.setState({
+	      unSubmittedTerm: term
+	    });
+	    //   browserHistory.push({term: term});
+	  },
+
 	  animateGif: function animateGif() {},
 
 	  stopGif: function stopGif() {},
@@ -25012,7 +25020,10 @@
 	  render: function render() {
 	    var signInModal = "";
 	    if (this.state.signInModalIsOpen) {
-	      signInModal = React.createElement(SignInForm, { closeHandler: this.closeSignInModal });
+	      signInModal = React.createElement(SignInForm, {
+	        closeHandler: this.closeSignInModal,
+	        unSubmittedTerm: this.state.unSubmittedTerm
+	      });
 	    }
 	    var newTermModal;
 	    var fetchingModal;
@@ -25029,8 +25040,16 @@
 	    if (this.state.newTermModalIsOpen) {
 	      newTermModal = React.createElement(
 	        Modal,
-	        { closeHandler: this.closeNewTermModal, closeButton: 'show' },
-	        React.createElement(NewTermForm, null)
+	        {
+	          closeHandler: this.closeNewTermModal,
+	          closeButton: 'show',
+	          signInModalHandler: this.openSignInModal
+	        },
+	        React.createElement(NewTermForm, {
+	          closeNewTermModal: this.closeNewTermModal,
+	          openSignInModal: this.openSignInModal,
+	          setUnsubmittedTerm: this.setUnsubmittedTerm
+	        })
 	      );
 	    } else {
 	      newTermModal = React.createElement('div', null);
@@ -25069,8 +25088,8 @@
 
 	var ApiActions = __webpack_require__(218);
 	var ErrorActions = __webpack_require__(224);
-	var CurrentUserActions = __webpack_require__(261);
-	var TermsStore = __webpack_require__(226);
+	var CurrentUserActions = __webpack_require__(226);
+	var TermsStore = __webpack_require__(228);
 
 	var ApiUtil = {
 	  newUser: function newUser(user, cb) {
@@ -25618,7 +25637,46 @@
 
 	'use strict';
 
-	var Store = __webpack_require__(227).Store;
+	var AppDispatcher = __webpack_require__(219);
+	var CurrentUserConstants = __webpack_require__(227);
+
+	var CurrentUserActions = {
+	  receiveCurrentUser: function receiveCurrentUser(currentUser) {
+	    AppDispatcher.dispatch({
+	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
+	      currentUser: currentUser
+	    });
+	  },
+	  logoutCurrentUser: function logoutCurrentUser() {
+	    AppDispatcher.dispatch({
+	      actionType: CurrentUserConstants.LOGOUT_CURRENT_USER,
+	      currentUser: {}
+	    });
+	  }
+	};
+
+	module.exports = CurrentUserActions;
+
+/***/ },
+/* 227 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var CurrentUserConstants = {
+	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER",
+	  LOGOUT_CURRENT_USER: "LOGOUT_CURRENT_USER"
+	};
+
+	module.exports = CurrentUserConstants;
+
+/***/ },
+/* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var Store = __webpack_require__(229).Store;
 	var AppDispatcher = __webpack_require__(219);
 	var TermConstants = __webpack_require__(223);
 
@@ -25683,7 +25741,7 @@
 	module.exports = TermStore;
 
 /***/ },
-/* 227 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25695,15 +25753,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 
-	module.exports.Container = __webpack_require__(228);
-	module.exports.MapStore = __webpack_require__(231);
-	module.exports.Mixin = __webpack_require__(241);
-	module.exports.ReduceStore = __webpack_require__(232);
-	module.exports.Store = __webpack_require__(233);
+	module.exports.Container = __webpack_require__(230);
+	module.exports.MapStore = __webpack_require__(233);
+	module.exports.Mixin = __webpack_require__(243);
+	module.exports.ReduceStore = __webpack_require__(234);
+	module.exports.Store = __webpack_require__(235);
 
 
 /***/ },
-/* 228 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25725,10 +25783,10 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxStoreGroup = __webpack_require__(229);
+	var FluxStoreGroup = __webpack_require__(231);
 
 	var invariant = __webpack_require__(222);
-	var shallowEqual = __webpack_require__(230);
+	var shallowEqual = __webpack_require__(232);
 
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -25886,7 +25944,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 229 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25967,7 +26025,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 230 */
+/* 232 */
 /***/ function(module, exports) {
 
 	/**
@@ -26022,7 +26080,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 231 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26043,8 +26101,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxReduceStore = __webpack_require__(232);
-	var Immutable = __webpack_require__(240);
+	var FluxReduceStore = __webpack_require__(234);
+	var Immutable = __webpack_require__(242);
 
 	var invariant = __webpack_require__(222);
 
@@ -26172,7 +26230,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 232 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26193,9 +26251,9 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var FluxStore = __webpack_require__(233);
+	var FluxStore = __webpack_require__(235);
 
-	var abstractMethod = __webpack_require__(239);
+	var abstractMethod = __webpack_require__(241);
 	var invariant = __webpack_require__(222);
 
 	var FluxReduceStore = (function (_FluxStore) {
@@ -26279,7 +26337,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 233 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26298,7 +26356,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _require = __webpack_require__(234);
+	var _require = __webpack_require__(236);
 
 	var EventEmitter = _require.EventEmitter;
 
@@ -26462,7 +26520,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 234 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26475,14 +26533,14 @@
 	 */
 
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(235)
+	  EventEmitter: __webpack_require__(237)
 	};
 
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 235 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26501,8 +26559,8 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var EmitterSubscription = __webpack_require__(236);
-	var EventSubscriptionVendor = __webpack_require__(238);
+	var EmitterSubscription = __webpack_require__(238);
+	var EventSubscriptionVendor = __webpack_require__(240);
 
 	var emptyFunction = __webpack_require__(17);
 	var invariant = __webpack_require__(15);
@@ -26679,7 +26737,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 236 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26700,7 +26758,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var EventSubscription = __webpack_require__(237);
+	var EventSubscription = __webpack_require__(239);
 
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -26732,7 +26790,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 237 */
+/* 239 */
 /***/ function(module, exports) {
 
 	/**
@@ -26786,7 +26844,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 238 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26895,7 +26953,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 239 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26922,7 +26980,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 240 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31909,7 +31967,7 @@
 	}));
 
 /***/ },
-/* 241 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31926,7 +31984,7 @@
 
 	'use strict';
 
-	var FluxStoreGroup = __webpack_require__(229);
+	var FluxStoreGroup = __webpack_require__(231);
 
 	var invariant = __webpack_require__(222);
 
@@ -32032,7 +32090,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 242 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32044,9 +32102,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var React = __webpack_require__(3);
-	var TermStore = __webpack_require__(226);
-	var TermListItem = __webpack_require__(243);
-	var SearchResultsStore = __webpack_require__(256);
+	var TermStore = __webpack_require__(228);
+	var TermListItem = __webpack_require__(245);
+	var SearchResultsStore = __webpack_require__(257);
 
 
 	var searchResultFound = false;
@@ -32089,7 +32147,7 @@
 	module.exports = TermList;
 
 /***/ },
-/* 243 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32098,14 +32156,14 @@
 
 	var React = __webpack_require__(3);
 	var Router = __webpack_require__(1);
-	var TermStore = __webpack_require__(226);
+	var TermStore = __webpack_require__(228);
 	var History = __webpack_require__(1).History;
-	var FileUploads = __webpack_require__(244);
-	var TermHeader = __webpack_require__(249);
-	var YoutubeVideo = __webpack_require__(251);
-	var Opinion = __webpack_require__(252);
-	var CurrentUserStore = __webpack_require__(253);
-	var DeleteButton = __webpack_require__(255);
+	var FileUploads = __webpack_require__(246);
+	var TermHeader = __webpack_require__(251);
+	var YoutubeVideo = __webpack_require__(253);
+	var Opinion = __webpack_require__(254);
+	var CurrentUserStore = __webpack_require__(255);
+	var DeleteButton = __webpack_require__(256);
 
 
 	var TermListItem = React.createClass({
@@ -32232,17 +32290,17 @@
 	module.exports = TermListItem;
 
 /***/ },
-/* 244 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var ImageUploadForm = __webpack_require__(245);
-	var VideoUploadForm = __webpack_require__(246);
-	var AudioUploadForm = __webpack_require__(247);
-	var Modal = __webpack_require__(248);
-	var TermStore = __webpack_require__(226);
+	var ImageUploadForm = __webpack_require__(247);
+	var VideoUploadForm = __webpack_require__(248);
+	var AudioUploadForm = __webpack_require__(249);
+	var Modal = __webpack_require__(250);
+	var TermStore = __webpack_require__(228);
 
 	var FileUploads = React.createClass({
 	  displayName: 'FileUploads',
@@ -32365,7 +32423,7 @@
 	module.exports = FileUploads;
 
 /***/ },
-/* 245 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -32430,7 +32488,7 @@
 	module.exports = ImageUploadForm;
 
 /***/ },
-/* 246 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -32495,7 +32553,7 @@
 	module.exports = VideoUploadForm;
 
 /***/ },
-/* 247 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32517,7 +32575,7 @@
 	module.exports = AudioUploadForm;
 
 /***/ },
-/* 248 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -32553,13 +32611,13 @@
 	module.exports = Modal;
 
 /***/ },
-/* 249 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var FacebookLike = __webpack_require__(250);
+	var FacebookLike = __webpack_require__(252);
 
 	var TermHeader = React.createClass({
 	  displayName: 'TermHeader',
@@ -32581,7 +32639,7 @@
 	module.exports = TermHeader;
 
 /***/ },
-/* 250 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -32606,7 +32664,7 @@
 	module.exports = FacebookLike;
 
 /***/ },
-/* 251 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -32626,7 +32684,7 @@
 	module.exports = YoutubeVideo;
 
 /***/ },
-/* 252 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32634,8 +32692,8 @@
 	var _reactRouter = __webpack_require__(1);
 
 	var React = __webpack_require__(3);
-	var TermStore = __webpack_require__(226);
-	var CurrentUserStore = __webpack_require__(253);
+	var TermStore = __webpack_require__(228);
+	var CurrentUserStore = __webpack_require__(255);
 
 
 	var Opinion = React.createClass({
@@ -32722,14 +32780,14 @@
 	module.exports = Opinion;
 
 /***/ },
-/* 253 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Store = __webpack_require__(227).Store;
+	var Store = __webpack_require__(229).Store;
 	var AppDispatcher = __webpack_require__(219);
-	var CurrentUserConstants = __webpack_require__(254);
+	var CurrentUserConstants = __webpack_require__(227);
 
 	var _currentUser = { user: {} };
 	var _currentUserHasBeenFetched = false;
@@ -32766,20 +32824,7 @@
 	module.exports = CurrentUserStore;
 
 /***/ },
-/* 254 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var CurrentUserConstants = {
-	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER",
-	  LOGOUT_CURRENT_USER: "LOGOUT_CURRENT_USER"
-	};
-
-	module.exports = CurrentUserConstants;
-
-/***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32816,14 +32861,14 @@
 	module.exports = DeleteButton;
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Store = __webpack_require__(227).Store;
+	var Store = __webpack_require__(229).Store;
 	var AppDispatcher = __webpack_require__(219);
-	var SearchConstants = __webpack_require__(257);
+	var SearchConstants = __webpack_require__(258);
 
 	var _searchResults = [];
 	var _meta = {};
@@ -32853,7 +32898,7 @@
 	module.exports = SearchResultsStore;
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32865,7 +32910,7 @@
 	module.exports = SearchConstants;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -32892,7 +32937,7 @@
 	module.exports = SignInButton;
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32900,14 +32945,14 @@
 	var _reactRouter = __webpack_require__(1);
 
 	var React = __webpack_require__(3);
-	var SessionsApiUtil = __webpack_require__(260);
+	var SessionsApiUtil = __webpack_require__(261);
 	var ApiUtil = __webpack_require__(217);
-	var Modal = __webpack_require__(248);
+	var Modal = __webpack_require__(250);
 	var GuestSignIn = __webpack_require__(262);
 	var FacebookSignIn = __webpack_require__(263);
 	var TwitterSignIn = __webpack_require__(264);
 	var SignUpForm = __webpack_require__(265);
-	var CurrentUserStore = __webpack_require__(253);
+	var CurrentUserStore = __webpack_require__(255);
 
 
 	var SignInForm = React.createClass({
@@ -32934,11 +32979,16 @@
 	    this.setState({ signUpPassword: e.currentTarget.value });
 	  },
 
+	  hasUnsubmittedTerm: function hasUnsubmittedTerm(term) {
+	    return term === null;
+	  },
+
 	  signin: function signin(e) {
 	    e.preventDefault();
 	    var credentials = $(e.currentTarget).serializeJSON().user;
-	    if (typeof _reactRouter.browserHistory.state !== "undefined" && typeof _reactRouter.browserHistory.state.term !== "undefined") {
-	      term = _reactRouter.browserHistory.state.term;
+	    debugger;
+	    if (this.browserHistoryHasTerm()) {
+	      var term = this.props.unSubmittedTerm;
 	      term.user_id = CurrentUserStore.currentUser().id;
 	      ApiUtil.createTerm(term);
 	    } else {
@@ -32949,8 +32999,8 @@
 	  },
 
 	  handleSubmittedTerm: function handleSubmittedTerm(user) {
-	    if (typeof _reactRouter.browserHistory.state !== "undefined" && typeof _reactRouter.browserHistory.state.term !== "undefined") {
-	      term = _reactRouter.browserHistory.state.term;
+	    if (this.browserHistoryHasTerm()) {
+	      var term = this.props.unSubmittedTerm;
 	      term.user_id = CurrentUserStore.currentUser().id;
 	      ApiUtil.createTerm(term);
 	    } else {
@@ -32962,7 +33012,6 @@
 
 	  signup: function signup(e) {
 	    e.preventDefault();
-
 	    var user = $(e.currentTarget).serializeJSON().user;
 	    if (CurrentUserStore.hasBeenFetched()) {
 	      this.handleSubmittedTerm(user);
@@ -32972,6 +33021,7 @@
 	  },
 
 	  render: function render() {
+	    var signinAdverb = this.hasUnsubmittedTerm(this.props.unSubmittedTerm) ? " first" : "";
 	    return React.createElement(
 	      'section',
 	      { className: 'sign-in-modal' },
@@ -32984,7 +33034,9 @@
 	          React.createElement(
 	            'h2',
 	            null,
-	            'Say, Jim, fancy a sign in?'
+	            'Say, Jim, fancy a sign in',
+	            signinAdverb,
+	            '?'
 	          ),
 	          React.createElement(
 	            'div',
@@ -33050,13 +33102,13 @@
 	module.exports = SignInForm;
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var ErrorActions = __webpack_require__(224);
-	var CurrentUserActions = __webpack_require__(261);
+	var CurrentUserActions = __webpack_require__(226);
 	var SessionsApiUtil = {
 	  login: function login(credentials, _success) {
 	    $.ajax({
@@ -33103,32 +33155,6 @@
 	};
 
 	module.exports = SessionsApiUtil;
-
-/***/ },
-/* 261 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var AppDispatcher = __webpack_require__(219);
-	var CurrentUserConstants = __webpack_require__(254);
-
-	var CurrentUserActions = {
-	  receiveCurrentUser: function receiveCurrentUser(currentUser) {
-	    AppDispatcher.dispatch({
-	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
-	      currentUser: currentUser
-	    });
-	  },
-	  logoutCurrentUser: function logoutCurrentUser() {
-	    AppDispatcher.dispatch({
-	      actionType: CurrentUserConstants.LOGOUT_CURRENT_USER,
-	      currentUser: {}
-	    });
-	  }
-	};
-
-	module.exports = CurrentUserActions;
 
 /***/ },
 /* 262 */
@@ -33275,9 +33301,9 @@
 	var _reactRouter = __webpack_require__(1);
 
 	var React = __webpack_require__(3);
-	var Modal = __webpack_require__(248);
+	var Modal = __webpack_require__(250);
 	var ApiUtil = __webpack_require__(217);
-	var SessionsApiUtil = __webpack_require__(260);
+	var SessionsApiUtil = __webpack_require__(261);
 
 
 	var SignUpForm = React.createClass({
@@ -33373,9 +33399,10 @@
 	var _reactRouter = __webpack_require__(1);
 
 	var React = __webpack_require__(3);
-	var CurrentUserStore = __webpack_require__(253);
+	var CurrentUserStore = __webpack_require__(255);
 	var ApiUtil = __webpack_require__(217);
-	var SessionsApiUtil = __webpack_require__(260);
+	var SessionsApiUtil = __webpack_require__(261);
+	var Header = __webpack_require__(268);
 
 
 	var NewTermForm = React.createClass({
@@ -33422,25 +33449,44 @@
 	    return CurrentUserStore.currentUser();
 	  },
 
-	  submit: function submit(e) {
-	    e.preventDefault();
-	    var term = $(e.currentTarget).serializeJSON();
-	    if (!!this.state.currentUser.user.id) {
-	      term.user_id = this.state.currentUser.user.id;
+	  parseTerm: function parseTerm(e) {
+	    return $(e.currentTarget).serializeJSON();
+	  },
 
-	      ApiUtil.createTerm(term);
-	    } else {
-	      _reactRouter.browserHistory.push(term, "/login");
-	    }
+
+	  signedIn: function signedIn() {
+	    return !!this.state.currentUser.user.id;
+	  },
+
+	  redirectToLogin: function redirectToLogin(e) {
+	    e.preventDefault();
+	    var term = this.parseTerm(e);
+	    this.props.setUnsubmittedTerm(term);
+	    this.props.closeNewTermModal();
+	    this.props.openSignInModal();
+	  },
+
+	  submitTerm: function submitTerm(e) {
+	    e.preventDefault();
+	    var term = this.parseTerm(e);
+	    term.user_id = this.state.currentUser.user.id;
+
+	    ApiUtil.createTerm(term);
 	  },
 
 	  render: function render() {
+	    var submitCallback = null;
+	    if (this.signedIn()) {
+	      submitCallback = this.submitTerm;
+	    } else {
+	      submitCallback = this.redirectToLogin;
+	    }
 	    return React.createElement(
 	      'section',
 	      { className: 'newTermForm' },
 	      React.createElement(
 	        'form',
-	        { onSubmit: this.submit },
+	        { onSubmit: submitCallback },
 	        React.createElement(
 	          'div',
 	          { className: 'form-inner' },
@@ -33453,19 +33499,26 @@
 	            'label',
 	            null,
 	            'Term',
-	            React.createElement('input', { type: 'text', onChange: this.handleTermChange, name: 'term' })
+	            React.createElement('input', { type: 'text',
+	              onChange: this.handleTermChange,
+	              name: 'term' })
 	          ),
 	          React.createElement(
 	            'label',
 	            null,
 	            'Definition',
-	            React.createElement('input', { type: 'textarea', onChange: this.handleDefinitionChange, name: 'definition' })
+	            React.createElement('input', {
+	              type: 'textarea',
+	              onChange: this.handleDefinitionChange,
+	              name: 'definition' })
 	          ),
 	          React.createElement(
 	            'label',
 	            null,
 	            'Usage',
-	            React.createElement('input', { type: 'textarea', onChange: this.handleUsageChange, name: 'usage' })
+	            React.createElement('input', { type: 'textarea',
+	              onChange: this.handleUsageChange,
+	              name: 'usage' })
 	          )
 	        ),
 	        React.createElement(
@@ -33487,407 +33540,14 @@
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var TermStore = __webpack_require__(226);
-	var CurrentUserStore = __webpack_require__(253);
-	var History = __webpack_require__(1).History;
-	var TermHeader = __webpack_require__(249);
-	var FileUploads = __webpack_require__(244);
-	var Opinion = __webpack_require__(252);
-	var YoutubeVideo = __webpack_require__(251);
-	var DeleteButton = __webpack_require__(255);
-
-	var SingleTerm = React.createClass({
-	  displayName: 'SingleTerm',
-
-
-	  getInitialState: function getInitialState() {
-	    return { term: TermStore.findById(this.getId()) };
-	  },
-
-	  getId: function getId() {
-	    var id = this.props.params.id;
-	    id = parseInt(id);
-	    return id;
-	  },
-
-	  getCurrentUser: function getCurrentUser() {
-	    this.setState({ currentUser: { user: CurrentUserStore.currentUser() } });
-	  },
-
-	  componentWillMount: function componentWillMount() {
-	    ApiUtil.fetchSingleTerm(this.getId());
-	    TermStore.addListener(this._onChange);
-	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
-	  },
-
-	  componentDidMount: function componentDidMount() {
-	    var id = this.getId();
-	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
-	    // ApiUtil.fetchSingleTerm(id);
-	  },
-
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.currentUserListener.remove();
-	  },
-
-	  _onChange: function _onChange() {
-	    var id = this.getId();
-	    this.setState({ term: TermStore.findById(id) });
-	  },
-
-	  deleteTerm: function deleteTerm(e) {
-	    e.preventDefault();
-	    ApiUtil.deleteTerm(this.getId());
-	  },
-
-	  render: function render() {
-	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	    var usage = "";
-	    var date = new Date();
-	    var author = "";
-	    var youtubeVideo = React.createElement('div', null);
-	    var image = React.createElement('div', null);
-	    var term = "";
-	    var definition = "";
-	    var deleteButton = "";
-	    if (typeof this.state.term !== "undefined") {
-	      date = new Date(this.state.term.created_at);
-	      if (typeof this.state.term.video_url === "string" && this.state.term.video_url.length > 7) {
-	        youtubeVideo = React.createElement(YoutubeVideo, { video: this.state.term.video_url });
-	      }
-	      if (typeof this.state.term.image_url === "string" && this.state.term.image_url.length > 1) {
-	        image = React.createElement('img', { className: 'termImg', src: this.state.term.image_url });
-	      }
-	      if (typeof this.state.term.usage !== "undefined" && this.state.term.usage.length > 0) {
-	        usage = React.createElement(
-	          'p',
-	          { className: 'usage' },
-	          this.state.term.usage
-	        );
-	      }
-	      author = React.createElement(
-	        'a',
-	        { href: '#', onClick: this.showUserTerms },
-	        '  ',
-	        this.state.term.user.username,
-	        ' '
-	      );
-	      term = this.state.term.term;
-	      definition = this.state.term.definition;
-	    }
-	    if (typeof this.state.currentUser !== 'undefined' && typeof this.state.term !== "undefined" && this.state.currentUser.user.id === this.state.term.user.id) {
-	      deleteButton = React.createElement(
-	        'a',
-	        { href: '#', onClick: this.deleteTerm },
-	        'Delete this term.'
-	      );
-	    }
-	    var shortMonth = months[date.getMonth()].slice(0, 3);
-	    var dateString = shortMonth + " " + date.getDate();
-	    return React.createElement(
-	      'article',
-	      { className: 'term term_list_item group' },
-	      React.createElement(TermHeader, { termHeader: dateString }),
-	      React.createElement(
-	        'a',
-	        { href: '#', onClick: this.showTerm },
-	        React.createElement(
-	          'h2',
-	          null,
-	          term
-	        )
-	      ),
-	      React.createElement(
-	        'p',
-	        { className: 'definition' },
-	        definition
-	      ),
-	      usage,
-	      React.createElement(
-	        'p',
-	        { className: 'author' },
-	        'by ',
-	        author,
-	        ' ',
-	        months[date.getMonth()],
-	        ' ',
-	        date.getDate(),
-	        ', ',
-	        date.getFullYear()
-	      ),
-	      React.createElement(FileUploads, { term: this.state.term }),
-	      image,
-	      youtubeVideo,
-	      React.createElement(Opinion, { term: this.state.term }),
-	      React.createElement(DeleteButton, { term: this.props, currentUser: this.state.currentUser.user.id })
-	    );
-	  }
-	});
-
-	module.exports = SingleTerm;
-
-/***/ },
-/* 269 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(3);
-	var TermStore = __webpack_require__(226);
-	var TermListItem = __webpack_require__(243);
-	var TermList = __webpack_require__(242);
-	var UserApiUtil = __webpack_require__(270);
-	var UserStore = __webpack_require__(273);
-
-	var Author = React.createClass({
-	  displayName: 'Author',
-
-
-	  getInitialState: function getInitialState() {
-	    var id = this.props.params.id;
-	    return { user: { username: "" }, terms: [] };
-	    // return null;
-	  },
-
-	  componentDidMount: function componentDidMount() {
-	    var id = parseInt(this.props.params.id);
-	    // this.user_listener = UserStore.addListener(this._onChange);
-	    this.term_listener = TermStore.addListener(this._onChange);
-	    if (TermStore.all().length === 0) {
-	      ApiUtil.fetchTerms();
-	    }
-	    this.setState({ terms: TermStore.findByAuthorId(id) });
-	  },
-
-	  componentWillUnmount: function componentWillUnmount() {
-	    this.user_listener.remove();
-	  },
-
-	  _onChange: function _onChange() {
-	    var id = parseInt(this.props.params.id);
-	    this.setState({ terms: TermStore.findByAuthorId(id) });
-	  },
-
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'author-terms group' },
-	      this.state.terms.map(function (term) {
-	        return React.createElement(TermListItem, {
-	          term: term,
-	          key: term.id,
-	          user: this.state.user
-	        });
-	      }.bind(this))
-	    );
-	  }
-	});
-
-	module.exports = Author;
-
-/***/ },
-/* 270 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var UserActions = __webpack_require__(271);
-	var ErrorActions = __webpack_require__(224);
-
-	var UserApiUtil = {
-
-	  fetchUsers: function fetchUsers() {
-	    $.ajax({
-	      url: '/api/users',
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function success(data) {
-	        UserActions.receiveUsers(data);
-	      },
-	      error: function error(_error) {
-	        ErrorActions.receiveErrors(_error);
-	      }
-	    });
-	  },
-
-	  fetchUser: function fetchUser(id) {
-	    $.ajax({
-	      url: '/api/users/' + id,
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function success(data) {
-	        UserActions.receiveUser(data);
-	      },
-	      error: function error(_error2) {
-	        ErrorActions.receiveErrors(_error2);
-	      }
-	    });
-	  }
-
-	};
-
-	module.exports = UserApiUtil;
-
-/***/ },
-/* 271 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(3);
-	var UserConstants = __webpack_require__(272);
-	var AppDispatcher = __webpack_require__(219);
-
-	var UserApiUtil = {
-	  receiveUsers: function receiveUsers(users) {
-	    AppDispatcher.dispatch({
-	      actionType: UserConstants.USERS_RECEIVED,
-	      users: users
-	    });
-	  },
-	  receiveUser: function receiveUser(user) {
-	    AppDispatcher.dispatch({
-	      actionType: UserConstants.USER_RECEIVED,
-	      user: user
-	    });
-	  }
-	};
-
-	module.exports = UserApiUtil;
-
-/***/ },
-/* 272 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var UserConstants = {
-	  USERS_RECEIVED: "USERS_RECEIVED",
-	  USER_RECEIVED: "USER_RECEIVED"
-	};
-
-	module.exports = UserConstants;
-
-/***/ },
-/* 273 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var Store = __webpack_require__(227).Store;
-	var AppDispatcher = __webpack_require__(219);
-	var UserConstants = __webpack_require__(272);
-
-	var _users = [];
-
-	var UserStore = new Store(AppDispatcher);
-
-	UserStore.all = function () {
-	  return _users.slice(0);
-	};
-
-	var reset = function reset(users) {
-	  _users = users;
-	};
-
-	UserStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case UserConstants.USERS_RECEIVED:
-	      reset(payload.users);
-	      UserStore.__emitChange();
-	      break;
-	    case UserConstants.USER_RECEIVED:
-	      reset(payload.user);
-	      UserStore.__emitChange();
-	      break;
-	  }
-	};
-
-	UserStore.getAuthorTerms = function (id) {
-	  return _users;
-	};
-
-	module.exports = UserStore;
-
-/***/ },
-/* 274 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(3);
+	var SignInButton = __webpack_require__(259);
 	var NewTermButton = __webpack_require__(266);
-
-	var Sidebar = React.createClass({
-	  displayName: 'Sidebar',
-
-
-	  getInitialState: function getInitialState() {
-	    var gifClasses = ["cat", "bowie", "glider", "typing", "kermit"];
-	    // var gifClasses = ["cat"];
-	    return {
-	      gifClass: "gif " + gifClasses[Math.floor(Math.random() * gifClasses.length)]
-	    };
-	  },
-
-	  render: function render() {
-	    return React.createElement(
-	      'section',
-	      { className: 'sidebar', onmouseover: this.onmouseover, onmouseout: this.onmouseout },
-	      React.createElement(
-	        'h2',
-	        null,
-	        React.createElement(
-	          'span',
-	          null,
-	          'Ye'
-	        ),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'span',
-	          null,
-	          'wright'
-	        ),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'span',
-	          null,
-	          'Urbane'
-	        ),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'span',
-	          null,
-	          'Dictionary.'
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'gif' },
-	        React.createElement('div', { className: this.state.gifClass })
-	      ),
-	      this.props.children
-	    );
-	  }
-	});
-
-	module.exports = Sidebar;
-
-/***/ },
-/* 275 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(3);
-	var SignInButton = __webpack_require__(258);
-	var NewTermButton = __webpack_require__(266);
-	var CurrentUserStore = __webpack_require__(253);
-	var SearchResultsStore = __webpack_require__(256);
-	var SearchResultsList = __webpack_require__(276);
-	var SessionsApiUtil = __webpack_require__(260);
-	var Logo = __webpack_require__(277);
-	var SearchBar = __webpack_require__(278);
+	var CurrentUserStore = __webpack_require__(255);
+	var SearchResultsStore = __webpack_require__(257);
+	var SearchResultsList = __webpack_require__(269);
+	var SessionsApiUtil = __webpack_require__(261);
+	var Logo = __webpack_require__(270);
+	var SearchBar = __webpack_require__(271);
 
 	var Header = React.createClass({
 	  displayName: 'Header',
@@ -34043,7 +33703,7 @@
 	module.exports = Header;
 
 /***/ },
-/* 276 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -34094,7 +33754,7 @@
 	module.exports = SearchResultsList;
 
 /***/ },
-/* 277 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -34125,14 +33785,14 @@
 	module.exports = Logo;
 
 /***/ },
-/* 278 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var SearchApiUtil = __webpack_require__(279);
-	var SearchResultsStore = __webpack_require__(256);
+	var SearchApiUtil = __webpack_require__(272);
+	var SearchResultsStore = __webpack_require__(257);
 
 	var SearchBar = React.createClass({
 	  displayName: 'SearchBar',
@@ -34164,13 +33824,13 @@
 	module.exports = SearchBar;
 
 /***/ },
-/* 279 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var ErrorActions = __webpack_require__(224);
-	var SearchActions = __webpack_require__(280);
+	var SearchActions = __webpack_require__(273);
 
 	var SearchApiUtil = {
 
@@ -34194,13 +33854,13 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
-/* 280 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var SearchConstants = __webpack_require__(257);
+	var SearchConstants = __webpack_require__(258);
 	var AppDispatcher = __webpack_require__(219);
 
 	var SearchApiUtil = {
@@ -34216,13 +33876,406 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var TermStore = __webpack_require__(228);
+	var CurrentUserStore = __webpack_require__(255);
+	var History = __webpack_require__(1).History;
+	var TermHeader = __webpack_require__(251);
+	var FileUploads = __webpack_require__(246);
+	var Opinion = __webpack_require__(254);
+	var YoutubeVideo = __webpack_require__(253);
+	var DeleteButton = __webpack_require__(256);
+
+	var SingleTerm = React.createClass({
+	  displayName: 'SingleTerm',
+
+
+	  getInitialState: function getInitialState() {
+	    return { term: TermStore.findById(this.getId()) };
+	  },
+
+	  getId: function getId() {
+	    var id = this.props.params.id;
+	    id = parseInt(id);
+	    return id;
+	  },
+
+	  getCurrentUser: function getCurrentUser() {
+	    this.setState({ currentUser: { user: CurrentUserStore.currentUser() } });
+	  },
+
+	  componentWillMount: function componentWillMount() {
+	    ApiUtil.fetchSingleTerm(this.getId());
+	    TermStore.addListener(this._onChange);
+	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    var id = this.getId();
+	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
+	    // ApiUtil.fetchSingleTerm(id);
+	  },
+
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.currentUserListener.remove();
+	  },
+
+	  _onChange: function _onChange() {
+	    var id = this.getId();
+	    this.setState({ term: TermStore.findById(id) });
+	  },
+
+	  deleteTerm: function deleteTerm(e) {
+	    e.preventDefault();
+	    ApiUtil.deleteTerm(this.getId());
+	  },
+
+	  render: function render() {
+	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	    var usage = "";
+	    var date = new Date();
+	    var author = "";
+	    var youtubeVideo = React.createElement('div', null);
+	    var image = React.createElement('div', null);
+	    var term = "";
+	    var definition = "";
+	    var deleteButton = "";
+	    if (typeof this.state.term !== "undefined") {
+	      date = new Date(this.state.term.created_at);
+	      if (typeof this.state.term.video_url === "string" && this.state.term.video_url.length > 7) {
+	        youtubeVideo = React.createElement(YoutubeVideo, { video: this.state.term.video_url });
+	      }
+	      if (typeof this.state.term.image_url === "string" && this.state.term.image_url.length > 1) {
+	        image = React.createElement('img', { className: 'termImg', src: this.state.term.image_url });
+	      }
+	      if (typeof this.state.term.usage !== "undefined" && this.state.term.usage.length > 0) {
+	        usage = React.createElement(
+	          'p',
+	          { className: 'usage' },
+	          this.state.term.usage
+	        );
+	      }
+	      author = React.createElement(
+	        'a',
+	        { href: '#', onClick: this.showUserTerms },
+	        '  ',
+	        this.state.term.user.username,
+	        ' '
+	      );
+	      term = this.state.term.term;
+	      definition = this.state.term.definition;
+	    }
+	    if (typeof this.state.currentUser !== 'undefined' && typeof this.state.term !== "undefined" && this.state.currentUser.user.id === this.state.term.user.id) {
+	      deleteButton = React.createElement(
+	        'a',
+	        { href: '#', onClick: this.deleteTerm },
+	        'Delete this term.'
+	      );
+	    }
+	    var shortMonth = months[date.getMonth()].slice(0, 3);
+	    var dateString = shortMonth + " " + date.getDate();
+	    return React.createElement(
+	      'article',
+	      { className: 'term term_list_item group' },
+	      React.createElement(TermHeader, { termHeader: dateString }),
+	      React.createElement(
+	        'a',
+	        { href: '#', onClick: this.showTerm },
+	        React.createElement(
+	          'h2',
+	          null,
+	          term
+	        )
+	      ),
+	      React.createElement(
+	        'p',
+	        { className: 'definition' },
+	        definition
+	      ),
+	      usage,
+	      React.createElement(
+	        'p',
+	        { className: 'author' },
+	        'by ',
+	        author,
+	        ' ',
+	        months[date.getMonth()],
+	        ' ',
+	        date.getDate(),
+	        ', ',
+	        date.getFullYear()
+	      ),
+	      React.createElement(FileUploads, { term: this.state.term }),
+	      image,
+	      youtubeVideo,
+	      React.createElement(Opinion, { term: this.state.term }),
+	      React.createElement(DeleteButton, { term: this.props, currentUser: this.state.currentUser.user.id })
+	    );
+	  }
+	});
+
+	module.exports = SingleTerm;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var TermStore = __webpack_require__(228);
+	var TermListItem = __webpack_require__(245);
+	var TermList = __webpack_require__(244);
+	var UserApiUtil = __webpack_require__(276);
+	var UserStore = __webpack_require__(279);
+
+	var Author = React.createClass({
+	  displayName: 'Author',
+
+
+	  getInitialState: function getInitialState() {
+	    var id = this.props.params.id;
+	    return { user: { username: "" }, terms: [] };
+	    // return null;
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    var id = parseInt(this.props.params.id);
+	    // this.user_listener = UserStore.addListener(this._onChange);
+	    this.term_listener = TermStore.addListener(this._onChange);
+	    if (TermStore.all().length === 0) {
+	      ApiUtil.fetchTerms();
+	    }
+	    this.setState({ terms: TermStore.findByAuthorId(id) });
+	  },
+
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.user_listener.remove();
+	  },
+
+	  _onChange: function _onChange() {
+	    var id = parseInt(this.props.params.id);
+	    this.setState({ terms: TermStore.findByAuthorId(id) });
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'author-terms group' },
+	      this.state.terms.map(function (term) {
+	        return React.createElement(TermListItem, {
+	          term: term,
+	          key: term.id,
+	          user: this.state.user
+	        });
+	      }.bind(this))
+	    );
+	  }
+	});
+
+	module.exports = Author;
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var UserActions = __webpack_require__(277);
+	var ErrorActions = __webpack_require__(224);
+
+	var UserApiUtil = {
+
+	  fetchUsers: function fetchUsers() {
+	    $.ajax({
+	      url: '/api/users',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function success(data) {
+	        UserActions.receiveUsers(data);
+	      },
+	      error: function error(_error) {
+	        ErrorActions.receiveErrors(_error);
+	      }
+	    });
+	  },
+
+	  fetchUser: function fetchUser(id) {
+	    $.ajax({
+	      url: '/api/users/' + id,
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function success(data) {
+	        UserActions.receiveUser(data);
+	      },
+	      error: function error(_error2) {
+	        ErrorActions.receiveErrors(_error2);
+	      }
+	    });
+	  }
+
+	};
+
+	module.exports = UserApiUtil;
+
+/***/ },
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var UserConstants = __webpack_require__(278);
+	var AppDispatcher = __webpack_require__(219);
+
+	var UserApiUtil = {
+	  receiveUsers: function receiveUsers(users) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.USERS_RECEIVED,
+	      users: users
+	    });
+	  },
+	  receiveUser: function receiveUser(user) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.USER_RECEIVED,
+	      user: user
+	    });
+	  }
+	};
+
+	module.exports = UserApiUtil;
+
+/***/ },
+/* 278 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var UserConstants = {
+	  USERS_RECEIVED: "USERS_RECEIVED",
+	  USER_RECEIVED: "USER_RECEIVED"
+	};
+
+	module.exports = UserConstants;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var Store = __webpack_require__(229).Store;
+	var AppDispatcher = __webpack_require__(219);
+	var UserConstants = __webpack_require__(278);
+
+	var _users = [];
+
+	var UserStore = new Store(AppDispatcher);
+
+	UserStore.all = function () {
+	  return _users.slice(0);
+	};
+
+	var reset = function reset(users) {
+	  _users = users;
+	};
+
+	UserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.USERS_RECEIVED:
+	      reset(payload.users);
+	      UserStore.__emitChange();
+	      break;
+	    case UserConstants.USER_RECEIVED:
+	      reset(payload.user);
+	      UserStore.__emitChange();
+	      break;
+	  }
+	};
+
+	UserStore.getAuthorTerms = function (id) {
+	  return _users;
+	};
+
+	module.exports = UserStore;
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var NewTermButton = __webpack_require__(266);
+
+	var Sidebar = React.createClass({
+	  displayName: 'Sidebar',
+
+
+	  getInitialState: function getInitialState() {
+	    var gifClasses = ["cat", "bowie", "glider", "typing", "kermit"];
+	    // var gifClasses = ["cat"];
+	    return {
+	      gifClass: "gif " + gifClasses[Math.floor(Math.random() * gifClasses.length)]
+	    };
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'section',
+	      { className: 'sidebar', onmouseover: this.onmouseover, onmouseout: this.onmouseout },
+	      React.createElement(
+	        'h2',
+	        null,
+	        React.createElement(
+	          'span',
+	          null,
+	          'Ye'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'span',
+	          null,
+	          'wright'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'span',
+	          null,
+	          'Urbane'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'span',
+	          null,
+	          'Dictionary.'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'gif' },
+	        React.createElement('div', { className: this.state.gifClass })
+	      ),
+	      this.props.children
+	    );
+	  }
+	});
+
+	module.exports = Sidebar;
+
+/***/ },
 /* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var Logo = __webpack_require__(277);
+	var Logo = __webpack_require__(270);
 
 	var Spinner = React.createClass({
 	  displayName: 'Spinner',
@@ -34300,7 +34353,7 @@
 
 	'use strict';
 
-	var Store = __webpack_require__(227).Store;
+	var Store = __webpack_require__(229).Store;
 	var AppDispatcher = __webpack_require__(219);
 	var ErrorConstants = __webpack_require__(225);
 

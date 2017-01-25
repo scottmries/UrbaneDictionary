@@ -31,12 +31,16 @@ var SignInForm = React.createClass({
     this.setState({ signUpPassword: e.currentTarget.value });
   },
 
+  hasUnsubmittedTerm: function(term){
+     return (term === null);
+  },
+
   signin: function (e) {
     e.preventDefault();
     var credentials = $(e.currentTarget).serializeJSON().user;
-    if(typeof browserHistory.state !== "undefined" &&
-      typeof browserHistory.state.term !== "undefined"){
-      term = browserHistory.state.term;
+    debugger;
+    if(this.browserHistoryHasTerm()){
+      var term = this.props.unSubmittedTerm;
       term.user_id = CurrentUserStore.currentUser().id;
       ApiUtil.createTerm(term);
     } else{
@@ -44,13 +48,11 @@ var SignInForm = React.createClass({
         browserHistory.push({}, "/");
       }.bind(this));
     }
-
   },
 
   handleSubmittedTerm: function (user) {
-    if(typeof browserHistory.state !== "undefined" &&
-      typeof browserHistory.state.term !== "undefined"){
-      term = browserHistory.state.term;
+    if(this.browserHistoryHasTerm()){
+      var term = this.props.unSubmittedTerm;
       term.user_id = CurrentUserStore.currentUser().id;
       ApiUtil.createTerm(term);
     } else {
@@ -62,23 +64,22 @@ var SignInForm = React.createClass({
 
   signup: function (e) {
     e.preventDefault();
-
     var user = $(e.currentTarget).serializeJSON().user;
     if (CurrentUserStore.hasBeenFetched()){
       this.handleSubmittedTerm(user);
     } else {
       SessionsApiUtil.fetchCurrentUser(this.handleSubmittedTerm(user));
     }
-
   },
 
   render: function () {
+      let signinAdverb = this.hasUnsubmittedTerm(this.props.unSubmittedTerm) ? " first" : "";
     return (
       <section className="sign-in-modal">
         <div className="form-inner">
 
                   <Modal closeButton="show" closeHandler={this.props.closeHandler}>
-                    <h2>Say, Jim, fancy a sign in?</h2>
+                    <h2>Say, Jim, fancy a sign in{signinAdverb}?</h2>
                     <div className="single-click-logins">
                       <GuestSignIn submit={this.signup}/>
                       <FacebookSignIn />

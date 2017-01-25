@@ -14,10 +14,8 @@ var CurrentUserStore = require('./../stores/current_user_store');
 var TermStore = require('./../stores/term');
 var SessionsApiUtil = require('./../util/sessions_api_util');
 var Spinner = require('./spinner');
-// var History = require('react-router').History;
 var ErrorComponent = require('./error');
-
-// import { browserHistory } from "react-router";
+import { browserHistory } from "react-router";
 
 const App = React.createClass({
 
@@ -53,7 +51,8 @@ const App = React.createClass({
     return ({
       signInModalIsOpen: false,
       newTermModalIsOpen: false,
-      fetchingModalIsOpen: false
+      fetchingModalIsOpen: false,
+      unSubmittedTerm: null
     });
   },
   // refactor: move modal logic to a store
@@ -96,6 +95,13 @@ const App = React.createClass({
     });
   },
 
+  setUnsubmittedTerm: function (term) {
+      this.setState({
+          unSubmittedTerm: term
+      });
+    //   browserHistory.push({term: term});
+  },
+
   animateGif: function (){
   },
 
@@ -105,7 +111,10 @@ const App = React.createClass({
   render: function () {
     var signInModal = "";
     if (this.state.signInModalIsOpen){
-      signInModal = <SignInForm closeHandler={this.closeSignInModal} />;
+      signInModal = <SignInForm
+          closeHandler={this.closeSignInModal}
+          unSubmittedTerm={this.state.unSubmittedTerm}
+          />;
     }
     var newTermModal;
     var fetchingModal;
@@ -121,8 +130,16 @@ const App = React.createClass({
     }
 
     if (this.state.newTermModalIsOpen){
-      newTermModal = <Modal closeHandler={this.closeNewTermModal} closeButton="show" >
-        <NewTermForm />
+      newTermModal = <Modal
+          closeHandler={this.closeNewTermModal}
+          closeButton="show"
+          signInModalHandler={this.openSignInModal}
+          >
+        <NewTermForm
+            closeNewTermModal={this.closeNewTermModal}
+            openSignInModal={this.openSignInModal}
+            setUnsubmittedTerm={this.setUnsubmittedTerm}
+            />
       </Modal>;
     } else {
       newTermModal = <div></div>;
