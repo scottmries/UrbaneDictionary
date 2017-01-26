@@ -14,10 +14,8 @@ const SearchResultsList = React.createClass ( {
     var resultsContent = <li>No results</li>;
     if (this.props.results.length > 0){
       resultsContent = this.props.results.map (function (result){
-        var termUrl = "/terms/" + result.searchable_id;
-        console.log(result.searchable_id);
         return (
-          <Link to={`/terms/${result.searchable_id}`}  onFocus={this.props.focusCallback}  key={result.searchable_id}><li>{result.content}</li></Link>
+          <Link to={`/terms/${result.searchable_id}`} onClick={this.props.blurCallback} onFocus={this.props.focusCallback}  key={result.searchable_id}><li>{result.content}</li></Link>
         );
       }.bind(this));
     }

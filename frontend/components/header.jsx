@@ -63,7 +63,11 @@ var Header = React.createClass({
     }
     var searchResultsList = "";
     if(this.state.searching){
-      searchResultsList = <SearchResultsList results={this.state.searchResults} focusCallback={this.searching}/>;
+      searchResultsList =
+        <SearchResultsList
+            results={this.state.searchResults}
+            focusCallback={this.searching}
+            blurCallback={this.notSearching}/>;
     }
     var alphabet = "abcdefghijklmnopqrstuvwxyz#".split("");
     alphabet.concat(["new"]);

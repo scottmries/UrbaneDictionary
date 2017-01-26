@@ -8,6 +8,7 @@ var Opinion = require('./opinion');
 var YoutubeVideo = require('./youtube_video');
 var DeleteButton = require('./delete_button');
 var ApiUtil = require('../util/api_util');
+import { Link } from 'react-router';
 
 var SingleTerm = React.createClass({
 
@@ -21,7 +22,14 @@ var SingleTerm = React.createClass({
   getId: function () {
     var id = this.props.params.id;
     id = parseInt(id);
+    console.log(id);
     return id;
+  },
+
+  componentWillReceiveProps: function () {
+    this.setState({
+        term: TermStore.findById(this.getId())
+    });
   },
 
   getCurrentUser: function () {
@@ -75,7 +83,7 @@ var SingleTerm = React.createClass({
       if (typeof this.state.term.usage !== "undefined" && this.state.term.usage.length > 0){
         usage = <p className="usage">{this.state.term.usage}</p>;
       }
-      author = <a href="#" onClick={this.showUserTerms}>  {this.state.term.user.username} </a>;
+      author = <Link to={`/users/${this.state.term.user.id}`}>  {this.state.term.user.username} </Link>;
       term = this.state.term.term;
       definition = this.state.term.definition;
     }

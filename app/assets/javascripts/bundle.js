@@ -33543,7 +33543,7 @@
 	        ),
 	        React.createElement(
 	          'button',
-	          null,
+	          { className: 'new-term-submit' },
 	          'Submit'
 	        )
 	      )
@@ -33633,7 +33633,10 @@
 	    }
 	    var searchResultsList = "";
 	    if (this.state.searching) {
-	      searchResultsList = React.createElement(SearchResultsList, { results: this.state.searchResults, focusCallback: this.searching });
+	      searchResultsList = React.createElement(SearchResultsList, {
+	        results: this.state.searchResults,
+	        focusCallback: this.searching,
+	        blurCallback: this.notSearching });
 	    }
 	    var alphabet = "abcdefghijklmnopqrstuvwxyz#".split("");
 	    alphabet.concat(["new"]);
@@ -33751,11 +33754,9 @@
 	    );
 	    if (this.props.results.length > 0) {
 	      resultsContent = this.props.results.map(function (result) {
-	        var termUrl = "/terms/" + result.searchable_id;
-	        console.log(result.searchable_id);
 	        return React.createElement(
 	          _reactRouter.Link,
-	          { to: "/terms/" + result.searchable_id, onFocus: this.props.focusCallback, key: result.searchable_id },
+	          { to: "/terms/" + result.searchable_id, onClick: this.props.blurCallback, onFocus: this.props.focusCallback, key: result.searchable_id },
 	          React.createElement(
 	            "li",
 	            null,
@@ -33899,6 +33900,8 @@
 
 	'use strict';
 
+	var _reactRouter = __webpack_require__(1);
+
 	var React = __webpack_require__(3);
 	var TermStore = __webpack_require__(228);
 	var CurrentUserStore = __webpack_require__(255);
@@ -33909,6 +33912,7 @@
 	var YoutubeVideo = __webpack_require__(253);
 	var DeleteButton = __webpack_require__(256);
 	var ApiUtil = __webpack_require__(217);
+
 
 	var SingleTerm = React.createClass({
 	  displayName: 'SingleTerm',
@@ -33924,7 +33928,14 @@
 	  getId: function getId() {
 	    var id = this.props.params.id;
 	    id = parseInt(id);
+	    console.log(id);
 	    return id;
+	  },
+
+	  componentWillReceiveProps: function componentWillReceiveProps() {
+	    this.setState({
+	      term: TermStore.findById(this.getId())
+	    });
 	  },
 
 	  getCurrentUser: function getCurrentUser() {
@@ -33982,8 +33993,8 @@
 	        );
 	      }
 	      author = React.createElement(
-	        'a',
-	        { href: '#', onClick: this.showUserTerms },
+	        _reactRouter.Link,
+	        { to: '/users/' + this.state.term.user.id },
 	        '  ',
 	        this.state.term.user.username,
 	        ' '

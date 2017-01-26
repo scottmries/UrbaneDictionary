@@ -102,7 +102,7 @@ const NewTermForm = React.createClass({
             </input>
           </label>
         </div>
-        <button>Submit</button>
+        <button className="new-term-submit">Submit</button>
       </form>
       </section>
     );

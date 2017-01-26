@@ -374,8 +374,7 @@ header .subnav button.signIn {
   margin-bottom: 15px;
 }
 
-
-.third-party-login, .single-click-logins input[type="submit"] {
+.third-party-login, .single-click-logins input[type="submit"], .new-term-submit {
   text-align: center;
   font-size: 24px;
   margin:15px auto;
