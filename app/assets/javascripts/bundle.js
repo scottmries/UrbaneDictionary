@@ -33781,15 +33781,12 @@
 	  displayName: "Logo",
 
 
-	  clickHandler: function clickHandler(e) {
-	    e.preventDefault();
-	    _reactRouter.browserHistory.push({}, "/");
-	  },
+	  clickHandler: function clickHandler(e) {},
 
 	  render: function render() {
 	    return React.createElement(
-	      "a",
-	      { href: "/", onClick: this.clickHandler },
+	      _reactRouter.Link,
+	      { to: "/" },
 	      React.createElement("div", { className: "logo" })
 	    );
 	  }
