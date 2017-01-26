@@ -1,5 +1,6 @@
 var React = require('react');
 var ApiUtil = require('../util/api_util');
+import {Link} from 'react-router';
 
 var DeleteButton = React.createClass({
 
@@ -8,16 +9,11 @@ var DeleteButton = React.createClass({
   },
 
   render: function(){
-    var deleteButton = "";
-    if (typeof this.props.currentUser !== 'undefined' && this.props.currentUser.user.user.id === this.props.term.user.id){
-      return (
-        <div>
-          <a className="delete_button" onClick={this.deleteTerm}>Delete this term.</a>
-        </div>
-      );
-    } else {
-      return <div></div>
-    }
+     return (
+       <div>
+         <Link className="delete_button" onClick={this.deleteTerm}>Delete this term.</Link>
+       </div>
+     );
   }
 });
 

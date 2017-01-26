@@ -63,7 +63,7 @@ var Header = React.createClass({
     }
     var searchResultsList = "";
     if(this.state.searching){
-      searchResultsList = <SearchResultsList results={this.state.searchResults} />;
+      searchResultsList = <SearchResultsList results={this.state.searchResults} focusCallback={this.searching}/>;
     }
     var alphabet = "abcdefghijklmnopqrstuvwxyz#".split("");
     alphabet.concat(["new"]);
@@ -102,7 +102,7 @@ var Header = React.createClass({
           <nav className="subnav">
             <SignInButton clickCallback={this.props.openSignInModal} text="" />
             <NewTermButton clickCallback={this.props.openNewTermModal} text="" />
-            <SearchBar focusCallback={this.searching} blurCallback={this.notSearching}/>
+            <SearchBar focusCallback={this.searching} />
             {searchResultsList}
           </nav>
         </div>

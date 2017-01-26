@@ -9,7 +9,7 @@ var Opinion = require('./opinion');
 var CurrentUserStore = require('../stores/current_user_store');
 var DeleteButton = require('./delete_button');
 var Waypoint = require('react-waypoint');
-import { browserHistory } from "react-router";
+import { browserHistory, Link } from "react-router";
 
 var TermListItem = React.createClass({
 
@@ -96,9 +96,9 @@ var TermListItem = React.createClass({
             termHeader={dateString}
             termId={this.props.term.id}
             hasBeenVisible={this.state.hasBeenVisible}/>
-        <a href="#" onClick={this.showTerm}>
+        <Link to={`/terms/${this.props.term.id}`}>
           <h2>{term}</h2>
-        </a>
+        </Link>
         <p className="definition">
           {definition}
         </p>

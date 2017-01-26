@@ -32260,8 +32260,8 @@
 	        termId: this.props.term.id,
 	        hasBeenVisible: this.state.hasBeenVisible }),
 	      React.createElement(
-	        'a',
-	        { href: '#', onClick: this.showTerm },
+	        _reactRouter.Link,
+	        { to: '/terms/' + this.props.term.id },
 	        React.createElement(
 	          'h2',
 	          null,
@@ -32853,8 +32853,11 @@
 
 	'use strict';
 
+	var _reactRouter = __webpack_require__(1);
+
 	var React = __webpack_require__(3);
 	var ApiUtil = __webpack_require__(217);
+
 
 	var DeleteButton = React.createClass({
 	  displayName: 'DeleteButton',
@@ -32865,20 +32868,15 @@
 	  },
 
 	  render: function render() {
-	    var deleteButton = "";
-	    if (typeof this.props.currentUser !== 'undefined' && this.props.currentUser.user.user.id === this.props.term.user.id) {
-	      return React.createElement(
-	        'div',
-	        null,
-	        React.createElement(
-	          'a',
-	          { className: 'delete_button', onClick: this.deleteTerm },
-	          'Delete this term.'
-	        )
-	      );
-	    } else {
-	      return React.createElement('div', null);
-	    }
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        _reactRouter.Link,
+	        { className: 'delete_button', onClick: this.deleteTerm },
+	        'Delete this term.'
+	      )
+	    );
 	  }
 	});
 
@@ -33627,7 +33625,7 @@
 	    }
 	    var searchResultsList = "";
 	    if (this.state.searching) {
-	      searchResultsList = React.createElement(SearchResultsList, { results: this.state.searchResults });
+	      searchResultsList = React.createElement(SearchResultsList, { results: this.state.searchResults, focusCallback: this.searching });
 	    }
 	    var alphabet = "abcdefghijklmnopqrstuvwxyz#".split("");
 	    alphabet.concat(["new"]);
@@ -33706,7 +33704,7 @@
 	          { className: 'subnav' },
 	          React.createElement(SignInButton, { clickCallback: this.props.openSignInModal, text: '' }),
 	          React.createElement(NewTermButton, { clickCallback: this.props.openNewTermModal, text: '' }),
-	          React.createElement(SearchBar, { focusCallback: this.searching, blurCallback: this.notSearching }),
+	          React.createElement(SearchBar, { focusCallback: this.searching }),
 	          searchResultsList
 	        )
 	      )
@@ -33732,8 +33730,9 @@
 
 
 	  onClick: function onClick(e) {
-	    // this.history.push({}, 'terms/new');
-	    // e.preventDefault();
+	    e.preventDefault();
+	    e.stopPropagation();
+	    console.log("clicky");
 	  },
 
 	  render: function render() {
@@ -33745,9 +33744,10 @@
 	    if (this.props.results.length > 0) {
 	      resultsContent = this.props.results.map(function (result) {
 	        var termUrl = "/terms/" + result.searchable_id;
+	        console.log(result.searchable_id);
 	        return React.createElement(
-	          "a",
-	          { href: termUrl, onclick: this.onClick(result.searchable_id), key: result.searchable_id },
+	          _reactRouter.Link,
+	          { to: "/terms/" + result.searchable_id, onFocus: this.props.focusCallback, key: result.searchable_id },
 	          React.createElement(
 	            "li",
 	            null,
@@ -33903,13 +33903,17 @@
 	var Opinion = __webpack_require__(254);
 	var YoutubeVideo = __webpack_require__(253);
 	var DeleteButton = __webpack_require__(256);
+	var ApiUtil = __webpack_require__(217);
 
 	var SingleTerm = React.createClass({
 	  displayName: 'SingleTerm',
 
 
 	  getInitialState: function getInitialState() {
-	    return { term: TermStore.findById(this.getId()) };
+	    return {
+	      term: TermStore.findById(this.getId()),
+	      currentUser: { user: CurrentUserStore.currentUser() }
+	    };
 	  },
 
 	  getId: function getId() {
@@ -33983,15 +33987,12 @@
 	      term = this.state.term.term;
 	      definition = this.state.term.definition;
 	    }
-	    if (typeof this.state.currentUser !== 'undefined' && typeof this.state.term !== "undefined" && this.state.currentUser.user.id === this.state.term.user.id) {
-	      deleteButton = React.createElement(
-	        'a',
-	        { href: '#', onClick: this.deleteTerm },
-	        'Delete this term.'
-	      );
+	    if (typeof this.state.currentUser.user.user.id !== 'undefined' && typeof this.state.term !== "undefined" && this.state.currentUser.user.user.id === this.state.term.user_id) {
+	      deleteButton = React.createElement(DeleteButton, { term: this.props.term, currentUser: this.state.currentUser.user.user.id });
 	    }
 	    var shortMonth = months[date.getMonth()].slice(0, 3);
 	    var dateString = shortMonth + " " + date.getDate();
+	    // var opinion = <Opinion term={this.state.term}/>;
 	    return React.createElement(
 	      'article',
 	      { className: 'term term_list_item group' },
@@ -34026,8 +34027,7 @@
 	      React.createElement(FileUploads, { term: this.state.term }),
 	      image,
 	      youtubeVideo,
-	      React.createElement(Opinion, { term: this.state.term }),
-	      React.createElement(DeleteButton, { term: this.props, currentUser: this.state.currentUser.user.id })
+	      deleteButton
 	    );
 	  }
 	});

@@ -7,12 +7,16 @@ var FileUploads = require('./file_uploads');
 var Opinion = require('./opinion');
 var YoutubeVideo = require('./youtube_video');
 var DeleteButton = require('./delete_button');
+var ApiUtil = require('../util/api_util');
 
 var SingleTerm = React.createClass({
 
   getInitialState: function () {
-    return { term: TermStore.findById(this.getId()) };
-  },
+    return {
+        term: TermStore.findById(this.getId()),
+        currentUser: {user: CurrentUserStore.currentUser()}
+    };
+},
 
   getId: function () {
     var id = this.props.params.id;
@@ -76,11 +80,14 @@ var SingleTerm = React.createClass({
       term = this.state.term.term;
       definition = this.state.term.definition;
     }
-    if (typeof this.state.currentUser !== 'undefined' && typeof this.state.term !== "undefined" && this.state.currentUser.user.id === this.state.term.user.id){
-      deleteButton = <a href="#" onClick={this.deleteTerm}>Delete this term.</a>
+    if (typeof this.state.currentUser.user.user.id !== 'undefined' &&
+        typeof this.state.term !== "undefined" &&
+        this.state.currentUser.user.user.id === this.state.term.user_id){
+      deleteButton = <DeleteButton term={this.props.term} currentUser={this.state.currentUser.user.user.id} />;
     }
     var shortMonth = months[date.getMonth()].slice(0,3);
     var dateString = shortMonth + " " + date.getDate();
+    // var opinion = <Opinion term={this.state.term}/>;
     return (
       <article className="term term_list_item group">
         <TermHeader termHeader={dateString} />
@@ -97,8 +104,7 @@ var SingleTerm = React.createClass({
         <FileUploads term={this.state.term} />
         {image}
         {youtubeVideo}
-        <Opinion term={this.state.term}/>
-        <DeleteButton term={this.props} currentUser={this.state.currentUser.user.id} />
+        {deleteButton}
       </article>
     );
   }

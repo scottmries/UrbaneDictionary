@@ -1,11 +1,13 @@
 var React = require('react');
-import { browserHistory } from "react-router";
+import { browserHistory, Link } from "react-router";
+
 
 const SearchResultsList = React.createClass ( {
 
   onClick: function (e) {
-    // this.history.push({}, 'terms/new');
-    // e.preventDefault();
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("clicky");
   },
 
   render: function () {
@@ -13,8 +15,9 @@ const SearchResultsList = React.createClass ( {
     if (this.props.results.length > 0){
       resultsContent = this.props.results.map (function (result){
         var termUrl = "/terms/" + result.searchable_id;
+        console.log(result.searchable_id);
         return (
-          <a href={termUrl} onclick={this.onClick(result.searchable_id)} key={result.searchable_id}><li>{result.content}</li></a>
+          <Link to={`/terms/${result.searchable_id}`}  onFocus={this.props.focusCallback}  key={result.searchable_id}><li>{result.content}</li></Link>
         );
       }.bind(this));
     }
