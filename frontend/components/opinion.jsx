@@ -24,7 +24,7 @@ const Opinion = React.createClass({
   parseProps: function (props) {
     var likes = 0;
     var dislikes = 0;
-    var opinions = props.term.opinions;
+    var opinions = this.props.term.opinions;
     var currentUserOpined = null;
     for (var i = 0; i < opinions.length; i++){
 
@@ -59,8 +59,8 @@ const Opinion = React.createClass({
   },
 
   render: function() {
-    var dislikeClass = this.state.currentUserOpined === false ? "dislike pressed" : "dislike";
-    var likeClass = this.state.currentUserOpined === true ? "like pressed" : "like";
+    var dislikeClass = this.state.currentUserOpined  ? "dislike" : "dislike pressed";
+    var likeClass = this.state.currentUserOpined ? "like pressed" : "like";
     return (
       <div className="opinion">
       <button className={dislikeClass} onClick={this.handleDislike} disabled={this.state.currentUserOpined === false}><i className="fa fa-thumbs-down"></i> {this.state.dislikes}</button>

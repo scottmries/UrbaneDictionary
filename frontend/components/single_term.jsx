@@ -81,7 +81,6 @@ var SingleTerm = React.createClass({
     }
     var shortMonth = months[date.getMonth()].slice(0,3);
     var dateString = shortMonth + " " + date.getDate();
-    // var opinion = <Opinion term={this.state.term}/>;
     return (
       <article className="term term_list_item group">
         <TermHeader termHeader={dateString} />
@@ -99,6 +98,7 @@ var SingleTerm = React.createClass({
         {image}
         {youtubeVideo}
         <DeleteButton term={this.props.term} currentUser={this.state.currentUser.user.user.id} />
+        <Opinion term={this.state.term}/>
       </article>
     );
   }

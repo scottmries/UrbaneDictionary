@@ -32744,7 +32744,7 @@
 	  parseProps: function parseProps(props) {
 	    var likes = 0;
 	    var dislikes = 0;
-	    var opinions = props.term.opinions;
+	    var opinions = this.props.term.opinions;
 	    var currentUserOpined = null;
 	    for (var i = 0; i < opinions.length; i++) {
 
@@ -32779,8 +32779,8 @@
 	  },
 
 	  render: function render() {
-	    var dislikeClass = this.state.currentUserOpined === false ? "dislike pressed" : "dislike";
-	    var likeClass = this.state.currentUserOpined === true ? "like pressed" : "like";
+	    var dislikeClass = this.state.currentUserOpined ? "dislike" : "dislike pressed";
+	    var likeClass = this.state.currentUserOpined ? "like pressed" : "like";
 	    return React.createElement(
 	      'div',
 	      { className: 'opinion' },
@@ -33990,7 +33990,6 @@
 	    }
 	    var shortMonth = months[date.getMonth()].slice(0, 3);
 	    var dateString = shortMonth + " " + date.getDate();
-	    // var opinion = <Opinion term={this.state.term}/>;
 	    return React.createElement(
 	      'article',
 	      { className: 'term term_list_item group' },
@@ -34025,7 +34024,8 @@
 	      React.createElement(FileUploads, { term: this.state.term }),
 	      image,
 	      youtubeVideo,
-	      React.createElement(DeleteButton, { term: this.props.term, currentUser: this.state.currentUser.user.user.id })
+	      React.createElement(DeleteButton, { term: this.props.term, currentUser: this.state.currentUser.user.user.id }),
+	      React.createElement(Opinion, { term: this.state.term })
 	    );
 	  }
 	});
