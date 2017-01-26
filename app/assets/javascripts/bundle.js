@@ -32678,21 +32678,10 @@
 	    var termUrl = "/terms/" + this.props.termId;
 	    var button = React.createElement(
 	      "div",
-	      null,
-	      "Spinner"
-	    );
-	    if (this.props.hasBeenVisible) {
-	      button = React.createElement(
-	        "div",
-	        { id: "fb-root" },
-	        React.createElement("div", { className: "fb-like", "data-href": termUrl, "data-layout": "button", "data-action": "like", "data-show-faces": "false" })
-	      );
-	    }
-	    return React.createElement(
-	      "div",
 	      { className: "fb-like-button" },
-	      button
+	      React.createElement("div", { className: "fb-like", "data-href": termUrl, "data-layout": "button", "data-action": "like", "data-show-faces": "false" })
 	    );
+	    return React.createElement("div", null);
 	  }
 	});
 
