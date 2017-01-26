@@ -68,10 +68,14 @@ var TermListItem = React.createClass({
     var definition = "";
     if (typeof this.props.term !== "undefined"){
       date = new Date(this.props.term.created_at);
-      if (this.state.hasBeenVisible && (typeof this.props.term.video_url === "string" &&
-            this.props.term.video_url.length > 7)){
-        youtubeVideo = <YoutubeVideo video={this.props.term.video_url} />;
-      }
+
+          if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7){
+            if (this.state.hasBeenVisible){
+                youtubeVideo = <YoutubeVideo video={this.props.term.video_url} />;
+            } else {
+                youtubeVideo = <div><i className="fa fa-circle-o-notch fa-spin"></i></div>;
+            }
+          }
       if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0){
         usage = <p className="usage">{this.props.term.usage}</p>;
       }
@@ -87,7 +91,11 @@ var TermListItem = React.createClass({
     var dateString = shortMonth + " " + date.getDate();
     return (
       <article className="term term_list_item group">
-        <TermHeader termHeader={dateString} termId={this.props.term.id}/>
+        <Waypoint onEnter={this.enterCallback} onLeave={this.leaveCallback} />
+        <TermHeader
+            termHeader={dateString}
+            termId={this.props.term.id}
+            hasBeenVisible={this.state.hasBeenVisible}/>
         <a href="#" onClick={this.showTerm}>
           <h2>{term}</h2>
         </a>
@@ -100,7 +108,6 @@ var TermListItem = React.createClass({
         </p>
         <FileUploads term={this.props.term} />
         {image}
-        <Waypoint onEnter={this.enterCallback} onLeave={this.leaveCallback} />
         {youtubeVideo}
         <Opinion term={this.props.term}/>
         <DeleteButton term={this.props.term} currentUser={this.state.currentUser} />

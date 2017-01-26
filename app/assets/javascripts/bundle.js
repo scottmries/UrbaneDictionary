@@ -32216,8 +32216,17 @@
 	    var definition = "";
 	    if (typeof this.props.term !== "undefined") {
 	      date = new Date(this.props.term.created_at);
-	      if (this.state.hasBeenVisible && typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7) {
-	        youtubeVideo = React.createElement(YoutubeVideo, { video: this.props.term.video_url });
+
+	      if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7) {
+	        if (this.state.hasBeenVisible) {
+	          youtubeVideo = React.createElement(YoutubeVideo, { video: this.props.term.video_url });
+	        } else {
+	          youtubeVideo = React.createElement(
+	            'div',
+	            null,
+	            React.createElement('i', { className: 'fa fa-circle-o-notch fa-spin' })
+	          );
+	        }
 	      }
 	      if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0) {
 	        usage = React.createElement(
@@ -32245,7 +32254,11 @@
 	    return React.createElement(
 	      'article',
 	      { className: 'term term_list_item group' },
-	      React.createElement(TermHeader, { termHeader: dateString, termId: this.props.term.id }),
+	      React.createElement(Waypoint, { onEnter: this.enterCallback, onLeave: this.leaveCallback }),
+	      React.createElement(TermHeader, {
+	        termHeader: dateString,
+	        termId: this.props.term.id,
+	        hasBeenVisible: this.state.hasBeenVisible }),
 	      React.createElement(
 	        'a',
 	        { href: '#', onClick: this.showTerm },
@@ -32275,7 +32288,6 @@
 	      ),
 	      React.createElement(FileUploads, { term: this.props.term }),
 	      image,
-	      React.createElement(Waypoint, { onEnter: this.enterCallback, onLeave: this.leaveCallback }),
 	      youtubeVideo,
 	      React.createElement(Opinion, { term: this.props.term }),
 	      React.createElement(DeleteButton, { term: this.props.term, currentUser: this.state.currentUser })
@@ -32614,20 +32626,36 @@
 
 	var React = __webpack_require__(3);
 	var FacebookLike = __webpack_require__(252);
+	var Waypoint = __webpack_require__(284);
 
 	var TermHeader = React.createClass({
 	  displayName: 'TermHeader',
 
+	  componentWillMount: function componentWillMount() {
+	    this.setState({
+	      hasBeenVisible: false
+	    });
+	  },
+
+	  enterCallback: function enterCallback() {
+	    this.setState({
+	      hasBeenVisible: true
+	    });
+	  },
+	  // leaveCallback: function() {
+	  //
+	  // },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      { className: 'term-header-container group' },
+	      React.createElement(Waypoint, { onEnter: this.enterCallback, onLeave: this.leaveCallback }),
 	      React.createElement(
 	        'strong',
 	        { className: 'term-header' },
 	        this.props.termHeader
 	      ),
-	      React.createElement(FacebookLike, { termId: this.props.termId })
+	      React.createElement(FacebookLike, { termId: this.props.termId, hasBeenVisible: this.props.hasBeenVisible })
 	    );
 	  }
 	});
@@ -32648,11 +32676,22 @@
 
 	  render: function render() {
 	    var termUrl = "/terms/" + this.props.termId;
+	    var button = React.createElement(
+	      "div",
+	      null,
+	      "Spinner"
+	    );
+	    if (this.props.hasBeenVisible) {
+	      button = React.createElement(
+	        "div",
+	        { id: "fb-root" },
+	        React.createElement("div", { className: "fb-like", "data-href": termUrl, "data-layout": "button", "data-action": "like", "data-show-faces": "false" })
+	      );
+	    }
 	    return React.createElement(
 	      "div",
 	      { className: "fb-like-button" },
-	      React.createElement("div", { id: "fb-root" }),
-	      React.createElement("div", { className: "fb-like", "data-href": termUrl, "data-layout": "button", "data-action": "like", "data-show-faces": "false" })
+	      button
 	    );
 	  }
 	});
