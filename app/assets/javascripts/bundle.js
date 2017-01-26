@@ -32719,6 +32719,7 @@
 	var React = __webpack_require__(3);
 	var TermStore = __webpack_require__(228);
 	var CurrentUserStore = __webpack_require__(255);
+	var ApiUtil = __webpack_require__(217);
 
 
 	var Opinion = React.createClass({
@@ -32742,26 +32743,28 @@
 	  },
 
 	  parseProps: function parseProps(props) {
-	    var likes = 0;
-	    var dislikes = 0;
-	    var opinions = this.props.term.opinions;
-	    var currentUserOpined = null;
-	    for (var i = 0; i < opinions.length; i++) {
+	    if (typeof props.term !== "undefined") {
+	      var likes = 0;
+	      var dislikes = 0;
+	      var opinions = props.term.opinions;
+	      var currentUserOpined = null;
+	      for (var i = 0; i < opinions.length; i++) {
 
-	      if (opinions[i].liked) {
-	        likes++;
-	      } else {
-	        dislikes++;
+	        if (opinions[i].liked) {
+	          likes++;
+	        } else {
+	          dislikes++;
+	        }
+	        if (opinions[i].user_id === CurrentUserStore.currentUser().user.id) {
+	          currentUserOpined = opinions[i].liked;
+	        }
 	      }
-	      if (opinions[i].user_id === CurrentUserStore.currentUser().user.id) {
-	        currentUserOpined = opinions[i].liked;
-	      }
+	      this.setState({
+	        likes: likes,
+	        dislikes: dislikes,
+	        currentUserOpined: currentUserOpined
+	      });
 	    }
-	    this.setState({
-	      likes: likes,
-	      dislikes: dislikes,
-	      currentUserOpined: currentUserOpined
-	    });
 	  },
 
 	  handleDislike: function handleDislike(e) {

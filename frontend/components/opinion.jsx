@@ -1,6 +1,7 @@
 var React = require('react');
 var TermStore = require('./../stores/term');
 var CurrentUserStore = require('./../stores/current_user_store');
+var ApiUtil = require('./../util/api_util');
 import { browserHistory } from "react-router";
 
 const Opinion = React.createClass({
@@ -22,26 +23,29 @@ const Opinion = React.createClass({
   },
 
   parseProps: function (props) {
-    var likes = 0;
-    var dislikes = 0;
-    var opinions = this.props.term.opinions;
-    var currentUserOpined = null;
-    for (var i = 0; i < opinions.length; i++){
+      if(typeof props.term !== "undefined"){
+          var likes = 0;
+          var dislikes = 0;
+          var opinions = props.term.opinions;
+          var currentUserOpined = null;
+          for (var i = 0; i < opinions.length; i++){
 
-      if (opinions[i].liked){
-        likes++;
-      } else {
-        dislikes++;
+            if (opinions[i].liked){
+              likes++;
+            } else {
+              dislikes++;
+            }
+            if (opinions[i].user_id === CurrentUserStore.currentUser().user.id){
+              currentUserOpined = opinions[i].liked;
+            }
+          }
+          this.setState({
+            likes: likes,
+            dislikes: dislikes,
+            currentUserOpined: currentUserOpined
+          });
       }
-      if (opinions[i].user_id === CurrentUserStore.currentUser().user.id){
-        currentUserOpined = opinions[i].liked;
-      }
-    }
-    this.setState({
-      likes: likes,
-      dislikes: dislikes,
-      currentUserOpined: currentUserOpined
-    });
+
   },
 
   handleDislike: function (e) {
