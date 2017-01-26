@@ -32169,7 +32169,8 @@
 
 	  componentWillMount: function componentWillMount() {
 	    this.setState({
-	      hasBeenVisible: false
+	      hasBeenVisible: false,
+	      currentUser: { user: CurrentUserStore.currentUser() }
 	    });
 	  },
 
@@ -32290,7 +32291,7 @@
 	      image,
 	      youtubeVideo,
 	      React.createElement(Opinion, { term: this.props.term }),
-	      React.createElement(DeleteButton, { term: this.props.term, currentUser: this.state.currentUser })
+	      React.createElement(DeleteButton, { term: this.props.term, currentUser: this.state.currentUser.user.user.id })
 	    );
 	  }
 	});
@@ -32864,18 +32865,22 @@
 
 
 	  deleteTerm: function deleteTerm() {
-	    ApiUtil.deleteTerm(this.props.term.id, this.props.currentUser.user.user.id);
+	    ApiUtil.deleteTerm(this.props.term.id, this.props.currentUser);
 	  },
 
 	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
+	    var deleteButton = "";
+	    if (typeof this.props.currentUser !== 'undefined' && typeof this.props.term !== "undefined" && this.props.currentUser === this.props.term.user_id) {
+	      deleteButton = React.createElement(
 	        _reactRouter.Link,
 	        { className: 'delete_button', onClick: this.deleteTerm },
 	        'Delete this term.'
-	      )
+	      );
+	    }
+	    return React.createElement(
+	      'div',
+	      null,
+	      deleteButton
 	    );
 	  }
 	});
@@ -33958,7 +33963,6 @@
 	    var image = React.createElement('div', null);
 	    var term = "";
 	    var definition = "";
-	    var deleteButton = "";
 	    if (typeof this.state.term !== "undefined") {
 	      date = new Date(this.state.term.created_at);
 	      if (typeof this.state.term.video_url === "string" && this.state.term.video_url.length > 7) {
@@ -33983,9 +33987,6 @@
 	      );
 	      term = this.state.term.term;
 	      definition = this.state.term.definition;
-	    }
-	    if (typeof this.state.currentUser.user.user.id !== 'undefined' && typeof this.state.term !== "undefined" && this.state.currentUser.user.user.id === this.state.term.user_id) {
-	      deleteButton = React.createElement(DeleteButton, { term: this.props.term, currentUser: this.state.currentUser.user.user.id });
 	    }
 	    var shortMonth = months[date.getMonth()].slice(0, 3);
 	    var dateString = shortMonth + " " + date.getDate();
@@ -34024,7 +34025,7 @@
 	      React.createElement(FileUploads, { term: this.state.term }),
 	      image,
 	      youtubeVideo,
-	      deleteButton
+	      React.createElement(DeleteButton, { term: this.props.term, currentUser: this.state.currentUser.user.user.id })
 	    );
 	  }
 	});

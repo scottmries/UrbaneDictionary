@@ -19,7 +19,8 @@ var TermListItem = React.createClass({
 
   componentWillMount: function () {
     this.setState({
-        hasBeenVisible: false
+        hasBeenVisible: false,
+        currentUser: {user: CurrentUserStore.currentUser()}
     });
   },
 
@@ -110,7 +111,7 @@ var TermListItem = React.createClass({
         {image}
         {youtubeVideo}
         <Opinion term={this.props.term}/>
-        <DeleteButton term={this.props.term} currentUser={this.state.currentUser} />
+        <DeleteButton term={this.props.term} currentUser={this.state.currentUser.user.user.id} />
       </article>
     );
   }

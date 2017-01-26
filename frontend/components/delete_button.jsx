@@ -5,13 +5,19 @@ import {Link} from 'react-router';
 var DeleteButton = React.createClass({
 
   deleteTerm: function() {
-    ApiUtil.deleteTerm(this.props.term.id, this.props.currentUser.user.user.id);
+    ApiUtil.deleteTerm(this.props.term.id, this.props.currentUser);
   },
 
   render: function(){
+      var deleteButton = "";
+      if (typeof this.props.currentUser !== 'undefined' &&
+          typeof this.props.term !== "undefined" &&
+          this.props.currentUser === this.props.term.user_id){
+        deleteButton = <Link className="delete_button" onClick={this.deleteTerm}>Delete this term.</Link>;
+      }
      return (
        <div>
-         <Link className="delete_button" onClick={this.deleteTerm}>Delete this term.</Link>
+         {deleteButton}
        </div>
      );
   }

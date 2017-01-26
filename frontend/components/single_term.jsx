@@ -64,7 +64,6 @@ var SingleTerm = React.createClass({
     var image = <div></div>;
     var term = "";
     var definition = "";
-    var deleteButton = "";
     if (typeof this.state.term !== "undefined"){
       date = new Date(this.state.term.created_at);
       if (typeof this.state.term.video_url === "string" && this.state.term.video_url.length > 7){
@@ -79,11 +78,6 @@ var SingleTerm = React.createClass({
       author = <a href="#" onClick={this.showUserTerms}>  {this.state.term.user.username} </a>;
       term = this.state.term.term;
       definition = this.state.term.definition;
-    }
-    if (typeof this.state.currentUser.user.user.id !== 'undefined' &&
-        typeof this.state.term !== "undefined" &&
-        this.state.currentUser.user.user.id === this.state.term.user_id){
-      deleteButton = <DeleteButton term={this.props.term} currentUser={this.state.currentUser.user.user.id} />;
     }
     var shortMonth = months[date.getMonth()].slice(0,3);
     var dateString = shortMonth + " " + date.getDate();
@@ -104,7 +98,7 @@ var SingleTerm = React.createClass({
         <FileUploads term={this.state.term} />
         {image}
         {youtubeVideo}
-        {deleteButton}
+        <DeleteButton term={this.props.term} currentUser={this.state.currentUser.user.user.id} />
       </article>
     );
   }
