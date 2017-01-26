@@ -24924,7 +24924,6 @@
 	var SessionsApiUtil = __webpack_require__(261);
 	var Spinner = __webpack_require__(281);
 	var ErrorComponent = __webpack_require__(282);
-	var Waypoint = __webpack_require__(284);
 
 
 	var App = React.createClass({
@@ -32157,26 +32156,21 @@
 	var Opinion = __webpack_require__(254);
 	var CurrentUserStore = __webpack_require__(255);
 	var DeleteButton = __webpack_require__(256);
+	var Waypoint = __webpack_require__(284);
 
 
 	var TermListItem = React.createClass({
 	  displayName: 'TermListItem',
 
 
-	  // contextTypes: {
-	  //   router: Router.PropTypes.router.isRequired
-	  // },
-
-	  // someHandler() {
-	  //   this.context.router.push(...)
-	  // }
-
 	  show: function show(e) {
 	    e.preventDefault();
 	  },
 
 	  componentWillMount: function componentWillMount() {
-	    this.setState({});
+	    this.setState({
+	      hasBeenVisible: false
+	    });
 	  },
 
 	  componentWillReceiveProps: function componentWillReceiveProps() {},
@@ -32203,6 +32197,14 @@
 	    _reactRouter.browserHistory.push(this.state, "/users/" + this.props.term.user_id);
 	  },
 
+	  enterCallback: function enterCallback() {
+	    this.setState({ hasBeenVisible: true });
+	  },
+
+	  leaveCallback: function leaveCallback() {
+	    //   console.log(this.props.term + " left");
+	  },
+
 	  render: function render() {
 	    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	    var usage = "";
@@ -32214,7 +32216,7 @@
 	    var definition = "";
 	    if (typeof this.props.term !== "undefined") {
 	      date = new Date(this.props.term.created_at);
-	      if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7) {
+	      if (this.state.hasBeenVisible && typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7) {
 	        youtubeVideo = React.createElement(YoutubeVideo, { video: this.props.term.video_url });
 	      }
 	      if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0) {
@@ -32273,6 +32275,7 @@
 	      ),
 	      React.createElement(FileUploads, { term: this.props.term }),
 	      image,
+	      React.createElement(Waypoint, { onEnter: this.enterCallback, onLeave: this.leaveCallback }),
 	      youtubeVideo,
 	      React.createElement(Opinion, { term: this.props.term }),
 	      React.createElement(DeleteButton, { term: this.props.term, currentUser: this.state.currentUser })

@@ -8,24 +8,19 @@ var YoutubeVideo = require('./youtube_video');
 var Opinion = require('./opinion');
 var CurrentUserStore = require('../stores/current_user_store');
 var DeleteButton = require('./delete_button');
+var Waypoint = require('react-waypoint');
 import { browserHistory } from "react-router";
 
 var TermListItem = React.createClass({
-
-  // contextTypes: {
-  //   router: Router.PropTypes.router.isRequired
-  // },
-
-  // someHandler() {
-  //   this.context.router.push(...)
-  // }
 
   show: function (e) {
     e.preventDefault();
   },
 
   componentWillMount: function () {
-    this.setState({});
+    this.setState({
+        hasBeenVisible: false
+    });
   },
 
   componentWillReceiveProps: function () {
@@ -53,6 +48,14 @@ var TermListItem = React.createClass({
     browserHistory.push(this.state, "/users/" + this.props.term.user_id);
   },
 
+  enterCallback: function () {
+      this.setState({hasBeenVisible: true});
+  },
+
+  leaveCallback: function () {
+    //   console.log(this.props.term + " left");
+  },
+
   render: function () {
     var months = ["January", "February", "March", "April", "May",
       "June", "July", "August", "September", "October", "November", "December"];
@@ -65,7 +68,8 @@ var TermListItem = React.createClass({
     var definition = "";
     if (typeof this.props.term !== "undefined"){
       date = new Date(this.props.term.created_at);
-      if (typeof this.props.term.video_url === "string" && this.props.term.video_url.length > 7){
+      if (this.state.hasBeenVisible && (typeof this.props.term.video_url === "string" &&
+            this.props.term.video_url.length > 7)){
         youtubeVideo = <YoutubeVideo video={this.props.term.video_url} />;
       }
       if (typeof this.props.term.usage !== "undefined" && this.props.term.usage.length > 0){
@@ -96,6 +100,7 @@ var TermListItem = React.createClass({
         </p>
         <FileUploads term={this.props.term} />
         {image}
+        <Waypoint onEnter={this.enterCallback} onLeave={this.leaveCallback} />
         {youtubeVideo}
         <Opinion term={this.props.term}/>
         <DeleteButton term={this.props.term} currentUser={this.state.currentUser} />

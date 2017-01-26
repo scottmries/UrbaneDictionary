@@ -15,7 +15,6 @@ var TermStore = require('./../stores/term');
 var SessionsApiUtil = require('./../util/sessions_api_util');
 var Spinner = require('./spinner');
 var ErrorComponent = require('./error');
-var Waypoint = require('react-waypoint');
 import { browserHistory } from "react-router";
 
 const App = React.createClass({
