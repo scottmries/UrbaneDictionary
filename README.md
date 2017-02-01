@@ -5,13 +5,13 @@
 ### Features
 
 * Authentication
-..* Twitter
-..* Facebook
-..* Email
+  * Twitter
+  * Facebook
+  * Email
 * Submit definitions
 * Attach media
-..* Images
-..* Vimeo/Youtube video
+  * Images
+  * Vimeo/Youtube video
 * Search definitions
 * Vote on definitions
 
@@ -21,11 +21,11 @@
 * ReactJS
 * Flux
 * Gems
-..* OmniAuth
-..* Paperclip
-..* AWS-sdk
-..* Jbuilder
-..* BCrypt
+  * OmniAuth
+  * Paperclip
+  * AWS-sdk
+  * Jbuilder
+  * BCrypt
 
 ### Screenshot
 
